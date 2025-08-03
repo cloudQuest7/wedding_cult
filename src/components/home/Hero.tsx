@@ -13,7 +13,7 @@ const Hero = () => {
       subtitle: "Complete Photography Package",
       description: "Professional pre-wedding shoot with unlimited photos & 50+ edited images",
       bg: "bg-gradient-to-r from-rose-500/90 to-pink-600/90"
-    },
+    },//sdsdsd
     {
       title: "Wedding Photography",
       subtitle: "Starting from ₹50K",
