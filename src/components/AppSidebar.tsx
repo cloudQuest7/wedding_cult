@@ -1,7 +1,13 @@
-"use client"
-
-import { Link, useLocation } from "react-router-dom"
-import { Home, Briefcase, Users, HelpCircle, Mail, Image, Heart, Menu, X } from "lucide-react"
+import { Link, useLocation } from "react-router-dom";
+import {
+  Home,
+  Briefcase,
+  Users,
+  HelpCircle,
+  Mail,
+  Image,
+  Heart,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,51 +19,50 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   useSidebar,
-} from "@/components/ui/sidebar"
-import logo from "@/assets/new-logo.png"
-import { useRef, useEffect, useState } from "react"
-import gsap from "gsap"
+} from "@/components/ui/sidebar";
+import logo from "@/assets/new-logo.png";
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
 
 // Modern CTA card with particle border animation and cool hover effects
 function SidebarCtaCard() {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const btnRef = useRef<HTMLButtonElement>(null)
-  const particleRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const particleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.fromTo(
       cardRef.current,
       { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", delay: 0.1 },
-    )
-  }, [])
+      { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", delay: 0.1 }
+    );
+  }, []);
 
   useEffect(() => {
     if (btnRef.current) {
-      const btn = btnRef.current
+      const btn = btnRef.current;
       const enter = () =>
         gsap.to(btn, {
           scale: 1.05,
           boxShadow: "0 12px 30px 0 #b7865a35",
           duration: 0.3,
           ease: "power2.out",
-        })
+        });
       const leave = () =>
         gsap.to(btn, {
           scale: 1,
           boxShadow: "0 4px 12px 0 #b7865a15",
           duration: 0.3,
           ease: "power2.out",
-        })
-
-      btn.addEventListener("mouseenter", enter)
-      btn.addEventListener("mouseleave", leave)
+        });
+      btn.addEventListener("mouseenter", enter);
+      btn.addEventListener("mouseleave", leave);
       return () => {
-        btn.removeEventListener("mouseenter", enter)
-        btn.removeEventListener("mouseleave", leave)
-      }
+        btn.removeEventListener("mouseenter", enter);
+        btn.removeEventListener("mouseleave", leave);
+      };
     }
-  }, [])
+  }, []);
 
   // Particle border animation
   useEffect(() => {
@@ -67,9 +72,9 @@ function SidebarCtaCard() {
         duration: 4,
         ease: "none",
         repeat: -1,
-      })
+      });
     }
-  }, [])
+  }, []);
 
   return (
     <div
@@ -105,6 +110,7 @@ function SidebarCtaCard() {
       >
         <div className="w-full h-full rounded-lg bg-white/80 backdrop-blur-sm"></div>
       </div>
+
       {/* Particles floating effect */}
       <div className="absolute inset-0 overflow-hidden rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-700">
         <div className="particle particle-1"></div>
@@ -113,6 +119,7 @@ function SidebarCtaCard() {
         <div className="particle particle-4"></div>
         <div className="particle particle-5"></div>
       </div>
+
       <div className="relative z-10 flex flex-col items-center gap-1.5 w-full transition-transform duration-300 group-hover:scale-105">
         <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-chocolate/85 to-chocolate/45 flex items-center justify-center shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:from-pink-500 group-hover:to-purple-500">
           <Heart className="text-cream w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110" />
@@ -132,78 +139,50 @@ function SidebarCtaCard() {
           </button>
         </Link>
       </div>
+
       <style jsx>{`
-        @keyframes twinkle {
-          0%,
-          100% {
-            opacity: 0.3;
-            transform: scale(0.8);
-          }
-          50% {
-            opacity: 1;
-            transform: scale(1.2);
-          }
-        }
 
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          33% {
-            transform: translateY(-10px) rotate(5deg);
-          }
-          66% {
-            transform: translateY(5px) rotate(-3deg);
-          }
-        }
-
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-twinkle {
-          animation: twinkle linear infinite;
-        }
-        .animate-float {
-          animation: float ease-in-out infinite;
-        }
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out forwards;
-        }
-        .hover-scale {
-          transition: transform 0.3s ease;
-        }
-        .hover-scale:hover {
-          transform: scale(1.02);
-        }
-
-        .bg-gradient-radial {
-          background: radial-gradient(circle, var(--tw-gradient-stops));
-        }
-
-        .grid {
-          grid-auto-rows: 200px;
-        }
-
-        @media (min-width: 768px) {
-          .grid {
-            grid-auto-rows: 250px;
-          }
-        }
-
-        @media (min-width: 1024px) {
-          .grid {
-            grid-auto-rows: 220px;
-          }
-        }
+       @keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(5deg); }
+    66% { transform: translateY(5px) rotate(-3deg); }
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-twinkle { animation: twinkle linear infinite; }
+  .animate-float { animation: float ease-in-out infinite; }
+  .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+  .hover-scale { transition: transform 0.3s ease; }
+  .hover-scale:hover { transform: scale(1.02); }
+  
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
+  
+  .grid {
+    grid-auto-rows: 200px;
+  }
+  
+  @media (min-width: 768px) {
+    .grid {
+      grid-auto-rows: 250px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .grid {
+      grid-auto-rows: 220px;
+    }
+  }
 
         .particle {
           position: absolute;
@@ -213,7 +192,7 @@ function SidebarCtaCard() {
           border-radius: 50%;
           animation: float 3s ease-in-out infinite;
         }
-
+        
         .particle-1 {
           top: 10%;
           left: 20%;
@@ -221,7 +200,7 @@ function SidebarCtaCard() {
           animation-delay: 0s;
           animation-duration: 3s;
         }
-
+        
         .particle-2 {
           top: 80%;
           right: 15%;
@@ -229,7 +208,7 @@ function SidebarCtaCard() {
           animation-delay: 0.5s;
           animation-duration: 3.5s;
         }
-
+        
         .particle-3 {
           top: 60%;
           left: 10%;
@@ -237,7 +216,7 @@ function SidebarCtaCard() {
           animation-delay: 1s;
           animation-duration: 2.8s;
         }
-
+        
         .particle-4 {
           top: 30%;
           right: 25%;
@@ -245,7 +224,7 @@ function SidebarCtaCard() {
           animation-delay: 1.5s;
           animation-duration: 3.2s;
         }
-
+        
         .particle-5 {
           top: 50%;
           left: 50%;
@@ -253,10 +232,9 @@ function SidebarCtaCard() {
           animation-delay: 2s;
           animation-duration: 2.5s;
         }
-
+        
         @keyframes float {
-          0%,
-          100% {
+          0%, 100% {
             transform: translateY(0px) scale(0.8);
             opacity: 0.7;
           }
@@ -267,7 +245,7 @@ function SidebarCtaCard() {
         }
       `}</style>
     </div>
-  )
+  );
 }
 
 const navigationItems = [
@@ -277,237 +255,107 @@ const navigationItems = [
   { title: "About & Reviews", url: "/about", icon: Users },
   { title: "FAQ", url: "/faq", icon: HelpCircle },
   { title: "Contact", url: "/contact", icon: Mail },
-]
-
-// Mobile Header Component
-function MobileHeader({ onMenuToggle, isMenuOpen }: { onMenuToggle: () => void; isMenuOpen: boolean }) {
-  return (
-    <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/20 px-4 py-3 shadow-lg">
-      <div className="flex items-center justify-between">
-        <Link to="/" className="flex items-center">
-          <img
-            src={logo || "/placeholder.svg"}
-            alt="Logo"
-            className="h-10 w-auto hover:scale-105 transition-transform duration-300"
-          />
-        </Link>
-        <button
-          onClick={onMenuToggle}
-          className="p-2 rounded-lg bg-chocolate/10 hover:bg-chocolate/20 transition-all duration-300 hover:scale-105"
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <X className="w-6 h-6 text-chocolate" /> : <Menu className="w-6 h-6 text-chocolate" />}
-        </button>
-      </div>
-    </div>
-  )
-}
-
-// Mobile Menu Component
-function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const location = useLocation()
-  const currentPath = location.pathname
-  const isActive = (path: string) => currentPath === path
-  const mobileMenuRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (mobileMenuRef.current) {
-      if (isOpen) {
-        gsap.fromTo(
-          mobileMenuRef.current,
-          { x: "-100%", opacity: 0 },
-          { x: "0%", opacity: 1, duration: 0.4, ease: "power3.out" },
-        )
-      }
-    }
-  }, [isOpen])
-
-  if (!isOpen) return null
-
-  return (
-    <>
-      {/* Backdrop */}
-      <div className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-
-      {/* Mobile Sidebar */}
-      <div
-        ref={mobileMenuRef}
-        className="lg:hidden fixed top-0 left-0 h-full w-80 z-50 bg-gradient-to-b from-background/95 via-background/80 to-background/95 backdrop-blur-sm shadow-xl border-r border-border/30"
-      >
-        {/* Mobile Header */}
-        <div className="p-6 border-b border-border/20 bg-gradient-to-r from-primary/10 to-secondary/10 backdrop-blur-md">
-          <Link to="/" onClick={onClose}>
-            <img
-              src={logo || "/placeholder.svg"}
-              alt="Logo"
-              className="h-20 w-auto mx-auto hover:scale-105 transition-transform duration-300 filter drop-shadow-xl"
-            />
-          </Link>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div className="px-4 py-6">
-          <div className="space-y-1">
-            {navigationItems.map((item, index) => {
-              const IconComponent = item.icon
-              const active = isActive(item.url)
-              return (
-                <Link
-                  key={item.title}
-                  to={item.url}
-                  onClick={onClose}
-                  className={`group relative overflow-hidden transition-all duration-300 rounded-lg mx-0.5 py-3 px-3 flex items-center space-x-3 ${
-                    active
-                      ? "bg-gradient-to-r from-primary/25 to-primary/10 text-primary font-semibold shadow-sm border-l-4 border-primary"
-                      : "hover:bg-muted/50 hover:text-primary/90"
-                  }`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <IconComponent
-                    className={`h-5 w-5 min-w-[20px] transition-colors duration-300 ${
-                      active ? "text-primary drop-shadow-sm" : "text-muted-foreground group-hover:text-primary/90"
-                    }`}
-                  />
-                  <span className="font-poppins font-medium text-sm tracking-wide select-none">{item.title}</span>
-                  {active && (
-                    <span
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-sm"
-                      aria-hidden="true"
-                    />
-                  )}
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Mobile CTA */}
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <SidebarCtaCard />
-        </div>
-      </div>
-    </>
-  )
-}
+];
 
 export function AppSidebar() {
-  const { state } = useSidebar()
-  const location = useLocation()
-  const currentPath = location.pathname
-  const isCollapsed = state === "collapsed"
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const isActive = (path: string) => currentPath === path
-
-  const handleMobileMenuToggle = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
-
-  const handleMobileMenuClose = () => {
-    setIsMobileMenuOpen(false)
-  }
+  const { state } = useSidebar();
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const isCollapsed = state === "collapsed";
+  const isActive = (path: string) => currentPath === path;
 
   return (
-    <>
-      {/* Mobile Header */}
-      <MobileHeader onMenuToggle={handleMobileMenuToggle} isMenuOpen={isMobileMenuOpen} />
-
-      {/* Mobile Menu */}
-      <MobileMenu isOpen={isMobileMenuOpen} onClose={handleMobileMenuClose} />
-
-      {/* Desktop Sidebar */}
-      <Sidebar
-        className="hidden lg:flex border-r border-border/30 bg-gradient-to-b from-background/95 via-background/80 to-background/95 backdrop-blur-sm shadow-xl"
-        collapsible="icon"
-        side="left"
-        style={{
-          minWidth: isCollapsed ? "60px" : "190px",
-          transition: "min-width 0.4s ease",
-        }}
+    <Sidebar
+      className="border-r border-border/30 bg-gradient-to-b from-background/95 via-background/80 to-background/95 backdrop-blur-sm shadow-xl"
+      collapsible="icon"
+      side="left"
+      style={{ 
+        minWidth: isCollapsed ? "60px" : "190px",
+        transition: "min-width 0.4s ease" 
+      }}
+    >
+      {/* Header & Logo */}
+      <SidebarHeader
+        className="p-3 border-b border-border/20 bg-gradient-to-r from-primary/10 to-secondary/10 backdrop-blur-md flex flex-col items-center"
+        style={{ userSelect: "none" }}
       >
-        {/* Header & Logo */}
-        <SidebarHeader
-          className="p-3 border-b border-border/20 bg-gradient-to-r from-primary/10 to-secondary/10 backdrop-blur-md flex flex-col items-center"
-          style={{ userSelect: "none" }}
-        >
-          <Link to="/" className="group flex flex-col items-center">
-            <img
-              src={logo || "/placeholder.svg"}
-              alt="Logo"
-              className={`transition-transform duration-700 ease-in-out filter drop-shadow-xl hover:scale-105 hover:rotate-[2deg] ${
-                isCollapsed ? "h-12 w-auto" : "h-32 w-auto"
+        <Link to="/" className="group flex flex-col items-center">
+          <img
+            src={logo}
+            alt="Logo"
+            className={`transition-transform duration-700 ease-in-out filter drop-shadow-xl hover:scale-105 hover:rotate-[2deg] ${
+              isCollapsed ? "h-12 w-auto" : "h-32 w-auto"
+            }`}
+          />
+        </Link>
+      </SidebarHeader>
+
+      <SidebarContent className="px-2 py-3 flex flex-col justify-between h-full">
+        <div>
+          {/* Navigation Group */}
+          <SidebarGroup>
+            <SidebarGroupLabel
+              className={`font-poppins font-semibold text-xs uppercase tracking-wider text-muted-foreground/70 px-3 mb-3 ${
+                isCollapsed ? "sr-only" : ""
               }`}
-            />
-          </Link>
-        </SidebarHeader>
+            >
+              Navigation
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu className="space-y-0.5">
+                {navigationItems.map((item) => {
+                  const IconComponent = item.icon;
+                  const active = isActive(item.url);
 
-        <SidebarContent className="px-2 py-3 flex flex-col justify-between h-full">
-          <div>
-            {/* Navigation Group */}
-            <SidebarGroup>
-              <SidebarGroupLabel
-                className={`font-poppins font-semibold text-xs uppercase tracking-wider text-muted-foreground/70 px-3 mb-3 ${
-                  isCollapsed ? "sr-only" : ""
-                }`}
-              >
-                Navigation
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu className="space-y-0.5">
-                  {navigationItems.map((item) => {
-                    const IconComponent = item.icon
-                    const active = isActive(item.url)
-                    return (
-                      <SidebarMenuItem key={item.title} className="relative">
-                        <SidebarMenuButton
-                          asChild
-                          className={`group relative overflow-hidden transition-all duration-300 rounded-lg mx-0.5 py-2.5 px-2 ${
-                            active
-                              ? "bg-gradient-to-r from-primary/25 to-primary/10 text-primary font-semibold shadow-sm border-l-4 border-primary hover:from-primary/30 hover:to-primary/15"
-                              : "hover:bg-muted/50 hover:text-primary/90"
-                          }`}
-                          tabIndex={0}
-                          title={isCollapsed ? item.title : undefined}
+                  return (
+                    <SidebarMenuItem key={item.title} className="relative">
+                      <SidebarMenuButton
+                        asChild
+                        className={`group relative overflow-hidden transition-all duration-300 rounded-lg mx-0.5 py-2.5 px-2 ${
+                          active
+                            ? "bg-gradient-to-r from-primary/25 to-primary/10 text-primary font-semibold shadow-sm border-l-4 border-primary hover:from-primary/30 hover:to-primary/15"
+                            : "hover:bg-muted/50 hover:text-primary/90"
+                        }`}
+                        tabIndex={0}
+                        title={isCollapsed ? item.title : undefined}
+                      >
+                        <Link
+                          to={item.url}
+                          className="flex items-center space-x-2.5"
+                          aria-current={active ? "page" : undefined}
                         >
-                          <Link
-                            to={item.url}
-                            className="flex items-center space-x-2.5"
-                            aria-current={active ? "page" : undefined}
-                          >
-                            <IconComponent
-                              className={`h-5 w-5 min-w-[20px] transition-colors duration-300 ${
-                                active
-                                  ? "text-primary drop-shadow-sm"
-                                  : "text-muted-foreground group-hover:text-primary/90"
-                              }`}
+                          <IconComponent
+                            className={`h-5 w-5 min-w-[20px] transition-colors duration-300 ${
+                              active
+                                ? "text-primary drop-shadow-sm"
+                                : "text-muted-foreground group-hover:text-primary/90"
+                            }`}
+                          />
+                          {!isCollapsed && (
+                            <span className="font-poppins font-medium text-sm tracking-wide select-none">
+                              {item.title}
+                            </span>
+                          )}
+                          {/* Active indicator dot */}
+                          {active && !isCollapsed && (
+                            <span
+                              className="absolute right-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-sm"
+                              aria-hidden="true"
                             />
-                            {!isCollapsed && (
-                              <span className="font-poppins font-medium text-sm tracking-wide select-none">
-                                {item.title}
-                              </span>
-                            )}
-                            {/* Active indicator dot */}
-                            {active && !isCollapsed && (
-                              <span
-                                className="absolute right-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-sm"
-                                aria-hidden="true"
-                              />
-                            )}
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    )
-                  })}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </div>
-          {/* Enhanced CTA card with particle effects */}
-          {!isCollapsed && <SidebarCtaCard />}
-        </SidebarContent>
-      </Sidebar>
+                          )}
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
 
-      {/* Add padding to main content for mobile header */}
-      <div className="lg:hidden h-16" />
-    </>
-  )
+        {/* Enhanced CTA card with particle effects */}
+        {!isCollapsed && <SidebarCtaCard />}
+      </SidebarContent>
+    </Sidebar>
+  );
 }
