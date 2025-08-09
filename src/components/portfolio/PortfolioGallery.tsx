@@ -1,46 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { client } from "../../lib/sanity";
+import { urlFor } from "../../lib/sanity";
+
+interface GalleryImage {
+  _id: string;
+  title: string;
+  image: any;
+  category: string;
+  description?: string;
+}
 
 const PortfolioGallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showAllImages, setShowAllImages] = useState(false);
+  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Portfolio photos - curated selection (initial display)
-  const portfolioPhotos = [{
-    id: 1,
-    url: "https://ik.imagekit.io/7xgikoq8o/17.png",
-    alt: "Wedding portfolio image",
-    category: "Portfolio"
-  }, {
-    id: 2,
-    url: "https://ik.imagekit.io/7xgikoq8o/16.png",
-    alt: "Wedding portfolio image",
-    category: "Portfolio"
-  }, {
-    id: 3,
-    url: "https://ik.imagekit.io/7xgikoq8o/15.png",
-    alt: "Wedding portfolio image",
-    category: "Portfolio"
-  }, {
-    id: 4,
-    url: "https://ik.imagekit.io/7xgikoq8o/8.png",
-    alt: "Wedding portfolio image",
-    category: "Portfolio"
-  }, {
-    id: 5,
-    url: "https://ik.imagekit.io/7xgikoq8o/6.png",
-    alt: "Wedding portfolio image",
-    category: "Portfolio"
-  }, {
-    id: 6,
-    url: "https://ik.imagekit.io/7xgikoq8o/4.png",
-    alt: "Wedding portfolio image",
-    category: "Portfolio"
-  }, {
-    id: 7,
-    url: "https://ik.imagekit.io/7xgikoq8o/2.png",
-    alt: "Wedding portfolio image",
-    category: "Portfolio"
-  }];
+  useEffect(() => {
+    async function fetchImages() {
+      try {
+        console.log('Attempting to fetch images from Sanity...');
+        const query = `*[_type == "gallery"] | order(order asc) {
+          _id,
+          title,
+          image,
+          category,
+          description,
+          featured
+        }`;
+        
+        console.log('Sanity Query:', query);
+        const result = await client.fetch(query);
+        console.log('Sanity Response:', result);
+        
+        if (!result || result.length === 0) {
+          console.log('No images found in Sanity');
+          setError('No images found');
+        } else {
+          console.log('Images found:', result.length);
+          setImages(result);
+        }
+      } catch (err) {
+        console.error('Error fetching gallery images:', err);
+        setError('Failed to load gallery images: ' + (err instanceof Error ? err.message : String(err)));
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchImages();
+  }, []);
+    
 
   // Additional gallery images for "Show More" - All remaining original + new photos
   const allGalleryImages = [
@@ -584,9 +595,9 @@ const PortfolioGallery = () => {
   ];
 
   // Get images to display based on state
-  const imagesToDisplay = showAllImages 
-    ? [...portfolioPhotos, ...allGalleryImages] 
-    : portfolioPhotos;
+  const displayedImages = showAllImages 
+    ? images 
+    : images.filter(img => img.featured);
 
   return (
     <>
