@@ -1,0 +1,16 @@
+.reviews-background-pattern {
+  background-image: 
+    radial-gradient(circle at 20% 80%, #8B4513 2px, transparent 2px),
+    radial-gradient(circle at 80% 20%, #D2691E 1px, transparent 1px),
+    radial-gradient(circle at 40% 40%, #8B4513 1px, transparent 1px);
+  background-size: 100px 100px, 60px 60px, 80px 80px;
+  background-position: 0 0, 30px 30px, 50px 50px;
+}
+
+.dot-pulse-1 {
+  animation-delay: 0.5s;
+}
+
+.dot-pulse-2 {
+  animation-delay: 1s;
+}
