@@ -28,8 +28,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
           </main>
         </div>
 
-        {/* Floating Social Media Button */}
-        <SocialFloatingButton />
+        {/* Floating Social Media Button - Adjusted position for mobile */}
+        <div className="fixed right-6 bottom-28 lg:bottom-6 z-50">
+          <SocialFloatingButton />
+        </div>
       </div>
     </SidebarProvider>
   );

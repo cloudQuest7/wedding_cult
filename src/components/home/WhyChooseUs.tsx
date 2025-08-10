@@ -90,6 +90,8 @@ const WhyChooseUs = () => {
 
   const handleMouseEnter = (index) => {
     const card = cardsRef.current[index];
+    if (!card) return;
+    
     const icon = card.querySelector('.feature-icon');
     const title = card.querySelector('.feature-title');
     const subtitle = card.querySelector('.feature-subtitle');
@@ -99,9 +101,9 @@ const WhyChooseUs = () => {
 
     gsap.timeline()
       .to(card, {
-        y: -15,
-        scale: 1.08,
-        rotationY: 5,
+        y: -8,
+        scale: 1.03,
+        rotationY: 2,
         duration: 0.4,
         ease: "power2.out"
       })
@@ -112,13 +114,13 @@ const WhyChooseUs = () => {
       }, 0)
       .to(icon, {
         rotation: 360,
-        scale: 1.3,
+        scale: 1.2,
         duration: 0.6,
         ease: "back.out(1.7)"
       }, 0.1)
       .to([title, subtitle], {
         color: "#8B4513",
-        y: -5,
+        y: -3,
         duration: 0.3,
         ease: "power2.out"
       }, 0.1)
@@ -130,7 +132,7 @@ const WhyChooseUs = () => {
       }, 0.2)
       .to(number, {
         opacity: 0.8,
-        scale: 1.4,
+        scale: 1.2,
         color: "#D2691E",
         duration: 0.3,
         ease: "power2.out"
@@ -139,6 +141,8 @@ const WhyChooseUs = () => {
 
   const handleMouseLeave = (index) => {
     const card = cardsRef.current[index];
+    if (!card) return;
+    
     const description = card.querySelector('.feature-description');
     const overlay = card.querySelector('.card-overlay');
 
@@ -172,7 +176,7 @@ const WhyChooseUs = () => {
       }, 0)
       .to(description, {
         opacity: 0,
-        y: 10,
+        y: 5,
         duration: 0.3,
         ease: "power2.out"
       }, 0)
@@ -188,7 +192,7 @@ const WhyChooseUs = () => {
   return (
     <section 
       ref={sectionRef}
-      className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-gradient-to-r from-beige-warm to-cream relative overflow-hidden"
+      className="py-8 sm:py-16 md:py-20 lg:py-24 px-3 sm:px-6 bg-gradient-to-r from-beige-warm to-cream relative overflow-hidden min-h-screen flex flex-col justify-center"
     >
       {/* Professional background pattern */}
       <div className="absolute inset-0 opacity-5">
@@ -205,33 +209,33 @@ const WhyChooseUs = () => {
         ></div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative">
-        {/* Enhanced Header */}
-        <div className="text-center mb-16 sm:mb-20">
+      <div className="max-w-7xl mx-auto relative flex-1 flex flex-col justify-center">
+        {/* Mobile-Optimized Header */}
+        <div className="text-center mb-6 sm:mb-12 md:mb-16 lg:mb-20">
           <div 
             ref={decorativeRef}
-            className="inline-flex items-center justify-center mb-6"
+            className="inline-flex items-center justify-center mb-3 sm:mb-6"
           >
-            <div className="w-16 h-px bg-chocolate"></div>
-            <Heart className="w-6 h-6 text-chocolate mx-4" />
-            <div className="w-16 h-px bg-chocolate"></div>
+            <div className="w-8 sm:w-16 h-px bg-chocolate"></div>
+            <Heart className="w-4 sm:w-6 h-4 sm:h-6 text-chocolate mx-2 sm:mx-4" />
+            <div className="w-8 sm:w-16 h-px bg-chocolate"></div>
           </div>
           
           <h2 
             ref={titleRef}
-            className="font-amsterdam text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-chocolate mb-6 leading-tight"
+            className="font-amsterdam text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-chocolate mb-3 sm:mb-6 leading-tight px-2"
           >
             Why Couples Choose Us
-            <span className="block text-2xl sm:text-3xl md:text-4xl font-poppins font-light text-muted-foreground mt-2">
+            <span className="block text-lg sm:text-3xl md:text-4xl font-poppins font-light text-muted-foreground mt-1 sm:mt-2">
               for Their Special Day
             </span>
           </h2>
           
-          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent mx-auto"></div>
+          <div className="w-16 sm:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent mx-auto"></div>
         </div>
 
-        {/* Enhanced Feature Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+        {/* Mobile-Optimized Feature Cards Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-6 max-w-6xl mx-auto">
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
@@ -242,70 +246,62 @@ const WhyChooseUs = () => {
                 onMouseEnter={() => handleMouseEnter(index)}
                 onMouseLeave={() => handleMouseLeave(index)}
               >
-                {/* Professional card container */}
-                <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50 overflow-hidden transform-gpu">
+                {/* Mobile-optimized card container */}
+                <div className="relative bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 lg:p-8 shadow-lg border border-white/50 overflow-hidden transform-gpu h-full min-h-[180px] sm:min-h-[280px] flex flex-col justify-center">
                   
                   {/* Gradient overlay on hover */}
                   <div className="card-overlay absolute inset-0 bg-gradient-to-br from-chocolate/5 to-amber-100/20 opacity-0 transition-opacity duration-300"></div>
                   
                   {/* Subtle corner accent */}
-                  <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-chocolate/10 to-transparent rounded-bl-3xl"></div>
+                  <div className="absolute top-0 right-0 w-8 sm:w-16 h-8 sm:h-16 bg-gradient-to-bl from-chocolate/10 to-transparent rounded-bl-2xl sm:rounded-bl-3xl"></div>
                   
-                  {/* Icon container with professional styling */}
-                  <div className="relative mb-8">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-chocolate/10 to-amber-100/30 rounded-2xl shadow-inner">
-                      <IconComponent className="feature-icon w-10 h-10 text-chocolate transition-all duration-300" />
+                  {/* Icon container with mobile-optimized sizing */}
+                  <div className="relative mb-3 sm:mb-6 lg:mb-8">
+                    <div className="inline-flex items-center justify-center w-12 sm:w-16 lg:w-20 h-12 sm:h-16 lg:h-20 bg-gradient-to-br from-chocolate/10 to-amber-100/30 rounded-xl sm:rounded-2xl shadow-inner">
+                      <IconComponent className="feature-icon w-6 sm:w-8 lg:w-10 h-6 sm:h-8 lg:h-10 text-chocolate transition-all duration-300" />
                     </div>
                   </div>
 
-                  {/* Content with hierarchy */}
-                  <div className="relative space-y-4">
-                    <h3 className="feature-title font-amsterdam text-2xl text-chocolate transition-all duration-300">
+                  {/* Mobile-optimized content */}
+                  <div className="relative space-y-1 sm:space-y-3 lg:space-y-4 flex-1 flex flex-col justify-center">
+                    <h3 className="feature-title font-amsterdam text-sm sm:text-xl lg:text-2xl text-chocolate transition-all duration-300 leading-tight">
                       {feature.title}
                     </h3>
                     
-                    <p className="feature-subtitle font-poppins text-base text-muted-foreground font-medium transition-all duration-300">
+                    <p className="feature-subtitle font-poppins text-xs sm:text-sm lg:text-base text-muted-foreground font-medium transition-all duration-300 leading-tight">
                       {feature.subtitle}
                     </p>
                     
-                    {/* Enhanced description that appears on hover */}
-                    <p className="feature-description font-poppins text-sm text-slate-600 leading-relaxed opacity-0 transform translate-y-2 transition-all duration-300">
+                    {/* Enhanced description - hidden on mobile, visible on larger screens */}
+                    <p className="feature-description font-poppins text-xs sm:text-sm text-slate-600 leading-relaxed opacity-0 transform translate-y-1 sm:translate-y-2 transition-all duration-300 hidden sm:block">
                       {feature.description}
                     </p>
                   </div>
 
-                  {/* Professional number styling */}
-                  <div className="absolute bottom-4 right-4">
-                    <span className="feature-number text-5xl font-bold text-chocolate/10 transition-all duration-300">
+                  {/* Mobile-optimized number styling */}
+                  <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4">
+                    <span className="feature-number text-2xl sm:text-4xl lg:text-5xl font-bold text-chocolate/10 transition-all duration-300">
                       {feature.number}
                     </span>
                   </div>
                 </div>
 
                 {/* Professional accent line */}
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-chocolate to-amber-500 transition-all duration-500 group-hover:w-3/4 rounded-full"></div>
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 sm:h-1 bg-gradient-to-r from-chocolate to-amber-500 transition-all duration-500 group-hover:w-3/4 rounded-full"></div>
               </div>
             );
           })}
         </div>
 
-        {/* Professional bottom section */}
-        <div className="text-center mt-20 lg:mt-28">
-          <div className="inline-flex flex-col items-center space-y-4">
-            <div className="flex items-center gap-4 text-muted-foreground font-poppins text-sm tracking-wide">
-              <div className="w-12 h-px bg-chocolate/30"></div>
-              <Heart className="w-4 h-4 text-chocolate" />
+        {/* Mobile-optimized bottom section */}
+        <div className="text-center mt-6 sm:mt-16 lg:mt-28">
+          <div className="inline-flex flex-col items-center space-y-2 sm:space-y-4">
+            <div className="flex items-center gap-2 sm:gap-4 text-muted-foreground font-poppins text-xs sm:text-sm tracking-wide">
+              <div className="w-6 sm:w-12 h-px bg-chocolate/30"></div>
+              <Heart className="w-3 sm:w-4 h-3 sm:h-4 text-chocolate" />
               <span className="font-medium">Capturing love stories across India</span>
-              <Heart className="w-4 h-4 text-chocolate" />
-              <div className="w-12 h-px bg-chocolate/30"></div>
-            </div>
-            
-            {/* Professional badge */}
-            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/60 backdrop-blur-sm rounded-full border border-chocolate/20 shadow-sm">
-              <div className="w-2 h-2 bg-chocolate rounded-full animate-pulse"></div>
-              <span className="font-poppins text-sm text-chocolate font-medium">
-                Trusted by 500+ couples
-              </span>
+              <Heart className="w-3 sm:w-4 h-3 sm:h-4 text-chocolate" />
+              <div className="w-6 sm:w-12 h-px bg-chocolate/30"></div>
             </div>
           </div>
         </div>

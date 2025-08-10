@@ -6,7 +6,7 @@ const CallToAction = () => {
         <h2 className="font-amsterdam text-2xl sm:text-3xl text-chocolate mb-4 sm:mb-6 mx-0 px-0 md:text-3xl">
           Your Story Deserves to be Remembered the Right Way
         </h2>
-        <p className="font-playfair text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto italic px-4 sm:px-0">
+        <p className="font-poppins text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto italic px-4 sm:px-0">
           Let's capture your forever.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">

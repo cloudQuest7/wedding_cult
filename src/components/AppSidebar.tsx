@@ -260,7 +260,7 @@ const navigationItems = [
   { title: "Contact", url: "/contact", icon: Mail },
 ];
 
-// Clean Mobile Bottom Navigation
+// Clean Mobile Bottom Navigation with Cream + Coffee Theme
 function MobileBottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -286,54 +286,74 @@ function MobileBottomNav() {
 
   return (
     <>
-      {/* Fixed Bottom Navigation Bar - Coffee Brown Theme */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 shadow-2xl bg-[#6F4E37]">
+      {/* Fixed Top Navbar with Cream + Coffee Theme */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cream/95 via-cream/90 to-beige-warm/95 backdrop-blur-sm shadow-lg border-b border-chocolate/20">
+        <div className="flex items-center justify-between px-4 py-3">
+          {/* Company Name on Left */}
+          <div className="text-left">
+            <h1 className="text-lg font-poppins font-medium text-chocolate">
+              The Wedding Cult
+            </h1>
+          </div>
+          
+          {/* Logo on Right */}
+          <img 
+            src={logo} 
+            alt="The Wedding Cult Logo" 
+            className="h-10 w-auto"
+          />
+        </div>
+      </div>
+
+      {/* Top padding to prevent content from being hidden by fixed navbar */}
+      <div className="h-16" />
+
+      {/* Fixed Bottom Navigation Bar - Cream + Coffee Theme */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 shadow-2xl bg-gradient-to-r from-chocolate to-chocolate-light border-t border-cream/30">
         <div className="flex items-center justify-between px-8 py-4 max-w-md mx-auto">
           {/* Menu Button */}
           <button
             onClick={() => setIsMenuOpen(true)}
             className="flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 hover:scale-110"
           >
-            <Menu className="h-6 w-6 mb-1 text-[#F5F5DC]" />
-            <span className="text-xs font-medium text-[#F5F5DC]">Menu</span>
+            <Menu className="h-6 w-6 mb-1 text-cream" />
+            <span className="text-xs font-medium text-cream">Menu</span>
           </button>
 
           {/* Logo Space in the Middle */}
-          {/* Logo Space in the Middle */}
-<div className="flex-1 flex justify-center">
-  <div className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 border-[#F5F5DC] bg-[#F5F5DC]/10 p-2">
-    <img 
-      src={logo} 
-      alt="Your Company Logo" 
-      className="w-full h-full object-contain rounded-full"
-    />
-  </div>
-</div>
-
+          <div className="flex-1 flex justify-center">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 border-cream bg-cream/10 p-2">
+              <img 
+                src={logo} 
+                alt="Your Company Logo" 
+                className="w-full h-full object-contain rounded-full"
+              />
+            </div>
+          </div>
 
           {/* Enquire Button */}
           <Link
             to="/contact"
             className="flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 hover:scale-110"
           >
-            <Phone className="h-6 w-6 mb-1 text-[#F5F5DC]" />
-            <span className="text-xs font-medium text-[#F5F5DC]">Enquire</span>
+            <Phone className="h-6 w-6 mb-1 text-cream" />
+            <span className="text-xs font-medium text-cream">Enquire</span>
           </Link>
         </div>
       </div>
 
-      {/* Full Screen Menu Overlay */}
+      {/* Full Screen Menu Overlay - Cream + Coffee Theme */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-[#6F4E37]">
+        <div className="fixed inset-0 z-50 bg-gradient-to-b from-chocolate via-chocolate-light to-chocolate backdrop-blur-sm">
           <div className="h-full flex flex-col">
             {/* Header with logo and close button */}
-            <div className="flex items-center justify-between p-6 border-b border-[#F5F5DC]/25">
+            <div className="flex items-center justify-between p-6 border-b border-cream/25 bg-chocolate/90 backdrop-blur-md">
               <img src={logo} alt="The Wedding Film Co" className="h-10 w-auto" />
               <button
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-200 bg-[#F5F5DC]/20 hover:bg-[#F5F5DC]/30"
+                className="flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-200 bg-cream/20 hover:bg-cream/30"
               >
-                <X className="h-6 w-6 text-[#F5F5DC]" />
+                <X className="h-6 w-6 text-cream" />
               </button>
             </div>
 
@@ -351,14 +371,14 @@ function MobileBottomNav() {
                       onClick={() => setIsMenuOpen(false)}
                       className={`flex items-center space-x-4 px-4 py-4 rounded-xl text-lg font-medium transition-all duration-200 ${
                         active 
-                          ? 'shadow-md bg-[#F5F5DC]/20 text-[#F5F5DC]' 
-                          : 'text-[#F5F5DC] hover:bg-[#F5F5DC]/10'
+                          ? 'shadow-md bg-cream/20 text-cream border-l-4 border-cream' 
+                          : 'text-cream/90 hover:bg-cream/10'
                       }`}
                     >
-                      <IconComponent className="h-6 w-6 text-[#F5F5DC]" />
+                      <IconComponent className="h-6 w-6 text-cream" />
                       <span>{item.title}</span>
                       {active && (
-                        <div className="ml-auto w-2 h-2 rounded-full bg-[#F5F5DC]" />
+                        <div className="ml-auto w-2 h-2 rounded-full bg-cream" />
                       )}
                     </Link>
                   );
@@ -367,20 +387,20 @@ function MobileBottomNav() {
 
               {/* CTA Section */}
               <div className="mt-8 mb-4">
-                <div className="rounded-2xl p-6 text-center shadow-lg border-2 bg-[#F5F5DC]/20 border-[#F5F5DC]/30">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center shadow-md bg-[#F5F5DC]">
-                    <Heart className="w-8 h-8 text-[#6F4E37]" />
+                <div className="rounded-2xl p-6 text-center shadow-lg border-2 bg-cream/20 border-cream/30 backdrop-blur-sm">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center shadow-md bg-cream">
+                    <Heart className="w-8 h-8 text-chocolate" />
                   </div>
-                  <h3 className="font-playfair font-semibold text-xl mb-3 text-[#F5F5DC]">
+                  <h3 className="font-playfair font-semibold text-xl mb-3 text-cream">
                     Ready to begin?
                   </h3>
-                  <p className="text-sm mb-6 leading-relaxed text-[#F5F5DC]/90">
+                  <p className="text-sm mb-6 leading-relaxed text-cream/90">
                     Let's create your perfect wedding story together.
                   </p>
                   <Link
                     to="/contact"
                     onClick={() => setIsMenuOpen(false)}
-                    className="inline-block w-full font-poppins font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 bg-[#F5F5DC] text-[#6F4E37]"
+                    className="inline-block w-full font-poppins font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 bg-cream text-chocolate"
                   >
                     Enquire Now
                   </Link>
@@ -415,10 +435,9 @@ export function AppSidebar() {
   return (
     <Sidebar
       className="border-r border-border/30 bg-gradient-to-b from-background/95 via-background/80 to-background/95 backdrop-blur-sm shadow-xl"
-      collapsible="icon"
       side="left"
       style={{ 
-        minWidth: isCollapsed ? "60px" : "190px",
+        minWidth: "190px",
         transition: "min-width 0.4s ease" 
       }}
     >
@@ -431,9 +450,7 @@ export function AppSidebar() {
           <img
             src={logo}
             alt="Logo"
-            className={`transition-transform duration-700 ease-in-out filter drop-shadow-xl hover:scale-105 hover:rotate-[2deg] ${
-              isCollapsed ? "h-12 w-auto" : "h-32 w-auto"
-            }`}
+            className="h-32 w-auto transition-transform duration-700 ease-in-out filter drop-shadow-xl hover:scale-105 hover:rotate-[2deg]"
           />
         </Link>
       </SidebarHeader>
@@ -442,11 +459,7 @@ export function AppSidebar() {
         <div>
           {/* Navigation Group */}
           <SidebarGroup>
-            <SidebarGroupLabel
-              className={`font-poppins font-semibold text-xs uppercase tracking-wider text-muted-foreground/70 px-3 mb-3 ${
-                isCollapsed ? "sr-only" : ""
-              }`}
-            >
+            <SidebarGroupLabel className="font-poppins font-semibold text-xs uppercase tracking-wider text-muted-foreground/70 px-3 mb-3">
               Navigation
             </SidebarGroupLabel>
             <SidebarGroupContent>
@@ -465,7 +478,7 @@ export function AppSidebar() {
                             : "hover:bg-muted/50 hover:text-primary/90"
                         }`}
                         tabIndex={0}
-                        title={isCollapsed ? item.title : undefined}
+                        title={item.title}
                       >
                         <Link
                           to={item.url}
@@ -479,13 +492,11 @@ export function AppSidebar() {
                                 : "text-muted-foreground group-hover:text-primary/90"
                             }`}
                           />
-                          {!isCollapsed && (
-                            <span className="font-poppins font-medium text-sm tracking-wide select-none">
-                              {item.title}
-                            </span>
-                          )}
+                          <span className="font-poppins font-medium text-sm tracking-wide select-none">
+                            {item.title}
+                          </span>
                           {/* Active indicator dot */}
-                          {active && !isCollapsed && (
+                          {active && (
                             <span
                               className="absolute right-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-sm"
                               aria-hidden="true"
@@ -502,7 +513,7 @@ export function AppSidebar() {
         </div>
 
         {/* Enhanced CTA card with particle effects */}
-        {!isCollapsed && <SidebarCtaCard />}
+        <SidebarCtaCard />
       </SidebarContent>
     </Sidebar>
   );

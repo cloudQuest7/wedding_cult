@@ -118,7 +118,7 @@ const Footer = () => {
           <div className="text-center space-y-2 mb-3">
             <div>
               <h3 className="font-amsterdam text-lg sm:text-xl lg:text-2xl mb-1.5">The Wedding Cult</h3>
-              <p className="font-playfair text-cream/80 text-xs sm:text-sm lg:text-base leading-relaxed mb-2 max-w-xl mx-auto px-4">
+              <p className="font-amsterdam text-cream/80 text-xs sm:text-sm lg:text-base leading-relaxed mb-2 max-w-xl mx-auto px-4">
                 "Capturing timeless love stories with cinematic beauty and emotional truth in Mumbai."
               </p>
             </div>
