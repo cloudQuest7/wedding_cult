@@ -2,51 +2,50 @@ import { Rule } from 'sanity';
 
 export default {
   name: 'feedback',
-  title: 'Customer Feedback',
+  title: 'Couple Feedback',
   type: 'document',
   fields: [
     {
-      name: 'name',
-      title: 'Customer Name',
+      name: 'names',
+      title: 'Couple Names',
       type: 'string',
+      description: 'Names of the couple (e.g., "Kavita & Raj")',
       validation: (Rule: Rule) => Rule.required()
     },
     {
-      name: 'email',
-      title: 'Email',
+      name: 'location',
+      title: 'Location',
       type: 'string',
-      validation: (Rule: Rule) => Rule.required().email()
+      description: 'Location of the couple',
+      validation: (Rule: Rule) => Rule.required()
+    },
+    {
+      name: 'review',
+      title: 'Review',
+      type: 'text',
+      description: 'The feedback/review from the couple',
+      validation: (Rule: Rule) => Rule.required().min(10).max(200)
     },
     {
       name: 'rating',
       title: 'Rating',
       type: 'number',
+      description: 'Rating out of 5',
       validation: (Rule: Rule) => Rule.required().min(1).max(5)
     },
     {
-      name: 'message',
-      title: 'Feedback Message',
-      type: 'text',
-      validation: (Rule: Rule) => Rule.required()
+      name: 'approved',
+      title: 'Approved',
+      type: 'boolean',
+      description: 'Only approved feedback will be shown on the website',
+      initialValue: false
     },
     {
-      name: 'dateSubmitted',
-      title: 'Submission Date',
+      name: 'date',
+      title: 'Date',
       type: 'datetime',
-      readOnly: true,
-    },
-    {
-      name: 'status',
-      title: 'Status',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Pending', value: 'pending' },
-          { title: 'Approved', value: 'approved' },
-          { title: 'Rejected', value: 'rejected' }
-        ],
-      },
-      initialValue: 'pending'
+      description: 'When was this feedback given',
+      initialValue: () => new Date().toISOString()
     },
     {
       name: 'featured',

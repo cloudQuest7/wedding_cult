@@ -15,6 +15,8 @@ const About = () => {
   const symbolRef = useRef(null)
   const quoteRef = useRef(null)
   const contentRef = useRef(null)
+  const typingCardRef = useRef(null)
+  const textRef = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -26,7 +28,7 @@ const About = () => {
         repeat: -1,
       })
 
-      // Entrance animations
+      // Fast smooth entrance animations
       gsap.fromTo(
         symbolRef.current,
         { opacity: 0, scale: 0.5, y: 50 },
@@ -34,8 +36,8 @@ const About = () => {
           opacity: 1,
           scale: 1,
           y: 0,
-          duration: 1.5,
-          ease: "elastic.out(1, 0.6)",
+          duration: 0.8,
+          ease: "back.out(1.7)",
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 80%",
@@ -46,13 +48,14 @@ const About = () => {
 
       gsap.fromTo(
         quoteRef.current,
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 30, scale: 0.95 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
+          scale: 1,
+          duration: 0.7,
           ease: "power3.out",
-          delay: 0.3,
+          delay: 0.2,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 80%",
@@ -61,15 +64,53 @@ const About = () => {
         },
       )
 
+      // Fast smooth card animation for typing section
       gsap.fromTo(
-        ".content-card",
-        { opacity: 0, y: 50, scale: 0.9 },
+        typingCardRef.current,
+        { opacity: 0, y: 40, scale: 0.9 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 1,
-          stagger: 0.2,
+          duration: 0.6,
+          ease: "power3.out",
+          delay: 0.4,
+          scrollTrigger: {
+            trigger: typingCardRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        },
+      )
+
+      // Smooth text reveal animation (replacing typing)
+      gsap.fromTo(
+        textRef.current,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          delay: 0.6,
+          scrollTrigger: {
+            trigger: typingCardRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        },
+      )
+
+      // Fast content cards animation
+      gsap.fromTo(
+        ".content-card",
+        { opacity: 0, y: 40, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.6,
+          stagger: 0.1,
           ease: "power3.out",
           scrollTrigger: {
             trigger: contentRef.current,
@@ -87,30 +128,6 @@ const About = () => {
         yoyo: true,
         repeat: -1,
         stagger: 0.5,
-      })
-
-      // Typing animation
-      const typingText =
-        "We don't just shoot weddings — we craft cinematic stories that capture the soul of your love, the laughter of your joy, and the tears of your happiness. Every frame is a memory, every moment is a masterpiece."
-      const typingElement = document.querySelector(".typing-text")
-      let i = 0
-
-      const typeWriter = () => {
-        if (i < typingText.length && typingElement) {
-          typingElement.textContent += typingText.charAt(i)
-          i++
-          setTimeout(typeWriter, 50) // Adjust speed here (lower = faster)
-        }
-      }
-
-      // Start typing animation when section comes into view
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top 70%",
-        onEnter: () => {
-          setTimeout(typeWriter, 1000) // Delay before starting
-        },
-        once: true,
       })
     })
 
@@ -171,9 +188,12 @@ const About = () => {
           </div>
         </div>
 
-        {/* Elegant Typing Paragraph */}
+        {/* Smooth Loading Text Section (No more typing) */}
         <div className="mb-16 max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border border-chocolate/10 relative overflow-hidden">
+          <div 
+            ref={typingCardRef}
+            className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border border-chocolate/10 relative overflow-hidden"
+          >
             {/* Decorative background gradient */}
             <div className="absolute inset-0 bg-gradient-to-br from-chocolate/5 to-beige-warm/10 opacity-50"></div>
 
@@ -182,9 +202,11 @@ const About = () => {
                 <Film className="w-6 h-6 text-cream" />
               </div>
 
-              <div className="font-playfair text-2xl sm:text-3xl md:text-4xl text-chocolate leading-relaxed mb-6">
-                <span className="typing-text"></span>
-                <span className="typing-cursor animate-pulse text-chocolate">|</span>
+              <div 
+                ref={textRef}
+                className="font-playfair text-2xl sm:text-3xl md:text-4xl text-chocolate leading-relaxed mb-6"
+              >
+                We don't just shoot weddings — we craft cinematic stories that capture the soul of your love, the laughter of your joy, and the tears of your happiness. Every frame is a memory, every moment is a masterpiece.
               </div>
 
               <div className="w-20 h-1 bg-chocolate/30 mx-auto rounded-full"></div>

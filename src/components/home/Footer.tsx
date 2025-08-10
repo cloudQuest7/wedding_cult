@@ -1,8 +1,10 @@
 import { Instagram, Youtube, Mail, Phone } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
+  const flowerRef = useRef(null);
   
   const socialLinks = [
     {
@@ -26,6 +28,28 @@ const Footer = () => {
       label: "WhatsApp"
     }
   ];
+
+  // Beautiful spinning flower animation
+  useEffect(() => {
+    if (flowerRef.current) {
+      // Continuous smooth spinning animation
+      gsap.to(flowerRef.current, {
+        rotation: 360,
+        duration: 15, // 15 seconds for one full rotation
+        ease: "none", // Linear rotation for consistent speed
+        repeat: -1 // Infinite loop
+      });
+
+      // Optional: Add gentle scale breathing while spinning
+      gsap.to(flowerRef.current, {
+        scale: 1.05,
+        duration: 4,
+        ease: "power2.inOut",
+        yoyo: true,
+        repeat: -1
+      });
+    }
+  }, []);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -75,32 +99,35 @@ const Footer = () => {
             </h2>
           </div>
 
-          {/* Elegant Flower - Properly centered */}
+          {/* Spinning Elegant Flower - Properly centered */}
           <div className="flex justify-center mb-2">
-            <div className="w-36 h-36 sm:w-44 sm:h-44 lg:w-52 lg:h-52 opacity-90">
+            <div 
+              ref={flowerRef}
+              className="w-36 h-36 sm:w-44 sm:h-44 lg:w-52 lg:h-52 opacity-90"
+            >
               <svg viewBox="0 0 200 200" className="w-full h-full fill-cream/70">
-                {/* Enhanced Elegant Flower Design - Centered at 100,100 */}
+                {/* Enhanced Elegant Flower Design - Centered at 100,100 with spinning animation */}
                 <g transform="translate(100,100)">
                   {/* Outer petals - larger and more detailed */}
-                  <path d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" className="fill-cream/50" transform="rotate(0)"/>
-                  <path d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" className="fill-cream/50" transform="rotate(72)"/>
-                  <path d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" className="fill-cream/50" transform="rotate(144)"/>
-                  <path d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" className="fill-cream/50" transform="rotate(216)"/>
-                  <path d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" className="fill-cream/50" transform="rotate(288)"/>
+                  <path className="fill-cream/50" d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" transform="rotate(0)"/>
+                  <path className="fill-cream/50" d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" transform="rotate(72)"/>
+                  <path className="fill-cream/50" d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" transform="rotate(144)"/>
+                  <path className="fill-cream/50" d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" transform="rotate(216)"/>
+                  <path className="fill-cream/50" d="M0,-45 Q18,-28 0,-12 Q-18,-28 0,-45 Z" transform="rotate(288)"/>
                   
                   {/* Middle petals */}
-                  <path d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" className="fill-cream/65" transform="rotate(36)"/>
-                  <path d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" className="fill-cream/65" transform="rotate(108)"/>
-                  <path d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" className="fill-cream/65" transform="rotate(180)"/>
-                  <path d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" className="fill-cream/65" transform="rotate(252)"/>
-                  <path d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" className="fill-cream/65" transform="rotate(324)"/>
+                  <path className="fill-cream/65" d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" transform="rotate(36)"/>
+                  <path className="fill-cream/65" d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" transform="rotate(108)"/>
+                  <path className="fill-cream/65" d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" transform="rotate(180)"/>
+                  <path className="fill-cream/65" d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" transform="rotate(252)"/>
+                  <path className="fill-cream/65" d="M0,-32 Q14,-20 0,-8 Q-14,-20 0,-32 Z" transform="rotate(324)"/>
                   
                   {/* Inner petals */}
-                  <path d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" className="fill-cream/80" transform="rotate(0)"/>
-                  <path d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" className="fill-cream/80" transform="rotate(72)"/>
-                  <path d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" className="fill-cream/80" transform="rotate(144)"/>
-                  <path d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" className="fill-cream/80" transform="rotate(216)"/>
-                  <path d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" className="fill-cream/80" transform="rotate(288)"/>
+                  <path className="fill-cream/80" d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" transform="rotate(0)"/>
+                  <path className="fill-cream/80" d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" transform="rotate(72)"/>
+                  <path className="fill-cream/80" d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" transform="rotate(144)"/>
+                  <path className="fill-cream/80" d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" transform="rotate(216)"/>
+                  <path className="fill-cream/80" d="M0,-20 Q10,-14 0,-6 Q-10,-14 0,-20 Z" transform="rotate(288)"/>
                   
                   {/* Center circles */}
                   <circle cx="0" cy="0" r="8" className="fill-cream/90"/>
@@ -108,14 +135,14 @@ const Footer = () => {
                   <circle cx="0" cy="0" r="2" className="fill-cream/50"/>
                   
                   {/* Enhanced decorative leaves */}
-                  <path d="M0,15 Q10,25 0,35 Q-10,25 0,15 Z" className="fill-cream/40"/>
-                  <path d="M0,15 Q10,25 0,35 Q-10,25 0,15 Z" className="fill-cream/40" transform="rotate(120)"/>
-                  <path d="M0,15 Q10,25 0,35 Q-10,25 0,15 Z" className="fill-cream/40" transform="rotate(240)"/>
+                  <path className="fill-cream/40" d="M0,15 Q10,25 0,35 Q-10,25 0,15 Z"/>
+                  <path className="fill-cream/40" d="M0,15 Q10,25 0,35 Q-10,25 0,15 Z" transform="rotate(120)"/>
+                  <path className="fill-cream/40" d="M0,15 Q10,25 0,35 Q-10,25 0,15 Z" transform="rotate(240)"/>
                   
                   {/* Additional decorative elements */}
-                  <path d="M0,25 Q6,30 0,35 Q-6,30 0,25 Z" className="fill-cream/30" transform="rotate(60)"/>
-                  <path d="M0,25 Q6,30 0,35 Q-6,30 0,25 Z" className="fill-cream/30" transform="rotate(180)"/>
-                  <path d="M0,25 Q6,30 0,35 Q-6,30 0,25 Z" className="fill-cream/30" transform="rotate(300)"/>
+                  <path className="fill-cream/30" d="M0,25 Q6,30 0,35 Q-6,30 0,25 Z" transform="rotate(60)"/>
+                  <path className="fill-cream/30" d="M0,25 Q6,30 0,35 Q-6,30 0,25 Z" transform="rotate(180)"/>
+                  <path className="fill-cream/30" d="M0,25 Q6,30 0,35 Q-6,30 0,25 Z" transform="rotate(300)"/>
                 </g>
               </svg>
             </div>

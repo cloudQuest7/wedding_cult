@@ -29,7 +29,7 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <img src={logo} alt="The Wedding Cult" className="h-12 w-auto sm:h-14 md:h-16" />
+            <img src={"logo.png"} alt="The Wedding Cult" className="h-12 w-auto sm:h-14 md:h-16" />
           </Link>
 
           {/* Desktop Navigation */}

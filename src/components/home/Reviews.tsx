@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Quote, Star, Users, Heart } from "lucide-react";
-import { useQuery } from "@sanity/react-loader";
+import { client } from "@/sanity/client";
 import { feedbacksQuery } from "@/lib/queries";
 
 interface Review {
@@ -19,10 +19,61 @@ const Reviews = () => {
   const dotsRef = useRef([]);
   const statsRef = useRef(null);
 
-  const { data: feedbackData, loading: isFeedbackLoading } = useQuery<{ 
+  const [feedbackData, setFeedbackData] = useState<{
     reviews: Review[];
     stats: { totalReviews: number; averageRating: number; }
-  }>(feedbacksQuery);
+  } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        console.log('🎯 Starting feedback fetch in Reviews component');
+        
+        // First check if we have any feedback documents
+        console.log('🔍 Testing simple query...');
+        const testQuery = '*[_type == "feedback"][0]';
+        const singleDoc = await client.fetch(testQuery)
+          .catch(err => {
+            throw new Error(`Simple query failed: ${err.message}`);
+          });
+        console.log('📄 Test document:', singleDoc);
+
+        if (!singleDoc) {
+          console.log('No feedback documents found. Creating test document...');
+          // You might want to create a test document here
+        }
+
+        console.log('🔄 Fetching all feedback...');
+        const result = await client.fetch(feedbacksQuery)
+          .catch(err => {
+            throw new Error(`Main query failed: ${err.message}`);
+          });
+        console.log('✅ Got feedback data:', result);
+        
+        if (!result) {
+          console.error('No data received from Sanity');
+          return;
+        }
+        if (!result.reviews) {
+          console.error('No reviews in the response:', result);
+          return;
+        }
+        setFeedbackData(result);
+        console.log('Successfully set feedback data:', result.reviews.length, 'reviews');
+      } catch (error) {
+        console.error('Error details:', {
+          message: error.message,
+          name: error.name,
+          stack: error.stack
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFeedback();
+  }, []);
 
   const clientReviews: Review[] = feedbackData?.reviews || [
     {
@@ -264,6 +315,10 @@ const Reviews = () => {
     });
   };
 
+  if (isLoading) {
+    console.log('Loading feedback data...');
+  }
+
   return (
     <section 
       ref={sectionRef}
@@ -273,10 +328,7 @@ const Reviews = () => {
     >
       {/* Premium background pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div 
-className="reviews-background"
-          className="w-full h-full reviews-background"
-        ></div>
+        <div className="w-full h-full reviews-background"></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative">
@@ -323,7 +375,6 @@ className="reviews-background"
           <div className="overflow-hidden rounded-2xl">
             <div 
               className="flex transition-all duration-700 ease-out slider-transform"
-              className="slider-transform"
               style={{ '--slide-offset': `-${currentIndex * 100}%` } as React.CSSProperties}
             >
               {Array.from({ length: totalSlides }, (_, slideIndex) => (
