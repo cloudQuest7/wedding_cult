@@ -1,9 +1,8 @@
 import { Instagram, Youtube, Mail, Phone } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
   const flowerRef = useRef(null);
   
   const socialLinks = [
@@ -51,41 +50,8 @@ const Footer = () => {
     }
   }, []);
 
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    console.log("Subscribed with email:", email);
-    setEmail("");
-  };
-
   return (
     <footer className="bg-gradient-to-b from-beige-light to-cream">
-      {/* Newsletter Section - Reduced spacing */}
-      <section className="py-4 sm:py-6 lg:py-8 px-4 sm:px-6 text-center">
-        <div className="max-w-xl sm:max-w-2xl mx-auto">
-          <h3 className="font-playfair text-base sm:text-lg lg:text-xl text-chocolate/80 mb-3 sm:mb-4 leading-relaxed px-2">
-            Stay in the loop with the latest trends, tips, and exclusive offers. Subscribe to our newsletter
-            and be the first to know about upcoming events and promotions.
-          </h3>
-          
-          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-sm sm:max-w-lg mx-auto mt-4 sm:mt-6">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address..."
-              className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-b-2 border-chocolate/30 bg-transparent text-chocolate placeholder-chocolate/60 focus:outline-none focus:border-chocolate transition-all duration-300 font-playfair text-sm sm:text-base"
-              required
-            />
-            <button
-              type="submit"
-              className="px-6 sm:px-8 py-2 sm:py-3 bg-chocolate text-cream font-poppins font-medium hover:bg-chocolate/90 transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base whitespace-nowrap"
-            >
-              SUBSCRIBE
-            </button>
-          </form>
-        </div>
-      </section>
-
       {/* Main Footer - Significantly reduced padding */}
       <section className="bg-chocolate text-cream pt-4 sm:pt-6 lg:pt-8 pb-3 sm:pb-4">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Quote, Star, Users, Heart } from "lucide-react";
+import { Quote, Star, Heart, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { client } from "@/sanity/client";
 import { feedbacksQuery } from "@/lib/queries";
 
@@ -17,7 +17,6 @@ const Reviews = () => {
   const titleRef = useRef(null);
   const cardsRef = useRef([]);
   const dotsRef = useRef([]);
-  const statsRef = useRef(null);
 
   const [feedbackData, setFeedbackData] = useState<{
     reviews: Review[];
@@ -30,8 +29,6 @@ const Reviews = () => {
       try {
         console.log('🎯 Starting feedback fetch in Reviews component');
         
-        // First check if we have any feedback documents
-        console.log('🔍 Testing simple query...');
         const testQuery = '*[_type == "feedback"][0]';
         const singleDoc = await client.fetch(testQuery)
           .catch(err => {
@@ -41,7 +38,6 @@ const Reviews = () => {
 
         if (!singleDoc) {
           console.log('No feedback documents found. Creating test document...');
-          // You might want to create a test document here
         }
 
         console.log('🔄 Fetching all feedback...');
@@ -208,7 +204,7 @@ const Reviews = () => {
   // GSAP Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Title animation with morphing effect
+      // Enhanced title animation
       gsap.fromTo(titleRef.current, {
         opacity: 0,
         y: 60,
@@ -221,21 +217,8 @@ const Reviews = () => {
         ease: "power3.out"
       });
 
-      // Stats animation
-      gsap.fromTo(statsRef.current, {
-        opacity: 0,
-        y: 40
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        delay: 0.3,
-        ease: "power2.out"
-      });
-
       // Initial cards animation
       animateCardsIn();
-
     }, sectionRef);
 
     return () => ctx.revert();
@@ -263,8 +246,8 @@ const Reviews = () => {
     gsap.fromTo(currentCards, {
       opacity: 0,
       y: 50,
-      scale: 0.9,
-      rotationX: 15
+      scale: 0.95,
+      rotationX: 10
     }, {
       opacity: 1,
       y: 0,
@@ -294,8 +277,8 @@ const Reviews = () => {
     if (!card) return;
 
     gsap.to(card, {
-      y: -10,
-      scale: 1.03,
+      y: -15,
+      scale: 1.05,
       rotationY: 5,
       duration: 0.4,
       ease: "power2.out"
@@ -322,110 +305,116 @@ const Reviews = () => {
   return (
     <section 
       ref={sectionRef}
-      className="py-20 sm:py-24 md:py-28 px-4 sm:px-6 bg-gradient-to-r from-beige-light to-cream relative overflow-hidden"
+      className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-gradient-to-br from-cream/80 via-background to-beige-light/60 relative overflow-hidden"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
-      {/* Premium background pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="w-full h-full reviews-background"></div>
+      {/* Modern animated background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-chocolate/5 to-amber-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-beige-warm/10 to-chocolate/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        
+        {/* Floating particles */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute animate-float opacity-20"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${3 + Math.random() * 2}s`,
+              }}
+            >
+              <Sparkles className="w-3 h-3 text-chocolate" />
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative">
-        {/* Enhanced Header Section */}
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Clean Header Section - Stats section removed */}
         <div className="text-center mb-16 sm:mb-20">
-          {/* Premium stats bar */}
-          <div 
-            ref={statsRef}
-            className="inline-flex items-center gap-8 mb-8 px-6 py-3 bg-white/60 backdrop-blur-sm rounded-full border border-chocolate/20 shadow-sm"
-          >
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-chocolate" />
-              <span className="font-poppins text-sm font-semibold text-chocolate">
-                {feedbackData?.stats.totalReviews || "500+"} Couples
-              </span>
-            </div>
-            <div className="w-px h-4 bg-chocolate/30"></div>
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
-              ))}
-              <span className="font-poppins text-sm font-semibold text-chocolate ml-1">
-                {feedbackData?.stats.averageRating || "4.9"}
-              </span>
+          <div className="relative">
+            <h2 
+              ref={titleRef}
+              className="font-amsterdam text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-chocolate mb-6 leading-tight"
+            >
+              What Our Couples Say
+            </h2>
+            <p className="font-playfair text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
+              Real Stories, Real Love, Real Emotions
+            </p>
+            
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="w-20 h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
+              <Heart className="w-6 h-6 text-chocolate animate-pulse" />
+              <div className="w-20 h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
             </div>
           </div>
-
-          <h2 
-            ref={titleRef}
-            className="font-amsterdam text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-chocolate mb-6 leading-tight"
-          >
-            What Our Couples Say
-            <span className="block text-xl sm:text-2xl md:text-3xl font-poppins font-light text-muted-foreground mt-2">
-              Real Stories, Real Love
-            </span>
-          </h2>
-          
-          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent mx-auto"></div>
         </div>
 
-        {/* Enhanced Reviews Slider */}
+        {/* Modern Reviews Slider */}
         <div className="relative">
-          {/* Main slider container */}
-          <div className="overflow-hidden rounded-2xl">
+          {/* Main slider container with improved styling */}
+          <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-white/50 to-cream/30 backdrop-blur-sm border border-white/30 shadow-2xl p-8">
             <div 
-              className="flex transition-all duration-700 ease-out slider-transform"
-              style={{ '--slide-offset': `-${currentIndex * 100}%` } as React.CSSProperties}
+              className="flex transition-all duration-700 ease-out"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
               {Array.from({ length: totalSlides }, (_, slideIndex) => (
                 <div 
                   key={slideIndex} 
-                  className="min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-2"
+                  className="min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
                 >
                   {clientReviews.slice(slideIndex * 3, slideIndex * 3 + 3).map((review, index) => (
                     <div
                       key={slideIndex * 3 + index}
                       ref={(el) => cardsRef.current[slideIndex * 3 + index] = el}
-                      className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/50 cursor-pointer transform-gpu"
+                      className="group relative bg-white/95 backdrop-blur-md p-8 rounded-3xl shadow-xl border border-white/50 cursor-pointer transform-gpu hover:shadow-2xl transition-all duration-500"
                       onMouseEnter={() => handleCardHover(index)}
                       onMouseLeave={() => handleCardLeave(index)}
                     >
-                      {/* Premium quote icon */}
-                      <div className="absolute -top-3 -left-3 w-8 h-8 bg-gradient-to-br from-chocolate to-amber-600 rounded-full flex items-center justify-center shadow-lg">
-                        <Quote className="w-4 h-4 text-white" />
+                      {/* Modern quote design */}
+                      <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-chocolate to-amber-600 rounded-2xl flex items-center justify-center shadow-xl transform rotate-12 group-hover:rotate-0 transition-transform duration-500">
+                        <Quote className="w-6 h-6 text-white" />
                       </div>
 
-                      {/* Corner accent */}
-                      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-chocolate/10 to-transparent rounded-bl-3xl"></div>
+                      {/* Floating accent */}
+                      <div className="absolute top-4 right-4 w-8 h-8 bg-gradient-to-br from-chocolate/10 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                      {/* Review content */}
-                      <div className="relative space-y-6">
-                        <p className="font-playfair text-foreground text-lg leading-relaxed italic">
+                      {/* Review content with modern typography */}
+                      <div className="relative pt-4 space-y-6">
+                        <p className="font-playfair text-foreground text-lg leading-relaxed italic relative z-10">
                           "{review.review}"
                         </p>
                         
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between pt-4 border-t border-chocolate/10">
                           <div>
-                            <div className="font-poppins font-semibold text-chocolate text-lg">
+                            <div className="font-amsterdam text-xl font-bold text-chocolate mb-1">
                               {review.names}
                             </div>
-                            <div className="font-poppins text-muted-foreground text-sm flex items-center gap-1">
-                              <div className="w-1 h-1 bg-chocolate rounded-full"></div>
+                            <div className="font-playfair text-muted-foreground text-sm flex items-center gap-2">
+                              <div className="w-2 h-2 bg-chocolate rounded-full animate-pulse"></div>
                               {review.location}
                             </div>
                           </div>
                           
-                          {/* Rating stars */}
-                          <div className="flex items-center gap-1">
+                          {/* Enhanced rating stars */}
+                          <div className="flex items-center gap-0.5 p-2 bg-amber-50 rounded-xl">
                             {[...Array(5)].map((_, i) => (
-                              <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
+                              <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400 drop-shadow-sm" />
                             ))}
                           </div>
                         </div>
                       </div>
 
-                      {/* Hover gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-chocolate/5 to-amber-100/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                      {/* Modern hover gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-chocolate/5 via-transparent to-amber-100/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
+                      
+                      {/* Subtle border glow on hover */}
+                      <div className="absolute inset-0 rounded-3xl ring-0 group-hover:ring-2 group-hover:ring-chocolate/20 transition-all duration-500"></div>
                     </div>
                   ))}
                 </div>
@@ -434,7 +423,7 @@ const Reviews = () => {
           </div>
 
           {/* Enhanced Navigation */}
-          <div className="flex justify-center items-center mt-12 space-x-3">
+          <div className="flex justify-center items-center mt-10 space-x-4">
             {Array.from({ length: totalSlides }, (_, index) => (
               <button
                 key={index}
@@ -442,9 +431,9 @@ const Reviews = () => {
                 onClick={() => handleDotClick(index)}
                 className={`relative transition-all duration-300 ${
                   index === currentIndex 
-                    ? 'w-8 h-3 bg-chocolate shadow-lg' 
-                    : 'w-3 h-3 bg-chocolate/30 hover:bg-chocolate/50'
-                } rounded-full`}
+                    ? 'w-12 h-4 bg-gradient-to-r from-chocolate to-amber-600 shadow-lg' 
+                    : 'w-4 h-4 bg-chocolate/30 hover:bg-chocolate/50'
+                } rounded-full hover:scale-110`}
                 aria-label={`Go to review slide ${index + 1}`}
               >
                 {index === currentIndex && (
@@ -454,38 +443,66 @@ const Reviews = () => {
             ))}
           </div>
 
-          {/* Navigation arrows for desktop */}
-          <div className="hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between pointer-events-none">
+          {/* Modern navigation arrows */}
+          <div className="hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between pointer-events-none z-10">
             <button
               onClick={() => handleDotClick(currentIndex > 0 ? currentIndex - 1 : totalSlides - 1)}
-              className="pointer-events-auto -ml-6 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center text-chocolate hover:bg-white transition-all duration-300 hover:scale-110"
+              className="pointer-events-auto -ml-8 w-14 h-14 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl flex items-center justify-center text-chocolate hover:bg-white hover:scale-110 transition-all duration-300 border border-chocolate/10"
             >
-              ←
+              <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={() => handleDotClick(currentIndex < totalSlides - 1 ? currentIndex + 1 : 0)}
-              className="pointer-events-auto -mr-6 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center text-chocolate hover:bg-white transition-all duration-300 hover:scale-110"
+              className="pointer-events-auto -mr-8 w-14 h-14 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl flex items-center justify-center text-chocolate hover:bg-white hover:scale-110 transition-all duration-300 border border-chocolate/10"
             >
-              →
+              <ChevronRight className="w-6 h-6" />
             </button>
           </div>
         </div>
 
-        {/* Bottom CTA */}
+        {/* Modern Bottom CTA */}
         <div className="text-center mt-16">
-          <div className="inline-flex items-center gap-4 px-8 py-4 bg-white/60 backdrop-blur-sm rounded-full border border-chocolate/20 shadow-sm">
-            <Heart className="w-5 h-5 text-chocolate animate-pulse" />
-            <span className="font-poppins text-chocolate font-medium">
-              Join 500+ Happy Couples
-            </span>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-chocolate rounded-full animate-pulse"></div>
-              <div className="w-2 h-2 bg-chocolate rounded-full animate-pulse dot-pulse-1"></div>
-              <div className="w-2 h-2 bg-chocolate rounded-full animate-pulse dot-pulse-2"></div>
+          <div className="inline-flex items-center gap-6 px-10 py-6 bg-gradient-to-r from-white/90 to-cream/90 backdrop-blur-md rounded-3xl border border-chocolate/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105">
+            <div className="p-3 bg-gradient-to-br from-chocolate to-amber-600 rounded-2xl">
+              <Heart className="w-6 h-6 text-white animate-pulse" />
+            </div>
+            <div className="text-left">
+              <h3 className="font-amsterdam text-2xl text-chocolate font-bold mb-1">
+                Join Our Family
+              </h3>
+              <p className="font-playfair text-muted-foreground">
+                500+ couples trust us with their love stories
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-chocolate rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-chocolate rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+              <div className="w-3 h-3 bg-chocolate rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Add custom CSS for animations */}
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.2; transform: scale(0.8); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .animate-twinkle {
+          animation: twinkle 3s ease-in-out infinite;
+        }
+      `}</style>
     </section>
   );
 };

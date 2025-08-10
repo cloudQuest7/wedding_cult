@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Instagram, Youtube, MessageCircle, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const SocialFloatingButton = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Close button on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isOpen]);
 
   const socialLinks = [
     {
