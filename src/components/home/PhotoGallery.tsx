@@ -242,7 +242,7 @@ const PhotoGallery = () => {
             {/* Main Title */}
             <h2
               ref={titleRef}
-              className="font-amsterdam text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-chocolate mb-4 leading-tight relative"
+              className="font-amsterdam text-3xl sm:text-4xl md:text-5xl lg:text-4xl text-chocolate mb-4 leading-tight relative"
               style={{
                 textShadow: "0 4px 20px rgba(183, 134, 90, 0.15)",
                 fontWeight: "400",
@@ -262,7 +262,7 @@ const PhotoGallery = () => {
             {/* Elegant Subtitle */}
             <p
               ref={subtitleRef}
-              className="font-playfair text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed italic"
+              className="font-playfair text-lg sm:text-xl md:text-2xl  max-w-4xl mx-auto leading-relaxed italic"
               style={{
                 textShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
                 fontWeight: "300",
@@ -308,17 +308,18 @@ const PhotoGallery = () => {
 
                   {/* Text Overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <div className="mb-2">
-                      <div className="flex items-center space-x-2 text-sm font-poppins font-light tracking-wider opacity-90">
-                        <span>{photo.date}</span>
-                        <span>—</span>
-                        <span>{photo.location}</span>
-                      </div>
-                    </div>
-                    <h3 className="font-poppins text-2xl lg:text-3xl font-light tracking-wide leading-tight">
-                      {photo.couple}
-                    </h3>
-                  </div>
+  <div className="mb-2">
+    <div className="flex items-center space-x-2 text-sm font-serif font-light tracking-wider opacity-90">
+      <span>{photo.date}</span>
+      <span>—</span>
+      <span>{photo.location}</span>
+    </div>
+  </div>
+  <h3 className="font-playfair text-xl lg:text-2xl font-light tracking-wide leading-tight">
+    {photo.couple}
+  </h3>
+</div>
+
 
                   {/* Hover Effect */}
                   <div className="absolute inset-0 bg-chocolate/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -345,7 +346,7 @@ const PhotoGallery = () => {
                       <span>{photos[currentIndex].location}</span>
                     </div>
                   </div>
-                  <h3 className="font-poppins text-2xl font-light tracking-wide leading-tight">
+                  <h3 className="font-playfair text-2xl font-light tracking-wide leading-tight">
                     {photos[currentIndex].couple}
                   </h3>
                 </div>

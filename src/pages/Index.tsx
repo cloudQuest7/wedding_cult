@@ -43,7 +43,7 @@ const Index = () => {
         <FeedbackSection />
         <Footer />
       </div>
-    </div>
+    </div> 
   );
 };
 

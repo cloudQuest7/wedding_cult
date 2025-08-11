@@ -74,11 +74,11 @@ const Hero = () => {
           </div>
 
           {/* Main Brand Title - Responsive but well-sized */}
-          <h1 className="font-amsterdam text-white text-xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-[0.02em] leading-[0.9] drop-shadow-2xl">
-  THE WEDDING
-  <br />
-  <span className="font-normal">CULT</span>
+          <h1 className="font-amsterdam text-white text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-wide leading-snug drop-shadow-2xl">
+  The Wedding   Cult
+  
 </h1>
+
 
 
           {/* Professional Tagline */}

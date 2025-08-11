@@ -255,18 +255,19 @@ const VideoPreview = () => {
             </div>
 
             {/* Main Title - Mobile Optimized Typography */}
-            <div className="mb-6 sm:mb-8">
-              <h1 className="font-poppins text-lg sm:text-2xl md:text-3xl text-chocolate mb-1 sm:mb-2 leading-tight tracking-tight font-medium">
-                FEATURED IN
-              </h1>
-              <h2 className="font-poppins text-lg sm:text-2xl md:text-3xl text-chocolate mb-2 leading-tight tracking-tight font-medium">
-                THE WEDDING CULT'S
-              </h2>
-              {/* Fixed couple names typography for mobile */}
-              <h3 className="font-poppins text-xl sm:text-3xl md:text-4xl text-chocolate leading-tight tracking-tight font-bold break-words">
-                {currentVideo.coupleNames.toUpperCase()}
-              </h3>
-            </div>
+    <div className="mb-6 sm:mb-8">
+  <h1 className="font-playfair text-lg sm:text-2xl md:text-3xl text-chocolate mb-1 sm:mb-2 leading-tight tracking-wide font-medium">
+    Featured In
+  </h1>
+  <h2 className="font-playfair text-lg sm:text-2xl md:text-3xl text-chocolate mb-2 leading-tight tracking-wide font-medium">
+    The Wedding Cult's
+  </h2>
+  <h3 className="font-amsterdam text-2xl sm:text-3xl md:text-4xl text-chocolate leading-tight tracking-normal font-bold break-words">
+    {currentVideo.coupleNames}
+  </h3>
+</div>
+
+
 
             {/* Breadcrumb Navigation - Mobile Optimized */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 mb-6 sm:mb-8 text-xs sm:text-sm space-y-1 sm:space-y-0">

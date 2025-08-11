@@ -223,7 +223,7 @@ const WhyChooseUs = () => {
           
           <h2
   ref={titleRef}
-  className="font-amsterdam text-lg sm:text-3xl md:text-4xl lg:text-5xl text-chocolate mb-3 sm:mb-6 leading-snug px-2"
+  className="font-amsterdam text-lg sm:text-4xl md:text-4xl lg:text-5xl text-chocolate mb-3 sm:mb-6 leading-snug px-2"
 >
   Why Couples Choose Us
   <span className="block mt-3 text-base sm:text-2xl md:text-3xl font-poppins font-light text-muted-foreground">
