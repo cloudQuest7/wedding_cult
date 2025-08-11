@@ -252,7 +252,7 @@ const About = () => {
               <span className="font-poppins text-sm font-medium text-chocolate">Cinematic Love Stories</span>
             </div>
             
-            <h1 className="font-amsterdam text-4xl sm:text-5xl md:text-6xl text-chocolate mb-6 leading-tight">
+            <h1 className="font-amsterdam text-4xl sm:text-5xl md:text-4xl text-chocolate mb-6 leading-tight">
               About Us & Reviews
             </h1>
             
@@ -437,7 +437,7 @@ const About = () => {
                 <Camera className="w-8 h-8 text-white" />
               </div>
               
-              <h2 className="font-amsterdam text-3xl sm:text-4xl md:text-5xl text-white mb-4">
+              <h2 className="font-amsterdam text-3xl sm:text-2xl md:text-3xl text-white mb-4">
                 Ready to Join Our Story?
               </h2>
               <p className="font-playfair text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">

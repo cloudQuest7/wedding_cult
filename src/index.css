@@ -146,7 +146,12 @@ All colors MUST be HSL.
     font-family: 'Amsterdam', cursive;
   }
 
-  
+  @font-face {
+  font-family: 'Amsterdam';
+  src: url('/src/assets/Amsterdam.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
   
   .font-poppins {
     font-family: 'Poppins', sans-serif;

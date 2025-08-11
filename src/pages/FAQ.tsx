@@ -119,7 +119,7 @@ const FAQ = () => {
               <span className="font-poppins text-sm font-medium text-chocolate">Your Questions Answered</span>
             </div>
 
-            <h1 className="font-amsterdam text-4xl sm:text-5xl md:text-6xl text-chocolate mb-4 leading-tight">
+            <h1 className="font-amsterdam text-2xl sm:text-5xl md:text-4xl text-chocolate mb-4 leading-tight">
               Frequently Asked Questions
             </h1>
 

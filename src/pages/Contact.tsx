@@ -100,7 +100,7 @@ const Contact = () => {
               <span className="font-poppins text-sm font-medium text-chocolate">Let's Create Something Beautiful</span>
             </div>
             
-            <h1 className="font-amsterdam text-4xl sm:text-5xl md:text-6xl text-chocolate mb-2 leading-tight">
+            <h1 className="font-amsterdam text-xl sm:text-xl md:text-3xl text-chocolate mb-7 leading-tight">
               Let's Create Magic Together
             </h1>
             
@@ -121,7 +121,7 @@ const Contact = () => {
               <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 sm:p-8 shadow-lg border border-beige-light/30">
                 {/* Form header - minimal margin */}
                 <div className="mb-3">
-                  <h2 className="font-amsterdam text-2xl sm:text-3xl text-chocolate mb-0.5">
+                  <h2 className="font-amsterdam text-m sm:text-m text-chocolate mb-1">
                     Tell Us About Your Day
                   </h2>
                   <p className="font-poppins text-muted-foreground text-sm sm:text-base">

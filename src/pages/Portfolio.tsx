@@ -209,7 +209,7 @@ const Portfolio = () => {
                          xs:text-3xl xs:mb-4
                          sm:text-4xl sm:mb-5 sm:leading-tight
                          md:text-5xl md:mb-6
-                         lg:text-6xl lg:mb-7">
+                         lg:text-4xl lg:mb-7">
             Our Cinematic Stories
           </h1>
           <p className="font-playfair text-sm leading-relaxed text-muted-foreground mx-auto mb-4 max-w-sm
@@ -407,7 +407,7 @@ const Portfolio = () => {
           <div className="text-center">
             <Link 
               to="/gallery"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-chocolate to-chocolate-light text-white px-5 py-2.5 rounded-full font-amsterdam text-sm hover:shadow-lg hover:scale-105 transition-all duration-300
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-chocolate to-chocolate-light text-white px-5 py-2.5 rounded-full font-playfair text-sm hover:shadow-lg hover:scale-105 transition-all duration-300
                          sm:gap-3 sm:px-6 sm:py-3 sm:text-base"
             >
               View Complete Gallery
