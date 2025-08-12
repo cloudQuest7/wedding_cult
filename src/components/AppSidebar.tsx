@@ -321,15 +321,19 @@ function MobileBottomNav() {
           </button>
 
           {/* Logo Space in the Middle */}
-          <div className="flex-1 flex justify-center">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 border-cream bg-cream/10 p-2">
-              <img 
-                src={logo} 
-                alt="Your Company Logo" 
-                className="w-full h-full object-contain rounded-full"
-              />
-            </div>
-          </div>
+<div className="flex-1 flex justify-center">
+  <Link 
+    to="/" 
+    className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 border-cream bg-cream/10 p-2 transition-transform duration-200 hover:scale-110"
+  >
+    <img 
+      src={logo} 
+      alt="The Wedding Cult Logo" 
+      className="w-full h-full object-contain rounded-full"
+    />
+  </Link>
+</div>
+
 
           {/* Enquire Button */}
           <Link
