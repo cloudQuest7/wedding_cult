@@ -58,7 +58,7 @@ const FeedbackSection = () => {
     <section className="py-16 px-4 bg-gradient-warm">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="font-amsterdam text-3xl text-chocolate mb-4 animate-fade-in-up">
+          <h2 className="font-amsterdam text-2xl text-chocolate mb-4 animate-fade-in-up">
             Share Your Feedback
           </h2>
           <p className="font-playfair text-lg text-muted-foreground animate-fade-in-up">

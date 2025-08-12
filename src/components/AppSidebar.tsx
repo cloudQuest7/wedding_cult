@@ -23,7 +23,7 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/new-logo.png";
 import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -291,7 +291,7 @@ function MobileBottomNav() {
         <div className="flex items-center justify-between px-4 py-3">
           {/* Company Name on Left */}
           <div className="text-left">
-            <h1 className="text-lg font-poppins font-medium text-chocolate">
+            <h1 className="text-sm font-poppins font-medium text-chocolate">
               The Wedding Cult
             </h1>
           </div>

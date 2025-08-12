@@ -309,15 +309,16 @@ const PhotoGallery = () => {
                   {/* Text Overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
   <div className="mb-2">
-    <div className="flex items-center space-x-2 text-sm font-serif font-light tracking-wider opacity-90">
+    <div className="flex items-center space-x-2 text-sm font-amsterdam font-light tracking-wider opacity-90">
       <span>{photo.date}</span>
       <span>—</span>
       <span>{photo.location}</span>
     </div>
   </div>
-  <h3 className="font-playfair text-xl lg:text-2xl font-light tracking-wide leading-tight">
-    {photo.couple}
-  </h3>
+  <h3 className="font-playfair text-xl sm:text-2xl lg:text-3xl font-light tracking-wide leading-tight">
+  {photo.couple}
+</h3>
+
 </div>
 
 

@@ -551,8 +551,9 @@ const Reviews = () => {
             </div>
             <div className="flex items-center gap-1 sm:gap-2">
               <div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse"></div>
-              <div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-              <div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+             <div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse delay-500ms"></div>
+<div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse delay-1s"></div>
+
             </div>
           </div>
         </div>

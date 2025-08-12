@@ -142,12 +142,13 @@ const About = () => {
     }
   ];
 
-  const stats = [
-    { number: "500+", label: "Weddings Captured", icon: Camera },
-    { number: "50+", label: "Cities Covered", icon: Heart },
-    { number: "100%", label: "Happy Couples", icon: Award },
-    { number: "5★", label: "Average Rating", icon: Star }
-  ];
+ const stats = [
+  { number: "100+", label: "Weddings Captured", icon: Camera },
+  { number: "8+", label: "Cities Covered", icon: Heart },
+  { number: "100%", label: "Happy Couples", icon: Award },
+  { number: "5★", label: "Average Rating", icon: Star }
+];
+
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -252,7 +253,7 @@ const About = () => {
               <span className="font-poppins text-sm font-medium text-chocolate">Cinematic Love Stories</span>
             </div>
             
-            <h1 className="font-amsterdam text-4xl sm:text-5xl md:text-4xl text-chocolate mb-6 leading-tight">
+            <h1 className="font-amsterdam text-3xl sm:text-5xl md:text-4xl text-chocolate mb-6 leading-tight">
               About Us & Reviews
             </h1>
             
@@ -265,8 +266,8 @@ const About = () => {
         {/* Stats Section */}
         <div ref={statsRef} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat, index) => {
-              const IconComponent = stat.icon;
+            {stats.map((stats, index) => {
+              const IconComponent = stats.icon;
               return (
                 <div key={index} className="text-center group">
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-chocolate/10 hover:shadow-xl transition-all duration-500 hover:scale-105">
@@ -274,10 +275,10 @@ const About = () => {
                       <IconComponent className="w-6 h-6 text-white" />
                     </div>
                     <div className="font-amsterdam text-2xl sm:text-3xl text-chocolate mb-1">
-                      {stat.number}
+                      {stats.number}
                     </div>
                     <div className="font-poppins text-sm text-muted-foreground">
-                      {stat.label}
+                      {stats.label}
                     </div>
                   </div>
                 </div>
@@ -342,7 +343,7 @@ const About = () => {
               <Heart className="w-4 h-4 text-chocolate fill-chocolate" />
               <span className="font-poppins text-sm font-medium text-chocolate">Client Love</span>
             </div>
-            <h2 className="font-amsterdam text-3xl sm:text-4xl text-chocolate mb-4">
+            <h2 className="font-amsterdam text-2xl sm:text-4xl text-chocolate mb-4">
               What Our Couples Say
             </h2>
             <p className="font-playfair text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -429,7 +430,8 @@ const About = () => {
           <div className="relative bg-gradient-to-br from-chocolate via-chocolate-light to-chocolate rounded-3xl p-8 sm:p-12 shadow-2xl overflow-hidden">
             {/* Animated decorative elements */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16 animate-pulse"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12 animate-pulse" style={{ animationDelay: '1s' }}></div>
+           <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12 animate-pulse delay-1s"></div>
+
             <div className="absolute top-1/2 left-1/2 w-16 h-16 bg-white/5 rounded-full transform -translate-x-1/2 -translate-y-1/2 animate-ping"></div>
             
             <div className="relative text-center">
@@ -437,7 +439,7 @@ const About = () => {
                 <Camera className="w-8 h-8 text-white" />
               </div>
               
-              <h2 className="font-amsterdam text-3xl sm:text-2xl md:text-3xl text-white mb-4">
+              <h2 className="font-amsterdam text-2xl sm:text-2xl md:text-3xl text-white mb-4">
                 Ready to Join Our Story?
               </h2>
               <p className="font-playfair text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">

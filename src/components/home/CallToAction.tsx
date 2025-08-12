@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 const CallToAction = () => {
   return <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-        <h2 className="font-amsterdam text-2xl sm:text-2xl text-chocolate mb-4 sm:mb-6 mx-0 px-0 md:text-3xl">
-          Your Story Deserves to be Remembered the Right Way
-        </h2>
-        <p className="font-playfair text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto px-4 sm:px-0">
+        <h2 className="font-amsterdam text-lg sm:text-2xl md:text-3xl text-chocolate mb-6 sm:mb-7 mx-0 px-0">
+  Your Story Deserves to be Remembered the Right Way
+</h2>
+
+        <p className="font-playfair text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-10 max-w-2xl mx-auto px-4 sm:px-0">
           Let's capture your forever.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">

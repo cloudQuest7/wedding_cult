@@ -670,13 +670,14 @@ const Gallery = () => {
         {/* Enhanced Header Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center">
           <div className="animate-fade-in-up">
-            <div className="inline-block mb-6">
-              <h1 className="font-dancing text-4xl sm:text-5xl lg:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-chocolate via-primary to-chocolate-light drop-shadow-sm">
+            <div className="inline-block mb-6 overflow-visible">
+  <h1 className="font-dancing text-4xl sm:text-5xl lg:text-6xl leading-[1.3] pt-2 pb-1 text-transparent bg-clip-text bg-gradient-to-r from-chocolate via-primary to-chocolate-light drop-shadow-sm">
   Gallery
 </h1>
 
-              <div className="h-1 w-32 mx-auto mt-4 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
-            </div>
+  <div className="h-1 w-32 mx-auto mt-4 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
+</div>
+
             <p className="font-playfair text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Explore our complete collection of cinematic wedding moments, 
               <span className="text-chocolate font-semibold"> captured with love and artistry</span>

@@ -256,16 +256,17 @@ const VideoPreview = () => {
 
             {/* Main Title - Mobile Optimized Typography */}
     <div className="mb-6 sm:mb-8">
-  <h1 className="font-playfair text-lg sm:text-2xl md:text-3xl text-chocolate mb-1 sm:mb-2 leading-tight tracking-wide font-medium">
+  <h1 className="font-playfair text-lg sm:text-xl md:text-2xl text-chocolate mb-2 leading-snug tracking-wide font-medium">
     Featured In
   </h1>
-  <h2 className="font-playfair text-lg sm:text-2xl md:text-3xl text-chocolate mb-2 leading-tight tracking-wide font-medium">
+  <h2 className="font-playfair text-lg sm:text-xl md:text-2xl text-chocolate mb-6 leading-snug tracking-wide font-medium">
     The Wedding Cult's
   </h2>
-  <h3 className="font-amsterdam text-2xl sm:text-3xl md:text-4xl text-chocolate leading-tight tracking-normal font-bold break-words">
+  <h3 className="font-amsterdam text-3xl sm:text-2xl md:text-3xl text-chocolate leading-[1.4] tracking-normal font-bold break-words">
     {currentVideo.coupleNames}
   </h3>
 </div>
+
 
 
 
