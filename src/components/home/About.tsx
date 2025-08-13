@@ -204,9 +204,9 @@ const About = () => {
 
               <div 
                 ref={textRef}
-                className="font-playfair text-2xl sm:text-3xl md:text-4xl mb-6"
+                className="font-playfair text-xl sm:text-3xl md:text-4xl mb-6"
               >
-                We don't just shoot weddings — we craft cinematic stories that capture the soul of your love, the laughter of your joy, and the tears of your happiness. Every frame is a memory, every moment is a masterpiece.
+                We don't just shoot weddings, we craft cinematic stories that capture the soul of your love, the laughter of your joy, and the tears of your happiness. Every frame is a memory, every moment is a masterpiece.
               </div>
 
               <div className="w-20 h-1 bg-chocolate/30 mx-auto rounded-full"></div>
@@ -254,10 +254,11 @@ const About = () => {
 
                   <div className="space-y-4 font-playfair text-lg sm:text-xl text-foreground leading-relaxed">
                     <p className="group-hover:text-chocolate transition-colors duration-300">
-                      We're not expensive like big studios — but our films speak louder.
+                      "We craft cinematic experiences that resonate, without the premium studio price tag."
+
                     </p>
-                    <p className="text-chocolate  group-hover:scale-105 transition-transform duration-300">
-                      The Wedding Cult is known for capturing real, raw emotions. We don't force moments — we find them.
+                    <p className="group-hover:text-chocolate transition-colors duration-300">
+                      The Wedding Cult is known for capturing real, raw emotions. We don't force moments, we find them.
                     </p>
                   </div>
                 </div>
