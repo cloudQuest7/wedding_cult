@@ -24,15 +24,15 @@ const PhotoGallery = () => {
     {
       id: 1,
       url: "https://ik.imagekit.io/7xgikoq8o/6(1).png?updatedAt=1752932936192",
-      couple: "BEAUTIFUL & MOMENTS",
+      couple: "Beautiful & Moments",
       date: "NOV 2024",
-      location: "MUMBAI",
+    location: "MUMBAI",
       alt: "Wedding gallery showcase",
     },
     {
       id: 2,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-thevisionaryvows-32927615.jpg?updatedAt=1752931184071",
-      couple: "LOVE & STORIES",
+      couple:"Love & Stories",
       date: "JUN 2024",
       location: "JAIPUR",
       alt: "Cinematic wedding capture",
@@ -40,7 +40,7 @@ const PhotoGallery = () => {
     {
       id: 3,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-thevisionaryvows-32862200.jpg?updatedAt=1752931182686",
-      couple: "ROMANTIC & MOMENTS",
+      couple: "Romantic & Moments",
       date: "JUN 2024",
       location: "GOA",
       alt: "Wedding celebration",
@@ -48,7 +48,7 @@ const PhotoGallery = () => {
     {
       id: 4,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-suraj-galgale-1822752-17284627.jpg?updatedAt=1752916089168",
-      couple: "PERFECT & DAY",
+      couple: "Perfect Days",
       date: "DEC 2024",
       location: "DELHI",
       alt: "Wedding ceremony capture",
@@ -56,7 +56,7 @@ const PhotoGallery = () => {
     {
       id: 5,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-909646465-31600964.jpg?updatedAt=1752917490827",
-      couple: "FOREVER & BEGINS",
+      couple: "Forever & Begins",
       date: "OCT 2024",
       location: "UDAIPUR",
       alt: "Wedding portrait session",
@@ -309,15 +309,18 @@ const PhotoGallery = () => {
                   {/* Text Overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
   <div className="mb-2">
-    <div className="flex items-center space-x-2 text-sm font-amsterdam font-light tracking-wider opacity-90">
+    <div className="flex items-center space-x-2 text-sm font-playfair font-light tracking-wider opacity-90">
       <span>{photo.date}</span>
       <span>—</span>
       <span>{photo.location}</span>
     </div>
   </div>
-  <h3 className="font-playfair text-xl sm:text-2xl lg:text-3xl font-light tracking-wide leading-tight">
+  <h3 className="font-playfair text-xl sm:text-2xl lg:text-xl font-normal tracking-wide leading-snug">
   {photo.couple}
 </h3>
+
+
+
 
 </div>
 
@@ -339,18 +342,21 @@ const PhotoGallery = () => {
                   className="w-full h-full object-cover transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <div className="mb-2">
-                    <div className="flex items-center space-x-2 text-sm font-poppins font-light tracking-wider opacity-90">
-                      <span>{photos[currentIndex].date}</span>
-                      <span>—</span>
-                      <span>{photos[currentIndex].location}</span>
-                    </div>
-                  </div>
-                  <h3 className="font-playfair text-2xl font-light tracking-wide leading-tight">
-                    {photos[currentIndex].couple}
-                  </h3>
-                </div>
+
+<div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+  {/* Date + Location */}
+  <div className="flex items-center space-x-2 text-xs sm:text-sm font-poppins font-light tracking-wider opacity-90 mb-1">
+    <span>{photos[currentIndex].date}</span>
+    <span>—</span>
+    <span>{photos[currentIndex].location}</span>
+  </div>
+
+  {/* Couple Name */}
+  <h3 className="font-playfair text-lg sm:text-xl lg:text-2xl font-light tracking-wide leading-snug">
+    {photos[currentIndex].couple}
+  </h3>
+</div>
+
               </div>
             </div>
           </div>

@@ -42,7 +42,9 @@ const SocialFloatingButton = () => {
   ];
 
   return (
-    <div className="fixed right-6 bottom-6 z-50 flex flex-col items-end gap-3">
+   <div className="fixed right-4 bottom-28 z-50 flex flex-col items-end gap-3">
+
+
       {/* Social Media Links */}
       {isOpen && (
         <div className="flex flex-col gap-3 animate-fade-in">

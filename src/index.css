@@ -120,6 +120,11 @@ All colors MUST be HSL.
   }
 }
 
+html {
+  font-display: swap;
+}
+
+
 @layer base {
   * {
     @apply border-border;
