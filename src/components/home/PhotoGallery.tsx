@@ -262,7 +262,7 @@ const PhotoGallery = () => {
             {/* Elegant Subtitle */}
             <p
               ref={subtitleRef}
-              className="font-playfair text-lg sm:text-xl md:text-2xl  max-w-4xl mx-auto leading-relaxed italic"
+              className="font-playfair text-lg sm:text-xl md:text-2xl  max-w-4xl mx-auto leading-relaxed"
               style={{
                 textShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
                 fontWeight: "300",

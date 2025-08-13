@@ -109,23 +109,17 @@ const Portfolio = () => {
     return () => clearInterval(interval)
   }, [testimonials.length])
 
-  // Film strip animation
+  // REMOVED: Film strip animation - No automatic animation anymore
+  // Just keep the ref for potential future use
   useEffect(() => {
     const el = filmStripRef.current
     if (!el) return
     
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          gsap.to(el, { x: "-50%", duration: 15, ease: "none", repeat: -1 })
-        } else {
-          gsap.killTweensOf(el)
-        }
-      },
-      { threshold: 0.2 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
+    // No animation - just keep the element available for manual scrolling
+    return () => {
+      // Cleanup any existing animations if they exist
+      gsap.killTweensOf(el)
+    }
   }, [])
 
   // Loading animations
@@ -164,47 +158,70 @@ const Portfolio = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 overflow-x-hidden">
-      {/* Add CSS to prevent scrollbar and fit content */}
+    <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 w-full">
+      {/* Enhanced CSS with manual scroll for film strip */}
       <style jsx>{`
-        /* Prevent vertical scrollbar on mobile */
-        @media (max-width: 768px) {
-          html, body {
-            overflow-x: hidden;
-            max-width: 100vw;
-          }
-          
-          body {
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-          }
-          
-          /* Hide scrollbar but keep functionality */
-          ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-          }
-          
-          /* For Firefox */
-          * {
-            scrollbar-width: none;
-          }
-          
-          /* For IE and Edge */
-          * {
-            -ms-overflow-style: none;
-          }
+        /* Prevent all overflow issues */
+        html, body {
+          overflow-x: hidden;
+          max-width: 100vw;
+          width: 100%;
         }
         
-        /* Ensure no horizontal overflow */
+        body {
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Hide scrollbar but keep functionality */
+        ::-webkit-scrollbar {
+          width: 0px;
+          background: transparent;
+        }
+        
+        /* For Firefox */
+        * {
+          scrollbar-width: none;
+        }
+        
+        /* For IE and Edge */
+        * {
+          -ms-overflow-style: none;
+        }
+        
+        /* Ensure no horizontal overflow anywhere */
         * {
           box-sizing: border-box;
         }
+        
+        /* Fix container overflow */
+        .container-fix {
+          max-width: 100vw;
+          overflow-x: hidden;
+        }
+        
+        /* Film strip manual scroll */
+        .film-strip-container {
+          overflow-x: auto;
+          overflow-y: hidden;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        
+        .film-strip-container::-webkit-scrollbar {
+          display: none;
+        }
+        
+        /* Smooth scrolling for film strip */
+        .film-strip-container {
+          scroll-behavior: smooth;
+        }
       `}</style>
 
-      {/* Mobile-First Header - Adjusted height to fit viewport */}
-      <div className="hero-content text-center px-4 pt-12 pb-6">
-        <div className="max-w-4xl mx-auto">
+      {/* Mobile-First Header - Fixed width constraints */}
+      <div className="hero-content text-center px-4 pt-12 pb-6 w-full container-fix">
+        <div className="max-w-4xl mx-auto w-full">
           <h1 className="font-amsterdam text-2xl leading-tight mb-3 text-chocolate 
                          xs:text-3xl xs:mb-4
                          sm:text-4xl sm:mb-5 sm:leading-tight
@@ -223,15 +240,15 @@ const Portfolio = () => {
         </div>
       </div>
 
-      {/* Mobile-Optimized Video Player - Reduced margins */}
-      <div className="video-player px-3 mb-8 sm:px-4 sm:mb-10 md:mb-12">
-        <div className="max-w-4xl mx-auto">
+      {/* Mobile-Optimized Video Player - Fixed width constraints */}
+      <div className="video-player px-3 mb-8 sm:px-4 sm:mb-10 md:mb-12 w-full container-fix">
+        <div className="max-w-4xl mx-auto w-full">
           <div className="bg-gradient-to-br from-white/90 to-cream/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-chocolate/10
                           sm:rounded-xl sm:shadow-xl
-                          lg:rounded-2xl">
+                          lg:rounded-2xl w-full">
             
             {/* Video Header - Compact for mobile */}
-            <div className="bg-gradient-to-r from-chocolate to-chocolate-light px-3 py-2 flex items-center justify-between
+            <div className="bg-gradient-to-r from-chocolate to-chocolate-light px-3 py-2 flex items-center justify-between w-full
                             sm:px-4 sm:py-3">
               <div className="flex items-center gap-2 flex-1 min-w-0
                               sm:gap-3">
@@ -257,7 +274,7 @@ const Portfolio = () => {
             </div>
             
             {/* Video Container - Responsive aspect ratio */}
-            <div className="relative aspect-video">
+            <div className="relative aspect-video w-full">
               {isPlaying ? (
                 <iframe
                   src={`https://www.youtube.com/embed/${currentVideo.embedId}?autoplay=1`}
@@ -297,7 +314,7 @@ const Portfolio = () => {
               {/* Compact Navigation */}
               <button 
                 onClick={prevVideo} 
-                className="absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 bg-black/70 text-white rounded-full hover:bg-chocolate transition-all duration-300 flex items-center justify-center
+                className="absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 bg-black/70 text-white rounded-full hover:bg-chocolate transition-all duration-300 flex items-center justify-center z-10
                            sm:left-2 sm:w-8 sm:h-8
                            md:left-3 md:w-10 md:h-10"
               >
@@ -307,7 +324,7 @@ const Portfolio = () => {
               </button>
               <button 
                 onClick={nextVideo} 
-                className="absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 bg-black/70 text-white rounded-full hover:bg-chocolate transition-all duration-300 flex items-center justify-center
+                className="absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 bg-black/70 text-white rounded-full hover:bg-chocolate transition-all duration-300 flex items-center justify-center z-10
                            sm:right-2 sm:w-8 sm:h-8
                            md:right-3 md:w-10 md:h-10"
               >
@@ -319,7 +336,7 @@ const Portfolio = () => {
           </div>
           
           {/* Compact Dots Navigation */}
-          <div className="flex justify-center mt-3 space-x-1.5
+          <div className="flex justify-center mt-3 space-x-1.5 w-full
                           sm:mt-4 sm:space-x-2
                           md:mt-6">
             {portfolioItems.map((_, i) => (
@@ -337,9 +354,9 @@ const Portfolio = () => {
         </div>
       </div>
 
-      {/* Compact Gallery Section */}
-      <div className="gallery-section px-3 mb-8 sm:px-4 sm:mb-10 md:mb-12">
-        <div className="max-w-6xl mx-auto">
+      {/* Compact Gallery Section - Fixed width constraints */}
+      <div className="gallery-section px-3 mb-8 sm:px-4 sm:mb-10 md:mb-12 w-full container-fix">
+        <div className="max-w-6xl mx-auto w-full">
           <div className="text-center mb-6 sm:mb-8">
             <h2 className="font-amsterdam text-xl text-chocolate mb-3
                            sm:text-2xl sm:mb-4
@@ -354,22 +371,22 @@ const Portfolio = () => {
             </p>
           </div>
 
-          {/* Compact Gallery Grid */}
-          <div className="grid grid-cols-2 gap-2 mb-4
+          {/* Compact Gallery Grid - Fixed width constraints */}
+          <div className="grid grid-cols-2 gap-2 mb-4 w-full
                           sm:gap-3 sm:mb-6
                           md:grid-cols-3 md:gap-4
                           lg:grid-cols-4">
             {featuredGalleryImages.map((photo, index) => (
               <div 
                 key={photo.id}
-                className="group cursor-pointer relative overflow-hidden rounded-lg shadow-sm hover:shadow-lg transform transition-all duration-500 hover:scale-105
+                className="group cursor-pointer relative overflow-hidden rounded-lg shadow-sm hover:shadow-lg transform transition-all duration-500 hover:scale-105 w-full
                            sm:rounded-xl
                            md:rounded-2xl"
                 style={{
                   animationDelay: `${index * 0.1}s`,
                 }}
               >
-                <div className="aspect-square">
+                <div className="aspect-square w-full">
                   <img 
                     src={photo.url} 
                     alt={photo.alt} 
@@ -404,7 +421,7 @@ const Portfolio = () => {
           </div>
 
           {/* Compact Button */}
-          <div className="text-center">
+          <div className="text-center w-full">
             <Link 
               to="/gallery"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-chocolate to-chocolate-light text-white px-5 py-2.5 rounded-full font-playfair text-sm hover:shadow-lg hover:scale-105 transition-all duration-300
@@ -418,132 +435,36 @@ const Portfolio = () => {
         </div>
       </div>
 
-      {/* Compact Testimonials */}
-      <div className="px-3 mb-8 sm:px-4 sm:mb-10 md:mb-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <h2 className="font-amsterdam text-xl text-chocolate mb-3
-                           sm:text-2xl sm:mb-4
-                           md:text-3xl md:mb-5
-                           lg:text-4xl">
-              What Couples Say
-            </h2>
-            <p className="font-playfair text-sm text-muted-foreground
-                          sm:text-base
-                          md:text-lg">
-              Real love stories, real emotions, real testimonials
-            </p>
-          </div>
-
-          <div className="relative">
-            <div className="overflow-hidden rounded-lg
-                            sm:rounded-xl
-                            md:rounded-2xl">
-              <div 
-                className="flex transition-transform duration-700 ease-in-out"
-                style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
-              >
-                {testimonials.map((testimonial) => (
-                  <div key={testimonial.id} className="w-full flex-shrink-0 px-1
-                                                      sm:px-2">
-                    <div className="bg-gradient-to-br from-white/90 to-cream/90 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-chocolate/10
-                                    sm:rounded-xl sm:p-5 sm:shadow-xl
-                                    md:rounded-2xl md:p-6
-                                    lg:p-8">
-                      <div className="flex flex-col items-center gap-3 text-center
-                                      md:flex-row md:gap-5 md:text-left
-                                      lg:gap-6">
-                        <div className="flex-shrink-0
-                                        md:w-1/3">
-                          <img 
-                            src={testimonial.image} 
-                            alt={testimonial.name}
-                            className="w-16 h-16 rounded-full object-cover shadow-md mx-auto
-                                       sm:w-20 sm:h-20
-                                       md:w-24 md:h-24
-                                       lg:w-32 lg:h-32"
-                          />
-                        </div>
-                        <div className="flex-1
-                                        md:w-2/3">
-                          <div className="flex justify-center mb-2
-                                          sm:mb-3
-                                          md:justify-start">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="w-3 h-3 text-yellow-400 fill-current
-                                                       sm:w-4 sm:h-4
-                                                       md:w-5 md:h-5" />
-                            ))}
-                          </div>
-                          <blockquote className="font-playfair text-sm text-chocolate mb-3 italic leading-relaxed
-                                                 sm:text-base sm:mb-4
-                                                 md:text-lg md:mb-5
-                                                 lg:text-xl">
-                            "{testimonial.text}"
-                          </blockquote>
-                          <div>
-                            <h4 className="font-amsterdam text-base text-chocolate mb-0.5
-                                           sm:text-lg
-                                           md:text-xl">
-                              {testimonial.name}
-                            </h4>
-                            <p className="text-muted-foreground font-playfair text-xs
-                                          sm:text-sm">
-                              {testimonial.location}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Compact Navigation */}
-            <div className="flex justify-center mt-4 space-x-1.5
-                            sm:mt-6 sm:space-x-2">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentTestimonial(i)}
-                  className={`transition-all duration-300 ${
-                    currentTestimonial === i 
-                      ? "w-5 h-1.5 bg-chocolate rounded-full sm:w-6 sm:h-2" 
-                      : "w-1.5 h-1.5 bg-chocolate/30 rounded-full hover:bg-chocolate/50 sm:w-2 sm:h-2"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Compact Film Strip */}
-      <div className="mb-8 sm:mb-10 md:mb-12">
-        <div className="max-w-5xl mx-auto px-3 sm:px-4">
-          <div className="bg-gradient-to-r from-black via-gray-900 to-black py-4 rounded-lg overflow-hidden relative shadow-lg
-                          sm:py-6 sm:rounded-xl sm:shadow-xl
-                          md:py-8 md:rounded-2xl
-                          lg:py-10">
-            <div className="overflow-hidden">
-              <div ref={filmStripRef} className="flex gap-2 px-2 min-w-max
-                                                sm:gap-3 sm:px-3
-                                                md:gap-4 md:px-4">
+      {/* UPDATED: Film Strip Belt - Now manually scrollable, no animation */}
+      <div className="mb-12 sm:mb-16 md:mb-20 w-full container-fix">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4">
+          <div className="bg-gradient-to-r from-black via-gray-900 to-black py-6 rounded-lg relative shadow-2xl
+                          sm:py-8 sm:rounded-xl sm:shadow-2xl
+                          md:py-12 md:rounded-2xl
+                          lg:py-16">
+            
+            {/* Manual scrollable film strip container */}
+            <div className="film-strip-container">
+              <div ref={filmStripRef} className="flex gap-3 px-3 min-w-max
+                                                sm:gap-4 sm:px-4
+                                                md:gap-6 md:px-6">
                 {[
                   "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000488.jpg?updatedAt=1752122341261",
                   "https://ik.imagekit.io/7xgikoq8o/pexels-theindiaweddings-28144255.jpg?updatedAt=1752122336598", 
                   "https://ik.imagekit.io/7xgikoq8o/pexels-zephyr-events-2153609654-32864600.jpg?updatedAt=1752122336721",
                   "https://ik.imagekit.io/7xgikoq8o/pexels-varun-118342-5759464.jpg?updatedAt=1752122335592",
                   "https://ik.imagekit.io/7xgikoq8o/couple-9210801.jpg?updatedAt=1752218451384",
+                  "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000488.jpg?updatedAt=1752122341261",
+                  "https://ik.imagekit.io/7xgikoq8o/pexels-theindiaweddings-28144255.jpg?updatedAt=1752122336598",
                 ].map((src, i) => (
-                  <div key={i} className="w-24 h-16 flex-shrink-0
-                                          sm:w-32 sm:h-24
-                                          md:w-48 md:h-32
-                                          lg:w-64 lg:h-40">
-                    <div className="w-full h-full bg-gray-800 rounded-md overflow-hidden border border-gray-600 hover:border-chocolate/50 transition-all duration-500 shadow-md
-                                    sm:rounded-lg sm:shadow-lg
-                                    md:rounded-xl">
+                  <div key={i} className="w-32 h-24 flex-shrink-0
+                                          sm:w-40 sm:h-32
+                                          md:w-56 md:h-40
+                                          lg:w-72 lg:h-48
+                                          xl:w-80 xl:h-56">
+                    <div className="w-full h-full bg-gray-800 rounded-md overflow-hidden border-2 border-gray-600 hover:border-chocolate/70 transition-all duration-500 shadow-xl
+                                    sm:rounded-lg sm:shadow-2xl sm:border-2
+                                    md:rounded-xl md:border-3">
                       <img 
                         src={src} 
                         alt="Portfolio film strip" 
@@ -555,14 +476,119 @@ const Portfolio = () => {
               </div>
             </div>
             
-            {/* Film perforations */}
-            <div className="flex justify-center mt-2 gap-1
-                            sm:mt-3 sm:gap-1.5
-                            md:mt-4 md:gap-2">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="w-1 h-1 bg-gray-600 rounded-sm opacity-70
-                                        sm:w-1.5 sm:h-1.5
-                                        md:w-2 md:h-2"></div>
+            {/* Enhanced Film perforations */}
+            <div className="flex justify-center mt-3 gap-1.5
+                            sm:mt-4 sm:gap-2
+                            md:mt-6 md:gap-3">
+              {[...Array(12)].map((_, i) => (
+                <div key={i} className="w-1.5 h-1.5 bg-gray-500 rounded-sm opacity-80
+                                        sm:w-2 sm:h-2
+                                        md:w-3 md:h-3"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* FIXED: Testimonials Section - Enhanced visibility and spacing */}
+      <div className="px-3 mb-16 sm:px-4 sm:mb-20 md:mb-24 w-full container-fix relative z-20">
+        <div className="max-w-6xl mx-auto w-full">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="font-amsterdam text-2xl text-chocolate mb-4 py-3 px-4 leading-relaxed
+               sm:text-3xl sm:mb-6 sm:py-4 sm:px-6 sm:leading-relaxed
+               md:text-4xl md:mb-8 md:py-6 md:px-8 md:leading-relaxed
+               lg:text-5xl lg:py-8 lg:px-10 lg:leading-relaxed">
+  What Couples Say
+</h2>
+
+
+            <p className="font-playfair text-base text-muted-foreground
+                          sm:text-lg
+                          md:text-xl">
+              Real love stories, real emotions, real testimonials
+            </p>
+          </div>
+
+          <div className="relative w-full">
+            <div className="overflow-hidden rounded-xl
+                            sm:rounded-2xl
+                            md:rounded-3xl">
+              <div 
+                className="flex transition-transform duration-700 ease-in-out w-full"
+                style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
+              >
+                {testimonials.map((testimonial) => (
+                  <div key={testimonial.id} className="w-full flex-shrink-0 px-2
+                                                      sm:px-4">
+                    <div className="bg-gradient-to-br from-white/95 to-cream/95 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-chocolate/20
+                                    sm:rounded-2xl sm:p-8 sm:shadow-2xl
+                                    md:rounded-3xl md:p-10
+                                    lg:p-12">
+                      <div className="flex flex-col items-center gap-6 text-center
+                                      md:flex-row md:gap-8 md:text-left
+                                      lg:gap-10">
+                        <div className="flex-shrink-0
+                                        md:w-1/3">
+                          <img 
+                            src={testimonial.image} 
+                            alt={testimonial.name}
+                            className="w-20 h-20 rounded-full object-cover shadow-lg mx-auto
+                                       sm:w-24 sm:h-24
+                                       md:w-32 md:h-32
+                                       lg:w-40 lg:h-40"
+                          />
+                        </div>
+                        <div className="flex-1
+                                        md:w-2/3">
+                          <div className="flex justify-center mb-3
+                                          sm:mb-4
+                                          md:justify-start md:mb-5">
+                            {[...Array(testimonial.rating)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 text-yellow-400 fill-current
+                                                       sm:w-5 sm:h-5
+                                                       md:w-6 md:h-6" />
+                            ))}
+                          </div>
+                          <blockquote className="font-playfair text-base text-chocolate mb-4 italic leading-relaxed
+                                                 sm:text-lg sm:mb-6
+                                                 md:text-xl md:mb-8
+                                                 lg:text-2xl">
+                            "{testimonial.text}"
+                          </blockquote>
+                          <div>
+                            <h4 className="font-amsterdam text-lg text-chocolate mb-1
+                                           sm:text-xl
+                                           md:text-2xl
+                                           lg:text-3xl">
+                              {testimonial.name}
+                            </h4>
+                            <p className="text-muted-foreground font-playfair text-sm
+                                          sm:text-base
+                                          md:text-lg">
+                              {testimonial.location}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Enhanced Navigation */}
+            <div className="flex justify-center mt-6 space-x-2 w-full
+                            sm:mt-8 sm:space-x-3">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentTestimonial(i)}
+                  className={`transition-all duration-300 ${
+                    currentTestimonial === i 
+                      ? "w-8 h-2 bg-chocolate rounded-full sm:w-10 sm:h-3" 
+                      : "w-2 h-2 bg-chocolate/30 rounded-full hover:bg-chocolate/50 sm:w-3 sm:h-3"
+                  }`}
+                />
               ))}
             </div>
           </div>

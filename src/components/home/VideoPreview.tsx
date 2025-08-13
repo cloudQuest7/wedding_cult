@@ -262,7 +262,7 @@ const VideoPreview = () => {
       Featured In
     </p>
     <p className="font-playfair text-base sm:text-lg md:text-xl text-chocolate mb-2 font-medium tracking-wide">
-      The Wedding Cult's
+      The Wedding Cult
     </p>
   </div>
   <h3 className="font-amsterdam text-xl sm:text-2xl md:text-3xl text-chocolate leading-tight font-normal">

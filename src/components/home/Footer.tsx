@@ -57,13 +57,14 @@ const Footer = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
           {/* Hero Text - New elegant text with cursive elements */}
-          <div className="text-center mb-2">
-  <h2 className="font-amsterdam text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-2 leading-tight font-light tracking-wide text-cream">
+<div className="text-center mb-2">
+  <h2 className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-2 leading-tight font-light tracking-wide text-cream">
     Where love meets art and<br />
     dreams become eternal<br />
-    <span className="italic font-playfair text-cream/90">Wedding Memories</span>
+    <span className="font-playfair text-cream/90 font-semibold tracking-wider text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">Wedding Memories</span>
   </h2>
 </div>
+
 
 
           {/* Spinning Elegant Flower - Properly centered */}
