@@ -11,10 +11,14 @@ const Portfolio = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const filmStripRef = useRef(null)
 
+  // UPDATED: Portfolio items with all 6 couples
   const portfolioItems = [
     { id: 1, couple: "Yash & Kejal", location: "Jaipur", type: "Pre-Wedding", embedId: "ly9ejEF1DqU" },
     { id: 2, couple: "Jobin & Jesline", location: "Kerala", type: "Wedding Film", embedId: "VWkzOkb21UA" },
     { id: 3, couple: "Pranay & Aishwarya", location: "Mumbai", type: "Pre-Wedding", embedId: "II_KVGp3WKM" },
+    { id: 4, couple: "Gaurav & Shikhanshi", location: "Himachal", type: "Pre-Wedding", embedId: "4s3wKpLEZ5w" },
+    { id: 5, couple: "Rajvi & Tejas", location: "Gujarat", type: "Wedding Teaser", embedId: "K8LlckrZJxw" },
+    { id: 6, couple: "Yash & Kejal", location: "Rajasthan", type: "Wedding Film", embedId: "Mb3u8RnwU6k" },
   ]
 
   // Featured gallery images
@@ -69,7 +73,7 @@ const Portfolio = () => {
     }
   ];
 
-  // Testimonials with YouTube thumbnails
+  // UPDATED: Testimonials with all 6 couples using YouTube thumbnails
   const testimonials = [
     {
       id: 1,
@@ -94,6 +98,30 @@ const Portfolio = () => {
       rating: 5,
       text: "Professional, creative, and passionate. Our wedding film exceeded all expectations!",
       image: "https://img.youtube.com/vi/II_KVGp3WKM/maxresdefault.jpg"
+    },
+    {
+      id: 4,
+      name: "Gaurav & Shikhanshi",
+      location: "Himachal",
+      rating: 5,
+      text: "The mountain backdrop and their artistic vision created magic. Truly memorable pre-wedding shoot!",
+      image: "https://img.youtube.com/vi/4s3wKpLEZ5w/maxresdefault.jpg"
+    },
+    {
+      id: 5,
+      name: "Rajvi & Tejas",
+      location: "Gujarat",
+      rating: 5,
+      text: "They perfectly captured our Gujarati traditions with modern cinematic flair. Outstanding work!",
+      image: "https://img.youtube.com/vi/K8LlckrZJxw/maxresdefault.jpg"
+    },
+    {
+      id: 6,
+      name: "Yash & Kejal",
+      location: "Rajasthan",
+      rating: 5,
+      text: "Our royal Rajasthani wedding was filmed like a grand epic. Every moment feels like a fairy tale!",
+      image: "https://img.youtube.com/vi/Mb3u8RnwU6k/maxresdefault.jpg"
     }
   ];
 
@@ -101,11 +129,11 @@ const Portfolio = () => {
   const nextVideo = () => { setCurrentVideoIndex((p) => (p + 1) % portfolioItems.length); setIsPlaying(false) }
   const prevVideo = () => { setCurrentVideoIndex((p) => (p - 1 + portfolioItems.length) % portfolioItems.length); setIsPlaying(false) }
 
-  // Auto-play testimonial carousel
+  // Auto-play testimonial carousel - Updated timing for more testimonials
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
-    }, 5000)
+    }, 6000) // Increased to 6 seconds since we have more testimonials
     return () => clearInterval(interval)
   }, [testimonials.length])
 
@@ -335,7 +363,7 @@ const Portfolio = () => {
             </div>
           </div>
           
-          {/* Compact Dots Navigation */}
+          {/* Compact Dots Navigation - Updated for 6 videos */}
           <div className="flex justify-center mt-3 space-x-1.5 w-full
                           sm:mt-4 sm:space-x-2
                           md:mt-6">
@@ -358,12 +386,13 @@ const Portfolio = () => {
       <div className="gallery-section px-3 mb-8 sm:px-4 sm:mb-10 md:mb-12 w-full container-fix">
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center mb-6 sm:mb-8">
-            <h2 className="font-amsterdam text-xl text-chocolate mb-3
-                           sm:text-2xl sm:mb-4
-                           md:text-3xl md:mb-5
-                           lg:text-4xl">
+            <h2 className="font-amsterdam text-xl text-chocolate mb-3 py-2 px-3
+               sm:text-2xl sm:mb-4 sm:py-3 sm:px-4
+               md:text-3xl md:mb-5 md:py-4 md:px-6
+               lg:text-3xl lg:py-6 lg:px-8">
               Featured Gallery
             </h2>
+
             <p className="font-playfair text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed
                           sm:text-base sm:max-w-xl
                           md:text-lg md:max-w-2xl">
@@ -490,17 +519,16 @@ const Portfolio = () => {
         </div>
       </div>
 
-      {/* FIXED: Testimonials Section - Enhanced visibility and spacing */}
+      {/* FIXED: Testimonials Section - Enhanced visibility and spacing with all 6 couples */}
       <div className="px-3 mb-16 sm:px-4 sm:mb-20 md:mb-24 w-full container-fix relative z-20">
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="font-amsterdam text-2xl text-chocolate mb-4 py-3 px-4 leading-relaxed
                sm:text-3xl sm:mb-6 sm:py-4 sm:px-6 sm:leading-relaxed
-               md:text-4xl md:mb-8 md:py-6 md:px-8 md:leading-relaxed
-               lg:text-5xl lg:py-8 lg:px-10 lg:leading-relaxed">
-  What Couples Say
-</h2>
-
+               md:text-3xl md:mb-8 md:py-6 md:px-8 md:leading-relaxed
+               lg:text-3xl lg:py-6 lg:px-10 lg:leading-relaxed">
+              What Couples Say
+            </h2>
 
             <p className="font-playfair text-base text-muted-foreground
                           sm:text-lg
@@ -576,7 +604,7 @@ const Portfolio = () => {
               </div>
             </div>
 
-            {/* Enhanced Navigation */}
+            {/* Enhanced Navigation - Updated for 6 testimonials */}
             <div className="flex justify-center mt-6 space-x-2 w-full
                             sm:mt-8 sm:space-x-3">
               {testimonials.map((_, i) => (
