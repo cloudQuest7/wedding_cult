@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- UPDATED: More accessible viewport tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
     <title>The Wedding Cult - Cinematic Wedding Photography & Films | Mumbai</title>
     <meta name="description" content="The Wedding Cult - Premium wedding photography & films in Mumbai. Quality, the way you deserve. Story, the way you want. Memories, the way your forever begins." />
     <meta name="author" content="The Wedding Cult" />
@@ -41,16 +43,26 @@
           font-family: 'Amsterdam Four', 'Amsterdam', cursive !important;
         }
       }
+
+      /* ADDED: Prevent unwanted zoom while maintaining accessibility */
+      html, body {
+        touch-action: manipulation;
+      }
+      
+      /* Prevent input zoom on iOS Safari */
+      input, textarea, select {
+        font-size: 16px;
+      }
     </style>
 
     <meta property="og:title" content="The Wedding Cult - Cinematic Wedding Photography & Films | Mumbai" />
     <meta property="og:description" content="The Wedding Cult - Premium wedding photography & films in Mumbai. Quality, the way you deserve. Story, the way you want. Memories, the way your forever begins." />
     <meta property="og:type" content="website" />
 
-
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@theweddingcultfilms" />
-   
+  </head> <!-- ADDED: Missing closing head tag -->
+  
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

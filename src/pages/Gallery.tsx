@@ -72,7 +72,7 @@ const AnimatedPatterns = () => {
   );
 };
 
-// Enhanced Gallery Filter Component
+// Enhanced Gallery Filter Component - EXCLUDES "Cinematic", "Family", "Details"
 const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
   return (
     <div className="flex flex-wrap justify-center gap-3 mb-12">
@@ -130,7 +130,6 @@ const Gallery = () => {
       alt: "Love Stories - Pre-wedding shoot",
       category: "Pre-Wedding"
     },
-    // Portfolio page images
     {
       id: 6,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187422.jpg?updatedAt=1752122328713",
@@ -203,7 +202,6 @@ const Gallery = () => {
       alt: "Wedding celebration",
       category: "Reception"
     },
-    // Previously added gallery images
     {
       id: 18,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9210801.jpg?updatedAt=1752218451384",
@@ -438,7 +436,6 @@ const Gallery = () => {
       alt: "Premium portrait photography",
       category: "Portraits"
     },
-    // New gallery images from user's request
     {
       id: 67,
       url: "https://ik.imagekit.io/7xgikoq8o/39.png",
@@ -577,7 +574,6 @@ const Gallery = () => {
       alt: "Wedding family moments",
       category: "Family"
     },
-    // Additional images - completing the full collection
     {
       id: 95,
       url: "https://ik.imagekit.io/7xgikoq8o/12.png",
@@ -652,8 +648,11 @@ const Gallery = () => {
     }
   ];
 
-  // Extract unique categories
-  const categories = ["All", ...new Set(galleryImages.map(img => img.category))];
+  // UPDATED: Extract unique categories BUT exclude "Cinematic", "Family", "Details"
+  const allCategories = [...new Set(galleryImages.map(img => img.category))];
+  const categories = ["All", ...allCategories.filter(category => 
+    !["Cinematic", "Family", "Details"].includes(category)
+  )];
 
   // Filter images based on active category
   const filteredImages = activeCategory === "All" 
@@ -671,12 +670,11 @@ const Gallery = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center">
           <div className="animate-fade-in-up">
             <div className="inline-block mb-6 overflow-visible">
-  <h1 className="font-dancing text-4xl sm:text-5xl lg:text-6xl leading-[1.3] pt-2 pb-1 text-transparent bg-clip-text bg-gradient-to-r from-chocolate via-primary to-chocolate-light drop-shadow-sm">
-  Gallery
-</h1>
-
-  <div className="h-1 w-32 mx-auto mt-4 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
-</div>
+              <h1 className="font-dancing text-4xl sm:text-5xl lg:text-6xl leading-[1.3] pt-2 pb-1 text-transparent bg-clip-text bg-gradient-to-r from-chocolate via-primary to-chocolate-light drop-shadow-sm">
+                Gallery
+              </h1>
+              <div className="h-1 w-32 mx-auto mt-4 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
+            </div>
 
             <p className="font-playfair text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Explore our complete collection of cinematic wedding moments, 
@@ -685,7 +683,7 @@ const Gallery = () => {
           </div>
         </div>
 
-        {/* Category Filter */}
+        {/* Category Filter - WITH Cinematic, Family, Details REMOVED */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <CategoryFilter 
             categories={categories}
@@ -700,6 +698,9 @@ const Gallery = () => {
           <div className="text-center mb-8">
             <p className="text-muted-foreground font-poppins">
               Showing <span className="font-semibold text-chocolate">{filteredImages.length}</span> beautiful moments
+              {activeCategory !== "All" && (
+                <span className="text-chocolate"> in {activeCategory}</span>
+              )}
             </p>
           </div>
 
