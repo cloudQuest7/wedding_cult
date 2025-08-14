@@ -396,7 +396,7 @@ const Reviews = () => {
           <div className="relative">
             <h2 
               ref={titleRef}
-              className="font-amsterdam text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-5xl text-chocolate mb-3 sm:mb-6 leading-tight px-2"
+              className="font-amsterdam text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-4xl text-chocolate mb-3 sm:mb-6 leading-tight px-2"
             >
               What Our Couples Say
             </h2>

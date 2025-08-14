@@ -23,7 +23,8 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
-import logo from "@/assets/new-logo.png";
+import logo from "@/assets/brand-logo.png";
+import centerlogo from "@/assets/new-logo.png";
 import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -287,23 +288,29 @@ function MobileBottomNav() {
   return (
     <>
       {/* Fixed Top Navbar with Cream + Coffee Theme */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cream/95 via-cream/90 to-beige-warm/95 backdrop-blur-sm shadow-lg border-b border-chocolate/20">
-        <div className="flex items-center justify-between px-4 py-3">
-          {/* Company Name on Left */}
-          <div className="text-left">
-            <h1 className="text-sm font-poppins font-medium text-chocolate">
-              The Wedding Cult
-            </h1>
-          </div>
-          
-          {/* Logo on Right */}
-          <img 
-            src={logo} 
-            alt="The Wedding Cult Logo" 
-            className="h-10 w-auto"
-          />
-        </div>
-      </div>
+      {/* Fixed Top Navbar with Full Width Coverage and Bigger Logo */}
+{/* Fixed Top Navbar with Properly Fitted Logo */}
+<div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cream/95 via-cream/90 to-beige-warm/95 backdrop-blur-sm shadow-lg border-b border-chocolate/20 w-full">
+  <div className="flex items-center justify-between px-6 py-4 w-full max-w-full">
+    {/* Company Name on Left */}
+    <div className="text-left flex-1">
+      <h1 className="text-m font-poppins text-chocolate">
+        The Wedding Cult
+      </h1>
+    </div>
+    
+    {/* Logo on Right - Cropped and Fitted into Frame */}
+    <div className="flex-shrink-0 w-16 h-16 bg-white/10 rounded-xl overflow-hidden shadow-md border border-chocolate/10">
+      <img 
+        src={logo} 
+        alt="The Wedding Cult Logo" 
+        className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
+      />
+    </div>
+  </div>
+</div>
+
+
 
       {/* Top padding to prevent content from being hidden by fixed navbar */}
       <div className="h-16" />
@@ -327,7 +334,7 @@ function MobileBottomNav() {
     className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 border-cream bg-cream/10 p-2 transition-transform duration-200 hover:scale-110"
   >
     <img 
-      src={logo} 
+      src={centerlogo} 
       alt="The Wedding Cult Logo" 
       className="w-full h-full object-contain rounded-full"
     />
