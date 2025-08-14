@@ -651,7 +651,7 @@ const Gallery = () => {
   // UPDATED: Extract unique categories BUT exclude "Cinematic", "Family", "Details"
   const allCategories = [...new Set(galleryImages.map(img => img.category))];
   const categories = ["All", ...allCategories.filter(category => 
-    !["Cinematic", "Family", "Details"].includes(category)
+    !["Cinematic", "Family", "Details","Candid"].includes(category)
   )];
 
   // Filter images based on active category

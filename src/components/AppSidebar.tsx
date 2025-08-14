@@ -261,7 +261,7 @@ const navigationItems = [
   { title: "Contact", url: "/contact", icon: Mail },
 ];
 
-// Clean Mobile Bottom Navigation with Cream + Coffee Theme
+// Clean Mobile Bottom Navigation with Cream + Coffee Theme - UPDATED
 function MobileBottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -287,37 +287,33 @@ function MobileBottomNav() {
 
   return (
     <>
-      {/* Fixed Top Navbar with Cream + Coffee Theme */}
-      {/* Fixed Top Navbar with Full Width Coverage and Bigger Logo */}
-{/* Fixed Top Navbar with Properly Fitted Logo */}
-<div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cream/95 via-cream/90 to-beige-warm/95 backdrop-blur-sm shadow-lg border-b border-chocolate/20 w-full">
-  <div className="flex items-center justify-between px-6 py-4 w-full max-w-full">
-    {/* Company Name on Left */}
-    <div className="text-left flex-1">
-      <h1 className="text-m font-poppins text-chocolate">
-        The Wedding Cult
-      </h1>
-    </div>
-    
-    {/* Logo on Right - Cropped and Fitted into Frame */}
-    <div className="flex-shrink-0 w-16 h-16 bg-white/10 rounded-xl overflow-hidden shadow-md border border-chocolate/10">
-      <img 
-        src={logo} 
-        alt="The Wedding Cult Logo" 
-        className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
-      />
-    </div>
-  </div>
-</div>
-
-
+      {/* UPDATED: Fixed Top Navbar - Clean Logo without Border */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cream/95 via-cream/90 to-beige-warm/95 backdrop-blur-sm shadow-lg border-b border-chocolate/20 w-full">
+        <div className="flex items-center justify-between px-6 py-2 w-full max-w-full">
+          {/* Company Name on Left */}
+          <div className="text-left flex-1">
+            <h1 className="text-m font-poppins text-chocolate">
+              The Wedding Cult
+            </h1>
+          </div>
+          
+          {/* UPDATED: Logo on Right - Clean without border/frame */}
+          <div className="flex-shrink-0">
+            <img 
+              src={logo} 
+              alt="The Wedding Cult Logo" 
+              className="h-16 w-auto hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        </div>
+      </div>
 
       {/* Top padding to prevent content from being hidden by fixed navbar */}
       <div className="h-16" />
 
-      {/* Fixed Bottom Navigation Bar - Cream + Coffee Theme */}
+      {/* UPDATED: Fixed Bottom Navigation Bar - Reduced Padding */}
       <div className="fixed bottom-0 left-0 right-0 z-40 shadow-2xl bg-gradient-to-r from-chocolate to-chocolate-light border-t border-cream/30">
-        <div className="flex items-center justify-between px-8 py-4 max-w-md mx-auto">
+        <div className="flex items-center justify-between px-6 py-3 max-w-md mx-auto">
           {/* Menu Button */}
           <button
             onClick={() => setIsMenuOpen(true)}
@@ -327,20 +323,19 @@ function MobileBottomNav() {
             <span className="text-xs font-medium text-cream">Menu</span>
           </button>
 
-          {/* Logo Space in the Middle */}
-<div className="flex-1 flex justify-center">
-  <Link 
-    to="/" 
-    className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden border-2 border-cream bg-cream/10 p-2 transition-transform duration-200 hover:scale-110"
-  >
-    <img 
-      src={centerlogo} 
-      alt="The Wedding Cult Logo" 
-      className="w-full h-full object-contain rounded-full"
-    />
-  </Link>
-</div>
-
+          {/* UPDATED: Logo Space in the Middle - Slightly smaller */}
+          <div className="flex-1 flex justify-center">
+            <Link 
+              to="/" 
+              className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden border-2 border-cream bg-cream/10 p-2 transition-transform duration-200 hover:scale-110"
+            >
+              <img 
+                src={centerlogo} 
+                alt="The Wedding Cult Logo" 
+                className="w-full h-full object-contain rounded-full"
+              />
+            </Link>
+          </div>
 
           {/* Enquire Button */}
           <Link
@@ -422,8 +417,8 @@ function MobileBottomNav() {
         </div>
       )}
 
-      {/* Bottom padding to prevent content from being hidden */}
-      <div className="h-20" />
+      {/* UPDATED: Bottom padding to prevent content from being hidden */}
+      <div className="h-18" />
     </>
   );
 }
