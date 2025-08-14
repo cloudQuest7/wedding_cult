@@ -390,174 +390,177 @@ const Reviews = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10 flex-1 flex flex-col justify-center">
-        {/* Mobile-Optimized Header Section */}
-        <div className="text-center mb-8 sm:mb-16 md:mb-20">
-          <div className="relative">
-            <h2 
-              ref={titleRef}
-              className="font-amsterdam text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-4xl text-chocolate mb-3 sm:mb-6 leading-tight px-2"
-            >
-              What Our Couples Say
-            </h2>
-            <p className="font-playfair text-base sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-4 sm:mb-8 px-2">
-              Real Stories, Real Love, Real Emotions
-            </p>
-            
-            <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-8">
-              <div className="w-10 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
-              <Heart className="w-4 sm:w-6 h-4 sm:h-6 text-chocolate animate-pulse" />
-              <div className="w-10 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
-            </div>
-          </div>
-        </div>
+     <div className="max-w-7xl mx-auto relative z-10 flex-1 flex flex-col justify-center">
+  {/* Mobile-Optimized Header Section */}
+  <div className="text-center mb-8 sm:mb-16 md:mb-20">
+    <div className="relative">
+      <h2 
+        ref={titleRef}
+        className="font-amsterdam text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-4xl text-chocolate mb-3 sm:mb-6 leading-tight px-2 py-2 sm:py-3"
+      >
+        What Our Couples Say
+      </h2>
+      <p className="font-playfair text-base sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-4 sm:mb-8 px-2">
+        Real Stories, Real Love, Real Emotions
+      </p>
+      
+      <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-8">
+        <div className="w-10 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
+        <Heart className="w-4 sm:w-6 h-4 sm:h-6 text-chocolate animate-pulse" />
+        <div className="w-10 sm:w-20 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
+      </div>
+    </div>
+  </div>
 
-        {/* Mobile-Optimized Reviews Slider */}
-        <div className="relative">
-          {/* Main slider container with mobile-optimized styling */}
+  {/* Mobile-Optimized Reviews Slider */}
+  <div className="relative">
+    {/* Main slider container with reduced padding */}
+    <div 
+      className="overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-white/50 to-cream/30 backdrop-blur-sm border border-white/30 shadow-xl sm:shadow-2xl p-3 sm:p-6"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
+      <div 
+        className="flex transition-all duration-500 ease-out"
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      >
+        {Array.from({ length: totalSlides }, (_, slideIndex) => (
           <div 
-            className="overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-white/50 to-cream/30 backdrop-blur-sm border border-white/30 shadow-xl sm:shadow-2xl p-4 sm:p-8"
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
+            key={slideIndex} 
+            className={`min-w-full grid gap-3 sm:gap-4 lg:gap-6 ${
+              cardsPerSlide === 1 ? 'grid-cols-1' :
+              cardsPerSlide === 2 ? 'grid-cols-1 md:grid-cols-2' :
+              'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+            }`}
           >
-            <div 
-              className="flex transition-all duration-500 ease-out"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-            >
-              {Array.from({ length: totalSlides }, (_, slideIndex) => (
-                <div 
-                  key={slideIndex} 
-                  className={`min-w-full grid gap-4 sm:gap-6 lg:gap-8 ${
-                    cardsPerSlide === 1 ? 'grid-cols-1' :
-                    cardsPerSlide === 2 ? 'grid-cols-1 md:grid-cols-2' :
-                    'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-                  }`}
-                >
-                  {clientReviews.slice(slideIndex * cardsPerSlide, slideIndex * cardsPerSlide + cardsPerSlide).map((review, index) => (
-                    <div
-                      key={slideIndex * cardsPerSlide + index}
-                      ref={(el) => cardsRef.current[slideIndex * cardsPerSlide + index] = el}
-                      className="group relative bg-white/95 backdrop-blur-md p-4 sm:p-6 lg:p-8 rounded-2xl sm:rounded-3xl shadow-lg sm:shadow-xl border border-white/50 cursor-pointer transform-gpu hover:shadow-2xl transition-all duration-300"
-                      onMouseEnter={() => handleCardHover(index)}
-                      onMouseLeave={() => handleCardLeave(index)}
-                    >
-                      {/* Mobile-optimized quote design */}
-                      <div className="absolute -top-2 sm:-top-4 -left-2 sm:-left-4 w-8 sm:w-12 h-8 sm:h-12 bg-gradient-to-br from-chocolate to-amber-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg sm:shadow-xl transform rotate-12 group-hover:rotate-0 transition-transform duration-300">
-                        <Quote className="w-4 sm:w-6 h-4 sm:h-6 text-white" />
-                      </div>
-
-                      {/* Floating accent - hidden on mobile */}
-                      <div className="absolute top-2 sm:top-4 right-2 sm:right-4 w-6 sm:w-8 h-6 sm:h-8 bg-gradient-to-br from-chocolate/10 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block"></div>
-
-                      {/* Mobile-optimized review content */}
-                      <div className="relative pt-2 sm:pt-4 space-y-3 sm:space-y-6">
-                        <p className="font-playfair text-foreground text-sm sm:text-base lg:text-lg leading-relaxed italic relative z-10 line-clamp-4 sm:line-clamp-none">
-                          "{review.review}"
-                        </p>
-                        
-                        <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-chocolate/10">
-                          <div className="flex-1 min-w-0">
-                            <div className="font-amsterdam text-base sm:text-lg lg:text-xl font-bold text-chocolate mb-1 truncate">
-                              {review.names}
-                            </div>
-                            <div className="font-playfair text-muted-foreground text-xs sm:text-sm flex items-center gap-1 sm:gap-2">
-                              <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-chocolate rounded-full animate-pulse flex-shrink-0"></div>
-                              <span className="truncate">{review.location}</span>
-                            </div>
-                          </div>
-                          
-                          {/* Mobile-optimized rating stars */}
-                          <div className="flex items-center gap-0.5 p-1.5 sm:p-2 bg-amber-50 rounded-lg sm:rounded-xl ml-2">
-                            {[...Array(5)].map((_, i) => (
-                              <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 fill-amber-400 text-amber-400 drop-shadow-sm" />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Modern hover gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-chocolate/5 via-transparent to-amber-100/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl sm:rounded-3xl"></div>
-                      
-                      {/* Subtle border glow on hover - desktop only */}
-                      <div className="absolute inset-0 rounded-2xl sm:rounded-3xl ring-0 group-hover:ring-1 sm:group-hover:ring-2 group-hover:ring-chocolate/20 transition-all duration-300 hidden sm:block"></div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Mobile-Optimized Navigation */}
-          <div className="flex justify-center items-center mt-6 sm:mt-10 space-x-2 sm:space-x-4">
-            {Array.from({ length: totalSlides }, (_, index) => (
-              <button
-                key={index}
-                ref={(el) => dotsRef.current[index] = el}
-                onClick={() => handleDotClick(index)}
-                className={`relative transition-all duration-300 ${
-                  index === currentIndex 
-                    ? 'w-6 sm:w-12 h-2 sm:h-4 bg-gradient-to-r from-chocolate to-amber-600 shadow-md sm:shadow-lg' 
-                    : 'w-2 sm:w-4 h-2 sm:h-4 bg-chocolate/30 hover:bg-chocolate/50'
-                } rounded-full hover:scale-110 touch-manipulation`}
-                aria-label={`Go to review slide ${index + 1}`}
+            {clientReviews.slice(slideIndex * cardsPerSlide, slideIndex * cardsPerSlide + cardsPerSlide).map((review, index) => (
+              <div
+                key={slideIndex * cardsPerSlide + index}
+                ref={(el) => cardsRef.current[slideIndex * cardsPerSlide + index] = el}
+                className="group relative bg-white/95 backdrop-blur-md p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl border border-white/50 cursor-pointer transform-gpu hover:shadow-2xl transition-all duration-300"
+                onMouseEnter={() => handleCardHover(index)}
+                onMouseLeave={() => handleCardLeave(index)}
               >
-                {index === currentIndex && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-chocolate to-amber-600 rounded-full animate-pulse"></div>
-                )}
-              </button>
+                {/* Quote icon - smaller and better positioned */}
+                <div className="absolute -top-2 sm:-top-3 -left-2 sm:-left-3 w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-chocolate to-amber-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-300 z-20">
+                  <Quote className="w-4 sm:w-5 h-4 sm:h-5 text-white" />
+                </div>
+
+                {/* Floating accent - smaller */}
+                <div className="absolute top-3 sm:top-4 right-3 sm:right-4 w-4 sm:w-6 h-4 sm:h-6 bg-gradient-to-br from-chocolate/10 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block"></div>
+
+                {/* Review content with reduced spacing */}
+                <div className="relative pt-3 sm:pt-4 space-y-3 sm:space-y-4">
+                  <p className="font-playfair text-foreground text-sm sm:text-base lg:text-lg leading-relaxed italic relative z-10 line-clamp-4 sm:line-clamp-none">
+                    "{review.review}"
+                  </p>
+                  
+                  <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-chocolate/10">
+                    <div className="flex-1 min-w-0">
+                      {/* Cleaner Amsterdam font names with minimal padding */}
+                      <div className="font-amsterdam text-base sm:text-lg lg:text-xl font-bold text-chocolate mb-1 py-1 px-1 leading-relaxed overflow-visible
+                                      sm:mb-2 sm:py-1 sm:px-2">
+                        {review.names}
+                      </div>
+                      <div className="font-playfair text-muted-foreground text-xs sm:text-sm flex items-center gap-1 sm:gap-2 px-1 sm:px-2">
+                        <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-chocolate rounded-full animate-pulse flex-shrink-0"></div>
+                        <span className="truncate">{review.location}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Compact stars container */}
+                    <div className="flex items-center gap-0.5 p-1.5 sm:p-2 bg-amber-50 rounded-lg sm:rounded-xl ml-3 flex-shrink-0">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-3 sm:w-4 h-3 sm:h-4 fill-amber-400 text-amber-400 drop-shadow-sm" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Modern hover gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-chocolate/5 via-transparent to-amber-100/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl sm:rounded-2xl"></div>
+                
+                {/* Subtle border glow on hover - desktop only */}
+                <div className="absolute inset-0 rounded-xl sm:rounded-2xl ring-0 group-hover:ring-1 sm:group-hover:ring-2 group-hover:ring-chocolate/20 transition-all duration-300 hidden sm:block"></div>
+              </div>
             ))}
           </div>
-
-          {/* Mobile swipe indicator */}
-          <div className="flex justify-center mt-4 sm:hidden">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground/70">
-              <ChevronLeft className="w-4 h-4" />
-              <span>Swipe to navigate</span>
-              <ChevronRight className="w-4 h-4" />
-            </div>
-          </div>
-
-          {/* Desktop navigation arrows - hidden on mobile */}
-          <div className="hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between pointer-events-none z-10">
-            <button
-              onClick={() => handleDotClick(currentIndex > 0 ? currentIndex - 1 : totalSlides - 1)}
-              className="pointer-events-auto -ml-8 w-12 lg:w-14 h-12 lg:h-14 bg-white/95 backdrop-blur-md rounded-xl lg:rounded-2xl shadow-xl flex items-center justify-center text-chocolate hover:bg-white hover:scale-110 transition-all duration-300 border border-chocolate/10"
-            >
-              <ChevronLeft className="w-5 lg:w-6 h-5 lg:h-6" />
-            </button>
-            <button
-              onClick={() => handleDotClick(currentIndex < totalSlides - 1 ? currentIndex + 1 : 0)}
-              className="pointer-events-auto -mr-8 w-12 lg:w-14 h-12 lg:h-14 bg-white/95 backdrop-blur-md rounded-xl lg:rounded-2xl shadow-xl flex items-center justify-center text-chocolate hover:bg-white hover:scale-110 transition-all duration-300 border border-chocolate/10"
-            >
-              <ChevronRight className="w-5 lg:w-6 h-5 lg:h-6" />
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile-Optimized Bottom CTA */}
-        <div className="text-center mt-8 sm:mt-16">
-          <div className="inline-flex flex-col sm:flex-row items-center gap-3 sm:gap-6 px-4 sm:px-10 py-4 sm:py-6 bg-gradient-to-r from-white/90 to-cream/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-chocolate/20 shadow-xl sm:shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 max-w-full">
-            <div className="p-2 sm:p-3 bg-gradient-to-br from-chocolate to-amber-600 rounded-xl sm:rounded-2xl">
-              <Heart className="w-4 sm:w-6 h-4 sm:h-6 text-white animate-pulse" />
-            </div>
-            <div className="text-center sm:text-left">
-              <h3 className="font-playfair text-lg sm:text-xl text-chocolate font-bold mb-1">
-                Join Our Family
-              </h3>
-              <p className="font-playfair text-muted-foreground text-sm sm:text-base">
-                500+ couples trust us with their love stories
-              </p>
-            </div>
-            <div className="flex items-center gap-1 sm:gap-2">
-              <div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse"></div>
-             <div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse delay-500ms"></div>
-<div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse delay-1s"></div>
-
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
+    </div>
+
+    {/* Mobile-Optimized Navigation */}
+    <div className="flex justify-center items-center mt-6 sm:mt-10 space-x-2 sm:space-x-4">
+      {Array.from({ length: totalSlides }, (_, index) => (
+        <button
+          key={index}
+          ref={(el) => dotsRef.current[index] = el}
+          onClick={() => handleDotClick(index)}
+          className={`relative transition-all duration-300 ${
+            index === currentIndex 
+              ? 'w-6 sm:w-12 h-2 sm:h-4 bg-gradient-to-r from-chocolate to-amber-600 shadow-md sm:shadow-lg' 
+              : 'w-2 sm:w-4 h-2 sm:h-4 bg-chocolate/30 hover:bg-chocolate/50'
+          } rounded-full hover:scale-110 touch-manipulation`}
+          aria-label={`Go to review slide ${index + 1}`}
+        >
+          {index === currentIndex && (
+            <div className="absolute inset-0 bg-gradient-to-r from-chocolate to-amber-600 rounded-full animate-pulse"></div>
+          )}
+        </button>
+      ))}
+    </div>
+
+    {/* Mobile swipe indicator */}
+    <div className="flex justify-center mt-4 sm:hidden">
+      <div className="flex items-center gap-2 text-xs text-muted-foreground/70">
+        <ChevronLeft className="w-4 h-4" />
+        <span>Swipe to navigate</span>
+        <ChevronRight className="w-4 h-4" />
+      </div>
+    </div>
+
+    {/* Desktop navigation arrows - hidden on mobile */}
+    <div className="hidden lg:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between pointer-events-none z-10">
+      <button
+        onClick={() => handleDotClick(currentIndex > 0 ? currentIndex - 1 : totalSlides - 1)}
+        className="pointer-events-auto -ml-8 w-12 lg:w-14 h-12 lg:h-14 bg-white/95 backdrop-blur-md rounded-xl lg:rounded-2xl shadow-xl flex items-center justify-center text-chocolate hover:bg-white hover:scale-110 transition-all duration-300 border border-chocolate/10"
+      >
+        <ChevronLeft className="w-5 lg:w-6 h-5 lg:h-6" />
+      </button>
+      <button
+        onClick={() => handleDotClick(currentIndex < totalSlides - 1 ? currentIndex + 1 : 0)}
+        className="pointer-events-auto -mr-8 w-12 lg:w-14 h-12 lg:h-14 bg-white/95 backdrop-blur-md rounded-xl lg:rounded-2xl shadow-xl flex items-center justify-center text-chocolate hover:bg-white hover:scale-110 transition-all duration-300 border border-chocolate/10"
+      >
+        <ChevronRight className="w-5 lg:w-6 h-5 lg:h-6" />
+      </button>
+    </div>
+  </div>
+
+  {/* Mobile-Optimized Bottom CTA */}
+  <div className="text-center mt-8 sm:mt-16">
+    <div className="inline-flex flex-col sm:flex-row items-center gap-3 sm:gap-6 px-4 sm:px-10 py-4 sm:py-6 bg-gradient-to-r from-white/90 to-cream/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-chocolate/20 shadow-xl sm:shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 max-w-full">
+      <div className="p-2 sm:p-3 bg-gradient-to-br from-chocolate to-amber-600 rounded-xl sm:rounded-2xl">
+        <Heart className="w-4 sm:w-6 h-4 sm:h-6 text-white animate-pulse" />
+      </div>
+      <div className="text-center sm:text-left">
+        <h3 className="font-playfair text-lg sm:text-xl text-chocolate font-bold mb-1">
+          Join Our Family
+        </h3>
+        <p className="font-playfair text-muted-foreground text-sm sm:text-base">
+          500+ couples trust us with their love stories
+        </p>
+      </div>
+      <div className="flex items-center gap-1 sm:gap-2">
+        <div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse"></div>
+        <div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse delay-500ms"></div>
+        <div className="w-2 sm:w-3 h-2 sm:h-3 bg-chocolate rounded-full animate-pulse delay-1s"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
       {/* Enhanced mobile-optimized CSS */}
       <style jsx>{`

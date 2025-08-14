@@ -242,7 +242,7 @@ const PhotoGallery = () => {
             {/* Main Title */}
             <h2
               ref={titleRef}
-              className="font-amsterdam text-3xl sm:text-4xl md:text-5xl lg:text-4xl text-chocolate mb-4 leading-tight relative"
+              className="font-amsterdam text-2xl sm:text-2xl md:text-4xl lg:text-4xl text-chocolate mb-4 leading-tight relative"
               style={{
                 textShadow: "0 4px 20px rgba(183, 134, 90, 0.15)",
                 fontWeight: "400",
