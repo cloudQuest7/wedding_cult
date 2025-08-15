@@ -1,309 +1,469 @@
-"use client"
+import { useState, useEffect, useRef } from "react";
+import FloatingBallBackground from "@/components/common/FloatingBallBackground";
+import SocialFloatingButton from "@/components/common/SocialFloatingButton";
+import { ChevronLeft, ChevronRight, Star, Quote, Heart, Camera, Film, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { useState } from "react"
-import FloatingBallBackground from "@/components/common/FloatingBallBackground"
-import SocialFloatingButton from "@/components/common/SocialFloatingButton"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Phone, Mail, Instagram, MessageCircle, ArrowRight, Sparkles, Heart, Plus } from "lucide-react"
+// Register GSAP plugin
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
-const FAQ = () => {
-  const [openItems, setOpenItems] = useState<string[]>([])
+const About = () => {
+  const [currentReview, setCurrentReview] = useState(0);
+  const heroRef = useRef(null);
+  const aboutRef = useRef(null);
+  const reviewsRef = useRef(null);
+  const ctaRef = useRef(null);
+  const statsRef = useRef(null);
 
-  const faqs = [
+  const reviews = [
     {
-      question: "Do you travel for destination weddings?",
-      answer:
-        "We love capturing love stories in beautiful destinations. We travel across India and internationally for weddings. Travel and accommodation costs are additional to our packages, and we're happy to provide detailed quotes based on your destination.",
+      names: "Sneha & Ritesh",
+      location: "Mumbai",
+      review: "The Wedding Cult captured our day with raw emotions. It felt magical.",
+      rating: 5
     },
     {
-      question: "What's included in your packages?",
-      answer:
-        "Our packages typically include pre-wedding consultation, full-day wedding coverage, cinematic highlight video, photo gallery, raw footage, and professional editing. We customize each package based on your specific needs and preferences.",
+      names: "Neha & Arjun",
+      location: "Thane",
+      review: "Very affordable. Even more cinematic than studios charging 5x.",
+      rating: 5
     },
     {
-      question: "Do you shoot both photo and video?",
-      answer:
-        "Yes! We specialize in both photography and videography. Our team captures stunning photos alongside cinematic films, ensuring every moment of your special day is beautifully preserved in both formats.",
+      names: "Devika & Sahil",
+      location: "Navi Mumbai",
+      review: "We didn't know we could look like a film scene until we saw the video.",
+      rating: 5
     },
     {
-      question: "Can we request specific edits or songs?",
-      answer:
-        "Of course! We love incorporating your favorite songs and specific editing styles. During our consultation, we discuss your preferences, musical choices, and any special moments you want highlighted in your wedding film.",
+      names: "Rahul & Manisha",
+      location: "Pune",
+      review: "Everything felt cinematic. The photos still make us cry.",
+      rating: 5
     },
     {
-      question: "How long does delivery take?",
-      answer:
-        "We typically deliver your complete wedding gallery and highlight video within 4-6 weeks after your wedding. We understand how excited you are to relive your special day, so we also provide a sneak peek within 48-72 hours!",
+      names: "Mira & Aditya",
+      location: "Mumbai",
+      review: "Pure magic. From pre-wedding to pheras — every frame felt alive.",
+      rating: 5
     },
     {
-      question: "Can we meet before booking?",
-      answer:
-        "We encourage meeting before your wedding day. We offer consultation calls and in-person meetings in Mumbai to discuss your vision, show our portfolio, and ensure we're the perfect fit for your special day.",
+      names: "Priya & Vikash",
+      location: "Mumbai",
+      review: "They treated our wedding like their own family celebration.",
+      rating: 5
     },
     {
-      question: "What makes you different from other studios?",
-      answer:
-        "We focus on authentic storytelling rather than posed shots. Our cinematic approach captures real emotions and creates films that feel like beautiful movies. Plus, we offer premium quality at more affordable rates than big studios.",
+      names: "Ananya & Rohan",
+      location: "Thane",
+      review: "The storytelling was beyond our expectations. Truly cinematic.",
+      rating: 5
     },
     {
-      question: "Do you offer pre-wedding shoots?",
-      answer:
-        "Yes! Pre-wedding shoots are one of our specialties. We love capturing your love story in beautiful locations with cinematic lighting and romantic compositions. It's also a great way for us to get comfortable with each other before the wedding day.",
+      names: "Kavya & Siddharth",
+      location: "Mumbai",
+      review: "Each shot was like a scene from a beautiful movie.",
+      rating: 5
     },
     {
-      question: "What equipment do you use?",
-      answer:
-        "We use professional cinema cameras, high-quality lenses, and advanced lighting equipment to ensure the best possible quality. Our gear includes multiple backup systems to guarantee nothing is missed on your special day.",
+      names: "Isha & Kartik",
+      location: "Navi Mumbai",
+      review: "They captured emotions we didn't even know we were feeling.",
+      rating: 5
     },
     {
-      question: "Do you have backup photographers/videographers?",
-      answer:
-        "Yes, we always have backup team members ready for every wedding. We also use multiple cameras and equipment backups to ensure comprehensive coverage and reliability throughout your wedding day.",
+      names: "Divya & Arjun",
+      location: "Mumbai",
+      review: "The best investment we made for our wedding. Absolutely stunning work.",
+      rating: 5
     },
     {
-      question: "What's your payment structure?",
-      answer:
-        "We typically require a booking amount to secure your date, with the remaining balance due before or on the wedding day. We're flexible with payment plans and happy to discuss options that work best for you.",
+      names: "Meera & Ashwin",
+      location: "Pune",
+      review: "Their attention to detail and artistic vision is unmatched.",
+      rating: 5
     },
     {
-      question: "Do you provide raw footage?",
-      answer:
-        "Yes! Along with the edited highlights, we also provide access to the raw footage so you have every precious moment captured during your celebration. This is included in our standard packages.",
+      names: "Pooja & Nikhil",
+      location: "Mumbai",
+      review: "Every family member was impressed. They work like silent artists.",
+      rating: 5
     },
-  ]
+    {
+      names: "Rhea & Varun",
+      location: "Thane",
+      review: "The way they captured our cultural traditions was breathtaking.",
+      rating: 5
+    },
+    {
+      names: "Shreya & Karan",
+      location: "Mumbai",
+      review: "Professional, creative, and so warm. Made us feel comfortable throughout.",
+      rating: 5
+    },
+    {
+      names: "Nidhi & Abhishek",
+      location: "Navi Mumbai",
+      review: "The final video made us relive every beautiful moment. Tears of joy!",
+      rating: 5
+    },
+    {
+      names: "Tara & Ravi",
+      location: "Mumbai",
+      review: "They understand Indian weddings and capture them with modern artistry.",
+      rating: 5
+    },
+    {
+      names: "Sonali & Pranav",
+      location: "Pune",
+      review: "Quality that surpasses expensive studios. Highly recommend!",
+      rating: 5
+    },
+    {
+      names: "Aditi & Sameer",
+      location: "Mumbai",
+      review: "Our families still talk about how beautiful the coverage was.",
+      rating: 5
+    },
+    {
+      names: "Riya & Harsh",
+      location: "Thane",
+      review: "They made our love story look like a Bollywood romance.",
+      rating: 5
+    },
+    {
+      names: "Shweta & Gaurav",
+      location: "Mumbai",
+      review: "Every penny was worth it. The memories they created are priceless.",
+      rating: 5
+    }
+  ];
 
-  const contactMethods = [
-    {
-      icon: Phone,
-      title: "Call Us",
-      subtitle: "Quick Response",
-      value: "+91 70216 83240",
-      href: "tel:+917021683240",
-      color: "from-emerald-500 to-teal-600",
-      hoverColor: "group-hover:from-emerald-600 group-hover:to-teal-700",
-    },
-    {
-      icon: Mail,
-      title: "Email Us",
-      subtitle: "Detailed Inquiries",
-      value: "theweddingcultfilms@gmail.com",
-      href: "mailto:theweddingcultfilms@gmail.com",
-      color: "from-blue-500 to-indigo-600",
-      hoverColor: "group-hover:from-blue-600 group-hover:to-indigo-700",
-    },
-    {
-      icon: Instagram,
-      title: "Follow Us",
-      subtitle: "Latest Work",
-      value: "@wedding_cult",
-      href: "https://www.instagram.com/wedding_cult",
-      color: "from-pink-500 to-rose-600",
-      hoverColor: "group-hover:from-pink-600 group-hover:to-rose-700",
-    },
-  ]
+  const stats = [
+    { number: "100+", label: "Weddings Captured", icon: Camera },
+    { number: "8+", label: "Cities Covered", icon: Heart },
+    { number: "100%", label: "Happy Couples", icon: Award },
+    { number: "5★", label: "Average Rating", icon: Star }
+  ];
 
-  const handleValueChange = (value: string) => {
-    setOpenItems(value ? [value] : [])
-  }
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Hero animation
+      gsap.fromTo(heroRef.current, 
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }
+      );
+
+      // About section animation
+      gsap.fromTo(aboutRef.current,
+        { opacity: 0, y: 80, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: aboutRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // Stats animation
+      gsap.fromTo(statsRef.current?.children,
+        { opacity: 0, y: 50, scale: 0.8 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: statsRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // Reviews animation
+      gsap.fromTo(reviewsRef.current,
+        { opacity: 0, rotationY: 15, z: -100 },
+        {
+          opacity: 1,
+          rotationY: 0,
+          z: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: reviewsRef.current,
+            start: "top 80%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // CTA animation
+      gsap.fromTo(ctaRef.current,
+        { opacity: 0, scale: 0.9, y: 30 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 1,
+          ease: "elastic.out(1, 0.8)",
+          scrollTrigger: {
+            trigger: ctaRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
+  const nextReview = () => {
+    setCurrentReview(prev => (prev + 1) % reviews.length);
+  };
+
+  const prevReview = () => {
+    setCurrentReview(prev => (prev - 1 + reviews.length) % reviews.length);
+  };
 
   return (
-    <div 
-      className="min-h-screen bg-gradient-to-br from-background mb-7 via-beige-light/10 to-background"
-      style={{
-        overflowX: 'hidden',
-        width: '100%',
-        maxWidth: '100vw',
-        wordBreak: 'break-word'
-      }}
-    >
+    <div className="min-h-screen bg-gradient-to-br from-background via-beige-light/10 to-background">
       <FloatingBallBackground />
-
-      <div className="pt-20 pb-16 w-full">
+      
+      <div className="pt-20 pb-16">
         {/* Elegant Header */}
-        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 overflow-hidden">
-          <div className="text-center animate-fade-in-up">
+        <div ref={heroRef} className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="text-center">
             <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-chocolate/10 rounded-full backdrop-blur-sm">
-              <Sparkles className="w-4 h-4 text-chocolate" />
-              <span className="font-poppins text-sm font-medium text-chocolate">Your Questions Answered</span>
+              <Film className="w-4 h-4 text-chocolate" />
+              <span className="font-poppins text-sm font-medium text-chocolate">Cinematic Love Stories</span>
             </div>
-
-            <h1 className="font-amsterdam text-2xl sm:text-3xl md:text-3xl text-chocolate mb-4 leading-tight max-w-full break-words">
-              Frequently Asked Questions
+            
+            <h1 className="font-amsterdam text-2xl sm:text-3xl md:text-4xl text-chocolate mb-6 leading-tight">
+              About Us & Reviews
             </h1>
-
-            <p className="font-playfair text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed break-words">
-              Everything you need to know about our wedding photography and videography services.
+            
+            <p className="font-playfair text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              We don't just film weddings — we narrate love stories through light, emotion, and timeless visuals.
             </p>
           </div>
         </div>
 
-        {/* Enhanced FAQ Accordion */}
-        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-chocolate/10 p-6 sm:p-8 lg:p-10 animate-fade-in-up w-full">
-            <Accordion type="single" collapsible className="w-full space-y-1" onValueChange={handleValueChange}>
-              {faqs.map((faq, index) => {
-                const isOpen = openItems.includes(`item-${index}`)
-                return (
-                  <AccordionItem key={index} value={`item-${index}`} className="border-none group w-full">
-                    <AccordionTrigger className="text-left font-playfair text-sm sm:text-base lg:text-lg font-medium text-chocolate hover:text-chocolate-light transition-all duration-500 hover:no-underline p-4 sm:p-5 rounded-2xl hover:bg-gradient-to-r hover:from-chocolate/5 hover:to-beige-warm/10 group relative overflow-hidden [&[data-state=open]]:bg-gradient-to-r [&[data-state=open]]:from-chocolate/8 [&[data-state=open]]:to-beige-warm/15 [&[data-state=open]]:shadow-lg w-full">
-                      {/* Decorative line that expands on open */}
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-chocolate to-chocolate/50 rounded-r-full transform scale-y-0 group-data-[state=open]:scale-y-100 transition-transform duration-500 origin-top"></div>
-
-                      {/* Question text */}
-                      <span className="pr-12 relative z-10 group-data-[state=open]:text-chocolate group-data-[state=open]:font-semibold transition-all duration-300 break-words max-w-full">
-                        {faq.question}
-                      </span>
-
-                      {/* Custom animated icon */}
-                      <div className="absolute right-4 sm:right-5 top-1/2 -translate-y-1/2 flex items-center justify-center">
-                        {/* Heart icon that appears when open */}
-                        <Heart
-                          className={`w-4 h-4 sm:w-5 sm:h-5 text-chocolate absolute transition-all duration-500 ${
-                            isOpen ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-50 rotate-45"
-                          }`}
-                          fill={isOpen ? "currentColor" : "none"}
-                        />
-
-                        {/* Plus/Minus icon */}
-                        <div
-                          className={`transition-all duration-500 ${isOpen ? "opacity-0 scale-50 rotate-180" : "opacity-100 scale-100 rotate-0"}`}
-                        >
-                          <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-chocolate/70" />
-                        </div>
-                      </div>
-
-                      {/* Floating particles on hover */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                        <div className="absolute top-2 right-8 w-1 h-1 bg-chocolate/30 rounded-full animate-pulse delay-0"></div>
-                        <div className="absolute top-4 right-12 w-0.5 h-0.5 bg-beige-warm/50 rounded-full animate-pulse delay-300"></div>
-                        <div className="absolute bottom-3 right-10 w-1.5 h-1.5 bg-chocolate/20 rounded-full animate-pulse delay-700"></div>
-                      </div>
-                    </AccordionTrigger>
-
-                    <AccordionContent className="font-poppins text-muted-foreground leading-relaxed px-4 sm:px-5 pb-4 sm:pb-5 text-sm sm:text-base relative overflow-hidden w-full">
-                      {/* Animated content with slide-in effect */}
-                      <div className="relative pl-4 sm:pl-6 border-l-2 border-chocolate/10 ml-1 w-full">
-                        {/* Decorative quote mark */}
-                        <div className="absolute -left-2 -top-1 w-4 h-4 bg-chocolate/10 rounded-full flex items-center justify-center">
-                          <div className="w-2 h-2 bg-chocolate/30 rounded-full"></div>
-                        </div>
-
-                        <div className="animate-in slide-in-from-left-4 duration-500 break-words max-w-full">{faq.answer}</div>
-
-                        {/* Subtle gradient overlay at bottom */}
-                        <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-white/50 to-transparent pointer-events-none"></div>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                )
-              })}
-            </Accordion>
+        {/* FIXED Stats Section */}
+        <div ref={statsRef} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {stats.map((stat, index) => {
+              const IconComponent = stat.icon;
+              return (
+                <div key={index} className="text-center group">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-chocolate/10 hover:shadow-xl transition-all duration-500 hover:scale-105">
+                    {/* FIXED: Added text-white to make icon visible */}
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-chocolate to-chocolate-light rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <IconComponent className="w-6 h-6 text-white" />
+                    </div>
+                    
+                    {/* FIXED: Made text more visible with better color and size */}
+                    <div className="font-amsterdam text-3xl sm:text-4xl text-chocolate font-bold mb-2">
+                      {stat.number}
+                    </div>
+                    
+                    {/* FIXED: Made label text darker and more readable */}
+                    <div className="font-poppins text-sm font-medium text-chocolate/80">
+                      {stat.label}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Still have questions section - Enhanced */}
-        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 overflow-hidden">
-          <div className="animate-fade-in-up w-full">
-            <div className="relative bg-gradient-to-br from-chocolate via-chocolate-light to-chocolate rounded-2xl p-6 sm:p-8 lg:p-12 shadow-2xl overflow-hidden w-full">
-              {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
-
-              <div className="relative text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-6">
-                  <MessageCircle className="w-8 h-8 text-white" />
+        {/* About Section - Enhanced */}
+        <div ref={aboutRef} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+          <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 sm:p-12 shadow-2xl border border-chocolate/10 overflow-hidden">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-chocolate/5 rounded-full -translate-y-16 translate-x-16"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-chocolate/5 rounded-full translate-y-12 -translate-x-12"></div>
+            
+            <div className="relative">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-chocolate to-chocolate-light rounded-full mb-6">
+                  <Quote className="w-8 h-8 text-white" />
                 </div>
-
-                <h2 className="font-amsterdam text-2xl sm:text-3xl lg:text-4xl text-white mb-4 max-w-full break-words">Still have questions?</h2>
-                <p className="font-playfair text-base sm:text-lg text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed break-words">
-                  We're here to help! Reach out to us and we'll be happy to answer any questions about your special day.
+                <h2 className="font-amsterdam text-3xl sm:text-4xl text-chocolate mb-4">
+                  Our Story
+                </h2>
+              </div>
+              
+              <div className="max-w-3xl mx-auto space-y-6 font-playfair text-base sm:text-lg text-foreground leading-relaxed">
+                <div className="bg-chocolate/5 rounded-2xl p-6 border-l-4 border-chocolate">
+                  <p className="italic text-chocolate font-medium">
+                    "We don't just film weddings — we narrate love stories through light, emotion, and timeless visuals."
+                  </p>
+                </div>
+                
+                <p>
+                  The Wedding Cult isn't just a studio — we're storytellers who believe real emotions make timeless films. 
+                  Based in Mumbai, we capture weddings with cinematic beauty, honesty, and soul.
                 </p>
-
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <a
-                    href="/contact"
-                    className="group inline-flex items-center justify-center bg-white text-chocolate px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-poppins font-semibold hover:bg-cream transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base"
-                  >
-                    Contact Us
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </a>
-                  <a
-                    href="https://wa.me/917021683240"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center justify-center bg-transparent border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-poppins font-semibold hover:bg-white hover:text-chocolate transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
-                  >
-                    <MessageCircle className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                    WhatsApp Us
-                  </a>
+                
+                <p>
+                  We aim to provide better work than our previous projects, constantly pushing ourselves to create something 
+                  extraordinary for every couple who trusts us with their special day.
+                </p>
+                
+                <p>
+                  We're more affordable than big-name studios — but our storytelling is stronger. We treat every wedding 
+                  like a personal project — never template-based. Each love story deserves its own unique narrative.
+                </p>
+                
+                <div className="bg-gradient-to-r from-beige-warm/30 to-cream/30 rounded-2xl p-6">
+                  <p className="italic text-chocolate font-medium text-center">
+                    "We always try to do better than our last wedding. Real emotions. Real memories. Timelessly filmed."
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Elegant Contact Cards */}
-        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 animate-fade-in-up w-full">
-            {contactMethods.map((method, index) => {
-              const IconComponent = method.icon
-              return (
-                <a
+        {/* Reviews Section - Enhanced */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-chocolate/10 rounded-full">
+              <Heart className="w-4 h-4 text-chocolate fill-chocolate" />
+              <span className="font-poppins text-sm font-medium text-chocolate">Client Love</span>
+            </div>
+            <h2 className="font-amsterdam text-2xl sm:text-4xl text-chocolate mb-4">
+              What Our Couples Say
+            </h2>
+            <p className="font-playfair text-lg text-muted-foreground max-w-2xl mx-auto">
+              Real reviews from real couples whose stories we've had the honor to capture
+            </p>
+          </div>
+
+          {/* Enhanced Review Carousel */}
+          <div ref={reviewsRef} className="relative">
+            <div className="bg-gradient-to-br from-white/95 to-beige-light/50 backdrop-blur-sm rounded-3xl p-8 sm:p-12 shadow-2xl border border-chocolate/10 overflow-hidden">
+              {/* Decorative quote marks */}
+              <div className="absolute top-6 left-6 text-6xl text-chocolate/10 font-serif">"</div>
+              <div className="absolute bottom-6 right-6 text-6xl text-chocolate/10 font-serif rotate-180">"</div>
+              
+              <div className="text-center relative z-10">
+                {/* Enhanced Stars */}
+                <div className="flex justify-center mb-6">
+                  {[...Array(5)].map((_, i) => (
+                    <Star 
+                      key={i} 
+                      className="h-6 w-6 text-gold fill-current mx-0.5 animate-pulse" 
+                      style={{ animationDelay: `${i * 0.1}s` }}
+                    />
+                  ))}
+                </div>
+                
+                {/* Review Text */}
+                <blockquote className="font-playfair text-xl sm:text-2xl text-chocolate mb-8 italic leading-relaxed max-w-3xl mx-auto">
+                  {reviews[currentReview].review}
+                </blockquote>
+                
+                {/* Couple Info */}
+                <div className="bg-chocolate/5 rounded-2xl p-6 inline-block">
+                  <div className="font-amsterdam text-2xl sm:text-3xl text-chocolate mb-2">
+                    {reviews[currentReview].names}
+                  </div>
+                  <div className="font-poppins text-muted-foreground flex items-center justify-center gap-2">
+                    <div className="w-2 h-2 bg-chocolate rounded-full"></div>
+                    {reviews[currentReview].location}
+                    <div className="w-2 h-2 bg-chocolate rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Enhanced Navigation Buttons */}
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={prevReview} 
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm border border-chocolate/20 hover:bg-chocolate hover:text-cream hover:scale-110 transition-all duration-300 shadow-lg"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={nextReview} 
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm border border-chocolate/20 hover:bg-chocolate hover:text-cream hover:scale-110 transition-all duration-300 shadow-lg"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </Button>
+            </div>
+
+            {/* Enhanced Review Indicators */}
+            <div className="flex justify-center mt-8 space-x-3">
+              {reviews.slice(0, 10).map((_, index) => (
+                <button
                   key={index}
-                  href={method.href}
-                  target={method.href.startsWith("http") ? "_blank" : undefined}
-                  rel={method.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="group relative bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-lg border border-white/20 hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 overflow-hidden w-full"
-                  style={{ maxWidth: '100%' }}
-                >
-                  {/* Gradient background on hover */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${method.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-                  ></div>
+                  onClick={() => setCurrentReview(index)}
+                  className={`transition-all duration-300 rounded-full ${
+                    currentReview === index 
+                      ? "w-8 h-3 bg-chocolate shadow-lg" 
+                      : "w-3 h-3 bg-chocolate/30 hover:bg-chocolate/50 hover:scale-125"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
 
-                  {/* Icon with gradient background */}
-                  <div className="relative mb-4">
-                    <div
-                      className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br ${method.color} ${method.hoverColor} rounded-xl shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-110`}
-                    >
-                      <IconComponent className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative">
-                    <h3 className="font-amsterdam text-lg text-chocolate mb-2 group-hover:text-chocolate-light transition-colors duration-300 break-words max-w-full">
-                      {method.title}
-                    </h3>
-                    <p className="font-poppins text-xs text-muted-foreground/70 mb-2 uppercase tracking-wider break-words">
-                      {method.subtitle}
-                    </p>
-                    <p 
-                      className="font-poppins text-sm text-muted-foreground group-hover:text-chocolate transition-colors duration-300 leading-relaxed max-w-full"
-                      style={{ 
-                        wordBreak: 'break-all',
-                        overflowWrap: 'break-word',
-                        maxWidth: '100%'
-                      }}
-                    >
-                      {method.value}
-                    </p>
-                  </div>
-
-                  {/* Hover arrow */}
-                  <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                    <ArrowRight className="w-4 h-4 text-chocolate" />
-                  </div>
-                </a>
-              )
-            })}
+        {/* Enhanced Call to Action */}
+        <div ref={ctaRef} className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative bg-gradient-to-br from-chocolate via-chocolate-light to-chocolate rounded-3xl p-8 sm:p-12 shadow-2xl overflow-hidden">
+            {/* Animated decorative elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16 animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12 animate-pulse delay-1s"></div>
+            <div className="absolute top-1/2 left-1/2 w-16 h-16 bg-white/5 rounded-full transform -translate-x-1/2 -translate-y-1/2 animate-ping"></div>
+            
+            <div className="relative text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-6">
+                <Camera className="w-8 h-8 text-white" />
+              </div>
+              
+              <h2 className="font-amsterdam text-2xl sm:text-2xl md:text-3xl text-white mb-4">
+                Ready to Join Our Story?
+              </h2>
+              <p className="font-playfair text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Let's create something beautiful together. Your love story deserves cinematic treatment.
+              </p>
+              
+              <a 
+                href="/contact" 
+                className="group inline-flex items-center justify-center bg-white text-chocolate px-8 py-4 rounded-2xl font-poppins font-semibold text-lg hover:bg-cream transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-translate-y-1"
+              >
+                Let's Begin Your Story
+                <Heart className="ml-3 w-5 h-5 group-hover:scale-125 transition-transform duration-300 fill-current" />
+              </a>
+            </div>
           </div>
         </div>
       </div>
-
+      
       <SocialFloatingButton />
     </div>
-  )
-}
+  );
+};
 
-export default FAQ
+export default About;

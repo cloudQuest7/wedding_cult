@@ -142,13 +142,12 @@ const About = () => {
     }
   ];
 
- const stats = [
-  { number: "100+", label: "Weddings Captured", icon: Camera },
-  { number: "8+", label: "Cities Covered", icon: Heart },
-  { number: "100%", label: "Happy Couples", icon: Award },
-  { number: "5★", label: "Average Rating", icon: Star }
-];
-
+  const stats = [
+    { number: "100+", label: "Weddings Captured", icon: Camera },
+    { number: "8+", label: "Cities Covered", icon: Heart },
+    { number: "100%", label: "Happy Couples", icon: Award },
+    { number: "5★", label: "Average Rating", icon: Star }
+  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -263,29 +262,32 @@ const About = () => {
           </div>
         </div>
 
-        {/* Stats Section */}
+        {/* FIXED Stats Section */}
         <div ref={statsRef} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, index) => {
-            const IconComponent = stat.icon;
-            return (
-              <div key={index} className="text-center group">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-chocolate/10 hover:shadow-xl transition-all duration-500 hover:scale-105">
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-chocolate to-chocolate-light rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <IconComponent className="w-6 h-6 text-white" />
-                  </div>
-                 <div className="font-amsterdam text-2xl sm:text-3xl text-amber-800 mb-1">
-  {stat.number}
-</div>
-
-                  <div className="font-poppins text-sm text-muted-foreground">
-                    {stat.label}
+              const IconComponent = stat.icon;
+              return (
+                <div key={index} className="text-center group">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-chocolate/10 hover:shadow-xl transition-all duration-500 hover:scale-105">
+                    {/* FIXED: Added text-white to make icon visible */}
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-chocolate to-chocolate-light rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <IconComponent className="w-6 h-6 text-white" />
+                    </div>
+                    
+                    {/* FIXED: Made text more visible with better color and size */}
+                    <div className="font-amsterdam text-3xl sm:text-4xl text-chocolate font-bold mb-2">
+                      {stat.number}
+                    </div>
+                    
+                    {/* FIXED: Made label text darker and more readable */}
+                    <div className="font-poppins text-sm font-medium text-chocolate/80">
+                      {stat.label}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-
+              );
+            })}
           </div>
         </div>
 
@@ -432,8 +434,7 @@ const About = () => {
           <div className="relative bg-gradient-to-br from-chocolate via-chocolate-light to-chocolate rounded-3xl p-8 sm:p-12 shadow-2xl overflow-hidden">
             {/* Animated decorative elements */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16 animate-pulse"></div>
-           <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12 animate-pulse delay-1s"></div>
-
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12 animate-pulse delay-1s"></div>
             <div className="absolute top-1/2 left-1/2 w-16 h-16 bg-white/5 rounded-full transform -translate-x-1/2 -translate-y-1/2 animate-ping"></div>
             
             <div className="relative text-center">
