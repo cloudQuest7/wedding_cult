@@ -100,7 +100,7 @@ const Contact = () => {
               <span className="font-poppins text-sm font-medium text-chocolate">Let's Create Something Beautiful</span>
             </div>
             
-            <h1 className="font-amsterdam text-xl sm:text-xl md:text-3xl text-chocolate mb-7 leading-tight">
+            <h1 className="font-amsterdam text-xl sm:text-xl md:text-3xl text-chocolate mb-5 mt-3 leading-tight">
               Let's Create Magic Together
             </h1>
             
@@ -122,10 +122,10 @@ const Contact = () => {
                 {/* Form header - Fixed font */}
                 <div className="mb-3">
                   <h2 
-                    className="font-playfair text-m sm:text-m text-chocolate mb-1"
+                    className="font-playfair text-m sm:text-m text-chocolate mb-3 "
                     style={{ fontFamily: "'Playfair Display', serif !important" }}
                   >
-                    Tell Us About Your Day
+                   Tell us about your day
                   </h2>
                   <p className="font-poppins text-muted-foreground text-sm sm:text-base">
                     Share your vision with us and let's create magic together
@@ -272,7 +272,7 @@ const Contact = () => {
                     <div className="inline-flex items-center justify-center w-8 h-8 bg-chocolate/10 rounded-full mb-1">
                       <Calendar className="w-4 h-4 text-chocolate" />
                     </div>
-                    <h4 className="font-amsterdam text-base text-chocolate mb-1">
+                    <h4 className="font-amsterdam text-base text-chocolate mb-10">
                       Quick Response Promise
                     </h4>
                     <p className="font-poppins text-muted-foreground text-xs leading-relaxed">
