@@ -107,50 +107,58 @@ const FAQ = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-beige-light/10 to-background">
+    <div 
+      className="min-h-screen bg-gradient-to-br from-background via-beige-light/10 to-background"
+      style={{
+        overflowX: 'hidden',
+        width: '100%',
+        maxWidth: '100vw',
+        wordBreak: 'break-word'
+      }}
+    >
       <FloatingBallBackground />
 
-      <div className="pt-20 pb-16">
+      <div className="pt-20 pb-16 w-full">
         {/* Elegant Header */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 overflow-hidden">
           <div className="text-center animate-fade-in-up">
             <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-chocolate/10 rounded-full backdrop-blur-sm">
               <Sparkles className="w-4 h-4 text-chocolate" />
               <span className="font-poppins text-sm font-medium text-chocolate">Your Questions Answered</span>
             </div>
 
-            <h1 className="font-amsterdam text-2xl sm:text-5xl md:text-4xl text-chocolate mb-4 leading-tight">
+            <h1 className="font-amsterdam text-2xl sm:text-3xl md:text-3xl text-chocolate mb-4 leading-tight max-w-full break-words">
               Frequently Asked Questions
             </h1>
 
-            <p className="font-playfair text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="font-playfair text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed break-words">
               Everything you need to know about our wedding photography and videography services.
             </p>
           </div>
         </div>
 
         {/* Enhanced FAQ Accordion */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-chocolate/10 p-8 sm:p-10 animate-fade-in-up">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-chocolate/10 p-6 sm:p-8 lg:p-10 animate-fade-in-up w-full">
             <Accordion type="single" collapsible className="w-full space-y-1" onValueChange={handleValueChange}>
               {faqs.map((faq, index) => {
                 const isOpen = openItems.includes(`item-${index}`)
                 return (
-                  <AccordionItem key={index} value={`item-${index}`} className="border-none group">
-                    <AccordionTrigger className="text-left font-playfair text-base sm:text-lg font-medium text-chocolate hover:text-chocolate-light transition-all duration-500 hover:no-underline p-5 rounded-2xl hover:bg-gradient-to-r hover:from-chocolate/5 hover:to-beige-warm/10 group relative overflow-hidden [&[data-state=open]]:bg-gradient-to-r [&[data-state=open]]:from-chocolate/8 [&[data-state=open]]:to-beige-warm/15 [&[data-state=open]]:shadow-lg">
+                  <AccordionItem key={index} value={`item-${index}`} className="border-none group w-full">
+                    <AccordionTrigger className="text-left font-playfair text-sm sm:text-base lg:text-lg font-medium text-chocolate hover:text-chocolate-light transition-all duration-500 hover:no-underline p-4 sm:p-5 rounded-2xl hover:bg-gradient-to-r hover:from-chocolate/5 hover:to-beige-warm/10 group relative overflow-hidden [&[data-state=open]]:bg-gradient-to-r [&[data-state=open]]:from-chocolate/8 [&[data-state=open]]:to-beige-warm/15 [&[data-state=open]]:shadow-lg w-full">
                       {/* Decorative line that expands on open */}
                       <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-chocolate to-chocolate/50 rounded-r-full transform scale-y-0 group-data-[state=open]:scale-y-100 transition-transform duration-500 origin-top"></div>
 
                       {/* Question text */}
-                      <span className="pr-12 relative z-10 group-data-[state=open]:text-chocolate group-data-[state=open]:font-semibold transition-all duration-300">
+                      <span className="pr-12 relative z-10 group-data-[state=open]:text-chocolate group-data-[state=open]:font-semibold transition-all duration-300 break-words max-w-full">
                         {faq.question}
                       </span>
 
                       {/* Custom animated icon */}
-                      <div className="absolute right-5 top-1/2 -translate-y-1/2 flex items-center justify-center">
+                      <div className="absolute right-4 sm:right-5 top-1/2 -translate-y-1/2 flex items-center justify-center">
                         {/* Heart icon that appears when open */}
                         <Heart
-                          className={`w-5 h-5 text-chocolate absolute transition-all duration-500 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 text-chocolate absolute transition-all duration-500 ${
                             isOpen ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-50 rotate-45"
                           }`}
                           fill={isOpen ? "currentColor" : "none"}
@@ -160,7 +168,7 @@ const FAQ = () => {
                         <div
                           className={`transition-all duration-500 ${isOpen ? "opacity-0 scale-50 rotate-180" : "opacity-100 scale-100 rotate-0"}`}
                         >
-                          <Plus className="w-5 h-5 text-chocolate/70" />
+                          <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-chocolate/70" />
                         </div>
                       </div>
 
@@ -172,15 +180,15 @@ const FAQ = () => {
                       </div>
                     </AccordionTrigger>
 
-                    <AccordionContent className="font-poppins text-muted-foreground leading-relaxed px-5 pb-5 text-sm sm:text-base relative overflow-hidden">
+                    <AccordionContent className="font-poppins text-muted-foreground leading-relaxed px-4 sm:px-5 pb-4 sm:pb-5 text-sm sm:text-base relative overflow-hidden w-full">
                       {/* Animated content with slide-in effect */}
-                      <div className="relative pl-6 border-l-2 border-chocolate/10 ml-1">
+                      <div className="relative pl-4 sm:pl-6 border-l-2 border-chocolate/10 ml-1 w-full">
                         {/* Decorative quote mark */}
                         <div className="absolute -left-2 -top-1 w-4 h-4 bg-chocolate/10 rounded-full flex items-center justify-center">
                           <div className="w-2 h-2 bg-chocolate/30 rounded-full"></div>
                         </div>
 
-                        <div className="animate-in slide-in-from-left-4 duration-500">{faq.answer}</div>
+                        <div className="animate-in slide-in-from-left-4 duration-500 break-words max-w-full">{faq.answer}</div>
 
                         {/* Subtle gradient overlay at bottom */}
                         <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-white/50 to-transparent pointer-events-none"></div>
@@ -194,9 +202,9 @@ const FAQ = () => {
         </div>
 
         {/* Still have questions section - Enhanced */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-          <div className="animate-fade-in-up">
-            <div className="relative bg-gradient-to-br from-chocolate via-chocolate-light to-chocolate rounded-2xl p-8 sm:p-12 shadow-2xl overflow-hidden">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 overflow-hidden">
+          <div className="animate-fade-in-up w-full">
+            <div className="relative bg-gradient-to-br from-chocolate via-chocolate-light to-chocolate rounded-2xl p-6 sm:p-8 lg:p-12 shadow-2xl overflow-hidden w-full">
               {/* Decorative elements */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
@@ -206,15 +214,15 @@ const FAQ = () => {
                   <MessageCircle className="w-8 h-8 text-white" />
                 </div>
 
-                <h2 className="font-amsterdam text-3xl sm:text-4xl text-white mb-4">Still have questions?</h2>
-                <p className="font-playfair text-lg text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+                <h2 className="font-amsterdam text-2xl sm:text-3xl lg:text-4xl text-white mb-4 max-w-full break-words">Still have questions?</h2>
+                <p className="font-playfair text-base sm:text-lg text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed break-words">
                   We're here to help! Reach out to us and we'll be happy to answer any questions about your special day.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                   <a
                     href="/contact"
-                    className="group inline-flex items-center justify-center bg-white text-chocolate px-8 py-4 rounded-xl font-poppins font-semibold hover:bg-cream transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="group inline-flex items-center justify-center bg-white text-chocolate px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-poppins font-semibold hover:bg-cream transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base"
                   >
                     Contact Us
                     <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -223,7 +231,7 @@ const FAQ = () => {
                     href="https://wa.me/917021683240"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center justify-center bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-poppins font-semibold hover:bg-white hover:text-chocolate transition-all duration-300 transform hover:scale-105"
+                    className="group inline-flex items-center justify-center bg-transparent border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-poppins font-semibold hover:bg-white hover:text-chocolate transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                   >
                     <MessageCircle className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                     WhatsApp Us
@@ -235,8 +243,8 @@ const FAQ = () => {
         </div>
 
         {/* Elegant Contact Cards */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in-up">
+        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 animate-fade-in-up w-full">
             {contactMethods.map((method, index) => {
               const IconComponent = method.icon
               return (
@@ -245,7 +253,8 @@ const FAQ = () => {
                   href={method.href}
                   target={method.href.startsWith("http") ? "_blank" : undefined}
                   rel={method.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="group relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 overflow-hidden"
+                  className="group relative bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-lg border border-white/20 hover:shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 overflow-hidden w-full"
+                  style={{ maxWidth: '100%' }}
                 >
                   {/* Gradient background on hover */}
                   <div
@@ -263,13 +272,20 @@ const FAQ = () => {
 
                   {/* Content */}
                   <div className="relative">
-                    <h3 className="font-amsterdam text-lg text-chocolate mb-2 group-hover:text-chocolate-light transition-colors duration-300">
+                    <h3 className="font-amsterdam text-lg text-chocolate mb-2 group-hover:text-chocolate-light transition-colors duration-300 break-words max-w-full">
                       {method.title}
                     </h3>
-                    <p className="font-poppins text-xs text-muted-foreground/70 mb-2 uppercase tracking-wider">
+                    <p className="font-poppins text-xs text-muted-foreground/70 mb-2 uppercase tracking-wider break-words">
                       {method.subtitle}
                     </p>
-                    <p className="font-poppins text-sm text-muted-foreground group-hover:text-chocolate transition-colors duration-300 leading-relaxed">
+                    <p 
+                      className="font-poppins text-sm text-muted-foreground group-hover:text-chocolate transition-colors duration-300 leading-relaxed max-w-full"
+                      style={{ 
+                        wordBreak: 'break-all',
+                        overflowWrap: 'break-word',
+                        maxWidth: '100%'
+                      }}
+                    >
                       {method.value}
                     </p>
                   </div>

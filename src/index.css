@@ -121,9 +121,14 @@ All colors MUST be HSL.
 }
 
 html {
-  font-display: swap;
+   scroll-behavior: smooth;
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
 
 @layer base {
   * {
