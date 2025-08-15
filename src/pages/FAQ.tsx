@@ -108,7 +108,7 @@ const FAQ = () => {
 
   return (
     <div 
-      className="min-h-screen bg-gradient-to-br from-background via-beige-light/10 to-background"
+      className="min-h-screen bg-gradient-to-br from-background mb-7 via-beige-light/10 to-background"
       style={{
         overflowX: 'hidden',
         width: '100%',
