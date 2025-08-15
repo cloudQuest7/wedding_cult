@@ -263,7 +263,7 @@ const WhyChooseUs = () => {
                   </div>
 
                   {/* Mobile-optimized content */}
-                  <div className="relative space-y-1 sm:space-y-3 lg:space-y-4 flex-1 flex flex-col justify-center">
+                  <div className="relative space-y-2 sm:space-y-3 lg:space-y-4 flex-1 flex flex-col justify-center">
                     <h3 className="feature-title font-amsterdam text-sm sm:text-xl lg:text-2xl text-chocolate transition-all duration-300 leading-tight">
                       {feature.title}
                     </h3>
@@ -273,7 +273,7 @@ const WhyChooseUs = () => {
                     </p>
                     
                     {/* Enhanced description - hidden on mobile, visible on larger screens */}
-                    <p className="feature-description font-poppins text-xs sm:text-sm text-slate-600 leading-relaxed opacity-0 transform translate-y-1 sm:translate-y-2 transition-all duration-300 hidden sm:block">
+                    <p className="feature-description font-poppins text-xs sm:text-sm text-slate-600 leading-relaxed opacity-0 transform translate-y-1 sm:translate-y-4 transition-all duration-300 hidden sm:block">
                       {feature.description}
                     </p>
                   </div>

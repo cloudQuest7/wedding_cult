@@ -32,7 +32,7 @@ const PhotoGallery = () => {
     {
       id: 2,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-thevisionaryvows-32927615.jpg?updatedAt=1752931184071",
-      couple:"Love & Stories",
+      couple:"Love stories",
       date: "JUN 2024",
       location: "JAIPUR",
       alt: "Cinematic wedding capture",
@@ -307,9 +307,9 @@ const PhotoGallery = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
                   {/* Text Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
   <div className="mb-2">
-    <div className="flex items-center space-x-2 text-sm font-playfair font-light tracking-wider opacity-90">
+    <div className="flex items-center space-x-3 text-sm font-playfair font-light tracking-wider opacity-90">
       <span>{photo.date}</span>
       <span>—</span>
       <span>{photo.location}</span>
