@@ -253,7 +253,7 @@ const About = () => {
               <span className="font-poppins text-sm font-medium text-chocolate">Cinematic Love Stories</span>
             </div>
             
-            <h1 className="font-amsterdam text-3xl sm:text-5xl md:text-4xl text-chocolate mb-6 leading-tight">
+            <h1 className="font-amsterdam text-2xl sm:text-3xl md:text-4xl text-chocolate mb-6 leading-tight">
               About Us & Reviews
             </h1>
             
@@ -267,23 +267,24 @@ const About = () => {
         <div ref={statsRef} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, index) => {
-  const IconComponent = stat.icon;
-  return (
-    <div key={index} className="text-center group">
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-chocolate/10 hover:shadow-xl transition-all duration-500 hover:scale-105">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-chocolate to-chocolate-light rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
-          <IconComponent className="w-6 h-6 text-white" />
-        </div>
-        <div className="font-amsterdam text-2xl sm:text-3xl text-chocolate mb-1">
-          {stat.number}
-        </div>
-        <div className="font-poppins text-sm text-muted-foreground">
-          {stat.label}
-        </div>
-      </div>
-    </div>
-  );
-})}
+            const IconComponent = stat.icon;
+            return (
+              <div key={index} className="text-center group">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-chocolate/10 hover:shadow-xl transition-all duration-500 hover:scale-105">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-chocolate to-chocolate-light rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className="w-6 h-6 text-white" />
+                  </div>
+                 <div className="font-amsterdam text-2xl sm:text-3xl text-amber-800 mb-1">
+  {stat.number}
+</div>
+
+                  <div className="font-poppins text-sm text-muted-foreground">
+                    {stat.label}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
 
           </div>
         </div>

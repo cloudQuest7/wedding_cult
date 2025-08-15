@@ -211,6 +211,11 @@ html {
   .transition-bounce {
     transition: var(--transition-bounce);
   }
+
+  .text-chocolate {
+  color: #8B4513;
+}
+
   
   /* Floating ball animations */
   @keyframes float-slow {
