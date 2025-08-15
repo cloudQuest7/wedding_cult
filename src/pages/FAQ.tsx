@@ -263,7 +263,7 @@ const FAQ = () => {
 
                   {/* Content */}
                   <div className="relative">
-                    <h3 className="font-amsterdam text-xl text-chocolate mb-1 group-hover:text-chocolate-light transition-colors duration-300">
+                    <h3 className="font-amsterdam text-lg text-chocolate mb-2 group-hover:text-chocolate-light transition-colors duration-300">
                       {method.title}
                     </h3>
                     <p className="font-poppins text-xs text-muted-foreground/70 mb-2 uppercase tracking-wider">

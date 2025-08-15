@@ -221,15 +221,14 @@ const WhyChooseUs = () => {
             <div className="w-8 sm:w-16 h-px bg-chocolate"></div>
           </div>
           
-          <h2
-  ref={titleRef}
-  className="font-amsterdam text-lg sm:text-4xl md:text-4xl lg:text-4xl text-chocolate mb-5 sm:mb-6 leading-snug px-2"
->
-  Why Couples Choose Us
-  <span className="block mt-3 text-base sm:text-2xl md:text-3xl font-poppins font-light text-muted-foreground">
-    for Their Special Day
-  </span>
-</h2>
+          <h2 ref={titleRef}
+          className="font-amsterdam text-lg sm:text-4xl md:text-4xl lg:text-3xl text-chocolate mb-5 sm:mb-6 leading-snug px-3"
+        >
+          Why Couples Choose Us
+          <span className="block mt-3 text-base sm:text-2xl md:text-3xl font-poppins font-light text-muted-foreground">
+            for Their Special Day
+          </span>
+        </h2>
 
           
           <div className="w-16 sm:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-chocolate to-transparent mx-auto"></div>

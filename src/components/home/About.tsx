@@ -204,7 +204,7 @@ const About = () => {
 
               <div 
                 ref={textRef}
-                className="font-playfair text-xl sm:text-3xl md:text-4xl mb-6"
+                className="font-playfair text-xl sm:text-3xl md:text-3xl mb-6"
               >
                 We don't just shoot weddings, we craft cinematic stories that capture the soul of your love, the laughter of your joy, and the tears of your happiness. Every frame is a memory, every moment is a masterpiece.
               </div>

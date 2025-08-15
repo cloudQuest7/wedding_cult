@@ -121,7 +121,7 @@ const Contact = () => {
               <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 sm:p-8 shadow-lg border border-beige-light/30">
                 {/* Form header - minimal margin */}
                 <div className="mb-3">
-                  <h2 className="font-amsterdam text-m sm:text-m text-chocolate mb-1">
+                  <h2 className="font-playfair text-m sm:text-m text-chocolate mb-1">
                     Tell Us About Your Day
                   </h2>
                   <p className="font-poppins text-muted-foreground text-sm sm:text-base">

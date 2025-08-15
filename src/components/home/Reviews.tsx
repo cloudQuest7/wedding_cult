@@ -544,7 +544,7 @@ const Reviews = () => {
         <Heart className="w-4 sm:w-6 h-4 sm:h-6 text-white animate-pulse" />
       </div>
       <div className="text-center sm:text-left">
-        <h3 className="font-playfair text-lg sm:text-xl text-chocolate font-bold mb-1">
+        <h3 className="font-playfair text-m sm:text-m text-chocolate font-bold mb-1">
           Join Our Family
         </h3>
         <p className="font-playfair text-muted-foreground text-sm sm:text-base">
