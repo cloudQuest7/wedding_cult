@@ -174,7 +174,7 @@ const About = () => {
             <Quote className="absolute -top-4 -left-4 w-8 h-8 text-chocolate/20 fill-current" />
             <Quote className="absolute -bottom-4 -right-4 w-8 h-8 text-chocolate/20 fill-current rotate-180" />
 
-            <blockquote className="font-amsterdam text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-chocolate leading-relaxed italic mb-8 px-8">
+            <blockquote className="font-amsterdam text-3xl sm:text-3xl md:text-4xl lg:text-5xl text-chocolate leading-relaxed mb-8 px-8">
               "Nothing is ever lost to us as long as we remember it."
             </blockquote>
 

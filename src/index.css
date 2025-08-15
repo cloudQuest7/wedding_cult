@@ -132,8 +132,15 @@ html {
 
   body {
     @apply bg-background text-foreground font-poppins;
+     overflow-x: hidden;
+  width: 100%;
+  position: relative;
   }
   
+* {
+  box-sizing: border-box;
+}
+
   /* Beautiful subtle pattern for white/cream backgrounds */
   .bg-background,
   .bg-cream,
