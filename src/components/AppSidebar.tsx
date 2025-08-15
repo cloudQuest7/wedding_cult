@@ -289,10 +289,10 @@ function MobileBottomNav() {
     <>
       {/* UPDATED: Fixed Top Navbar - Clean Logo without Border */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cream/95 via-cream/90 to-beige-warm/95 backdrop-blur-sm shadow-lg border-b border-chocolate/20 w-full">
-        <div className="flex items-center justify-between px-6 py-2 w-full max-w-full">
+        <div className="flex items-center justify-between px-6 py-0.5 w-full max-w-full">
           {/* Company Name on Left */}
           <div className="text-left flex-1">
-            <h1 className="text-m font-poppins text-chocolate">
+            <h1 className="text-sm font-poppins text-chocolate">
               The Wedding Cult
             </h1>
           </div>
@@ -317,7 +317,7 @@ function MobileBottomNav() {
           {/* Menu Button */}
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 hover:scale-110"
+            className="flex flex-col items-center justify-center p-1 rounded-lg transition-all duration-200 hover:scale-110"
           >
             <Menu className="h-6 w-6 mb-1 text-cream" />
             <span className="text-xs font-medium text-cream">Menu</span>
@@ -340,9 +340,9 @@ function MobileBottomNav() {
           {/* Enquire Button */}
           <Link
             to="/contact"
-            className="flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 hover:scale-110"
+            className="flex flex-col items-center justify-center p-1 rounded-lg transition-all duration-200 hover:scale-110"
           >
-            <Phone className="h-6 w-6 mb-1 text-cream" />
+            <Phone className="h-6 w-6 mb-2 text-cream" />
             <span className="text-xs font-medium text-cream">Enquire</span>
           </Link>
         </div>

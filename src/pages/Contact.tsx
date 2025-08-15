@@ -111,17 +111,20 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Main Content - Very compact */}
-      <section className="pb-8 px-4 sm:px-6 lg:px-8">
+      {/* Main Content - Responsive bottom padding */}
+      <section className="pb-8 sm:pb-12 lg:pb-16 xl:pb-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
             
             {/* Contact Form - Ultra tight spacing */}
             <div className="xl:col-span-2 animate-fade-in-up">
               <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 sm:p-8 shadow-lg border border-beige-light/30">
-                {/* Form header - minimal margin */}
+                {/* Form header - Fixed font */}
                 <div className="mb-3">
-                  <h2 className="font-playfair text-m sm:text-m text-chocolate mb-1">
+                  <h2 
+                    className="font-playfair text-m sm:text-m text-chocolate mb-1"
+                    style={{ fontFamily: "'Playfair Display', serif !important" }}
+                  >
                     Tell Us About Your Day
                   </h2>
                   <p className="font-poppins text-muted-foreground text-sm sm:text-base">
@@ -224,9 +227,9 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Contact Information Sidebar - Compact */}
+            {/* Contact Information Sidebar - Responsive margin */}
             <div className="animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-              <div className="xl:sticky xl:top-8 space-y-3">
+              <div className="space-y-3 mb-4 sm:mb-6 lg:mb-8">
                 <div className="bg-gradient-to-br from-chocolate to-chocolate-light rounded-xl p-5 shadow-lg text-white">
                   <h3 className="font-amsterdam text-xl sm:text-2xl mb-2">
                     Get In Touch

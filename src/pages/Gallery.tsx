@@ -122,7 +122,7 @@ const Gallery = () => {
       id: 4,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-varun-118342-5759464.jpg?updatedAt=1752122335592",
       alt: "Jobin & Jesline - Cinematic wedding moments",
-      category: "Cinematic"
+      category: "Portraits"
     },
     {
       id: 5,
@@ -134,61 +134,61 @@ const Gallery = () => {
       id: 6,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187422.jpg?updatedAt=1752122328713",
       alt: "Wedding ceremony moment",
-      category: "Ceremony"
+      category: "Pre-Wedding"
     },
     {
       id: 7,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-suraj-galgale-1822752-16196490.jpg?updatedAt=1752122329114",
-      alt: "Bride portrait",
-      category: "Portraits"
+      alt: "Moments",
+      category: "Ceremony"
     },
     {
       id: 8,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-sampark-films-samparkfilms-com-1300296201-32081698.jpg?updatedAt=1752122335732",
       alt: "Wedding celebration",
-      category: "Reception"
+      category: "Portraits"
     },
     {
       id: 9,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000471.jpg?updatedAt=1752122333713",
       alt: "Cinematic wedding collection",
-      category: "Cinematic"
+      category: "Ceremony"
     },
     {
       id: 10,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-theindiaweddings-28144266.jpg?updatedAt=1752122336295",
       alt: "Wedding details",
-      category: "Details"
+      category: "Portraits"
     },
     {
       id: 11,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-fotographiya-wedding-photography-823737813-29492597.jpg?updatedAt=1752122327991",
       alt: "Pre-wedding shoot",
-      category: "Pre-Wedding"
+      category: "Ceremony"
     },
     {
       id: 12,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-angel-ayala-321556-29851245.jpg?updatedAt=1752122328077",
       alt: "Family moments",
-      category: "Family"
+      category: "Pre-Wedding"
     },
     {
       id: 13,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000480.jpg?updatedAt=1752122335536",
       alt: "Couple dancing",
-      category: "Candid"
+      category: "Ceremony"
     },
     {
       id: 14,
       url: "https://ik.imagekit.io/7xgikoq8o/Nilkeshi%20+%20Saevesh%20Cinematic.00_04_33_23.Still015.png?updatedAt=1752122785721",
       alt: "Nilkeshi & Saevesh portrait",
-      category: "Portraits"
+      category: "Ceremony" //
     },
     {
       id: 15,
       url: "https://ik.imagekit.io/7xgikoq8o/Nilkeshi%20+%20Saevesh%20Cinematic.00_06_24_13.Still024.png?updatedAt=1752122785580",
       alt: "Nilkeshi & Saevesh moments",
-      category: "Cinematic"
+      category: "Ceremony"
     },
     {
       id: 16,
@@ -200,19 +200,19 @@ const Gallery = () => {
       id: 17,
       url: "https://ik.imagekit.io/7xgikoq8o/Dhiraj%20&%20Rajashri%20Wedding%20Teaser.00_01_18_06.Still019.png?updatedAt=1752122784770",
       alt: "Wedding celebration",
-      category: "Reception"
+      category: "Pre-Wedding"
     },
     {
       id: 18,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9210801.jpg?updatedAt=1752218451384",
       alt: "Beautiful couple portrait",
-      category: "Portraits"
+      category: "Ceremony"
     },
     {
       id: 19,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-gursher-gill-63702010-18633036.jpg?updatedAt=1752218493332",
-      alt: "Wedding ceremony moments",
-      category: "Ceremony"
+      alt: "Pretty bridal moments",
+      category: "Portraits" //
     },
     {
       id: 20,
@@ -224,25 +224,25 @@ const Gallery = () => {
       id: 21,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-909646465-31600968.jpg?updatedAt=1752218490957",
       alt: "Couple celebration",
-      category: "Reception"
+      category: "Pre-Wedding"
     },
     {
       id: 22,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-amit-chowdhury-2402860-18077025.jpg?updatedAt=1752218490697",
       alt: "Wedding photography session",
-      category: "Portraits"
+      category: "Portraits" //
     },
     {
       id: 23,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-lpfstudio023-26558728.jpg?updatedAt=1752218490314",
       alt: "Cinematic wedding moments",
-      category: "Cinematic"
+      category: "Pre-Wedding"
     },
     {
       id: 24,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-varun-118342-5759527.jpg?updatedAt=1752218488581",
       alt: "Elegant bridal portrait",
-      category: "Portraits"
+      category: "Portraits" //
     },
     {
       id: 25,
@@ -254,37 +254,37 @@ const Gallery = () => {
       id: 26,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000464.jpg?updatedAt=1752218486011",
       alt: "Candid wedding moments",
-      category: "Candid"
+      category: "Ceremony"
     },
     {
       id: 27,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000479.jpg?updatedAt=1752218483021",
       alt: "Wedding celebration",
-      category: "Reception"
+      category: "Ceremony"
     },
     {
       id: 28,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ajay-donga-1113836-2235390.jpg?updatedAt=1752218480207",
       alt: "Traditional Indian wedding",
-      category: "Ceremony"
+      category: "Pre-Wedding"
     },
     {
       id: 29,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ajay-donga-1113836-2221392.jpg?updatedAt=1752218479074",
       alt: "Wedding rituals captured",
-      category: "Ceremony"
+      category: "Pre-Wedding"
     },
     {
       id: 30,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187414.jpg?updatedAt=1752218469371",
       alt: "Cinematic wedding story",
-      category: "Cinematic"
+      category: "Pre-Wedding"
     },
     {
       id: 31,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9400897.jpg?updatedAt=1752218465131",
       alt: "Romantic couple moments",
-      category: "Portraits"
+      category: "Pre-Wedding"
     },
     {
       id: 32,
@@ -296,13 +296,13 @@ const Gallery = () => {
       id: 33,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9400899.jpg?updatedAt=1752218464719",
       alt: "Beautiful couple shoot",
-      category: "Portraits"
+      category: "Reception"
     },
     {
       id: 34,
       url: "https://ik.imagekit.io/7xgikoq8o/fotographiya-wedding-photography-9325564.jpg?updatedAt=1752218464295",
       alt: "Professional wedding photography",
-      category: "Portraits"
+      category: "Ceremony"
     },
     {
       id: 35,
@@ -314,13 +314,13 @@ const Gallery = () => {
       id: 36,
       url: "https://ik.imagekit.io/7xgikoq8o/fotographiya-wedding-photography-9325561.jpg?updatedAt=1752218460012",
       alt: "Artistic wedding photography",
-      category: "Details"
+      category: "Ceremony"
     },
     {
       id: 37,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187294.jpg?updatedAt=1752218462738",
       alt: "Cinematic wedding capture",
-      category: "Cinematic"
+      category: "Pre-Wedding"
     },
     {
       id: 38,
@@ -332,13 +332,13 @@ const Gallery = () => {
       id: 39,
       url: "https://ik.imagekit.io/7xgikoq8o/wedding-photography-9371876.jpg?updatedAt=1752218461631",
       alt: "Wedding photography excellence",
-      category: "Portraits"
+      category: "Reception"
     },
     {
       id: 40,
       url: "https://ik.imagekit.io/7xgikoq8o/candid-8535584.jpg?updatedAt=1752218456309",
       alt: "Candid wedding photography",
-      category: "Candid"
+      category: "Pre-Wedding"
     },
     {
       id: 41,
@@ -350,13 +350,13 @@ const Gallery = () => {
       id: 42,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9210812.jpg?updatedAt=1752218453773",
       alt: "Couple portraits",
-      category: "Portraits"
+      category: "Reception"
     },
     {
       id: 43,
       url: "https://ik.imagekit.io/7xgikoq8o/happy-couple-8457514.jpg?updatedAt=1752218453664",
       alt: "Happy wedding couple",
-      category: "Portraits"
+      category: "Ceremony"
     },
     {
       id: 44,
@@ -380,25 +380,25 @@ const Gallery = () => {
       id: 47,
       url: "https://ik.imagekit.io/7xgikoq8o/wedding-photography-8443234.jpg?updatedAt=1752218451592",
       alt: "Wedding photography masterpiece",
-      category: "Details"
+      category: "Ceremony"
     },
     {
       id: 52,
       url: "https://ik.imagekit.io/7xgikoq8o/DSC02069.jpg?updatedAt=1752469016563",
       alt: "Wedding ceremony capture",
-      category: "Ceremony"
+      category: "Ceremony"//
     },
     {
       id: 54,
       url: "https://ik.imagekit.io/7xgikoq8o/DSC01828.jpg?updatedAt=1752469017255",
-      alt: "Cinematic wedding photography",
-      category: "Cinematic"
+      alt: "Little Moments",
+      category: "All"//
     },
     {
       id: 60,
       url: "https://ik.imagekit.io/7xgikoq8o/8575c123-3f5f-4994-92d2-3e4a1c1f07f9.jpg?updatedAt=1752469020327",
-      alt: "Stunning wedding moments",
-      category: "Details"
+      alt: "Beautiful moments",
+      category: "Portraits" 
     },
     {
       id: 61,
@@ -410,25 +410,25 @@ const Gallery = () => {
       id: 62,
       url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20....._love%20_nature%20_naturelovers%20_photographer%20_photography%20_like%20_likesforlike%20_vagamon%20_model%20_modeling%20_dress%20_style%20_followforfollowback%20_follow%20_insta%20_in%20(8)_PhotoGrid.png?updatedAt=1752469379787",
       alt: "Nature-inspired photography",
-      category: "Pre-Wedding"
+      category: "Portraits"
     },
     {
       id: 63,
       url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20....._love%20_nature%20_naturelovers%20_photographer%20_photography%20_like%20_likesforlike%20_vagamon%20_model%20_modeling%20_dress%20_style%20_followforfollowback%20_follow%20_insta%20_in%20(7)_PhotoGrid.png?updatedAt=1752469379782",
       alt: "Artistic couple photography",
-      category: "Pre-Wedding"
+      category: "Portraits"
     },
     {
       id: 64,
       url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20....._love%20_nature%20_naturelovers%20_photographer%20_photography%20_like%20_likesforlike%20_vagamon%20_model%20_modeling%20_dress%20_style%20_followforfollowback%20_follow%20_insta%20_in%20(3)_PhotoGrid.png?updatedAt=1752469379471",
       alt: "Cinematic nature portraits",
-      category: "Cinematic"
+      category: "Portraits"
     },
     {
       id: 65,
       url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20....._love%20_nature%20_naturelovers%20_photographer%20_photography%20_like%20_likesforlike%20_vagamon%20_model%20_modeling%20_dress%20_style%20_followforfollowback%20_follow%20_insta%20_in%20(6)_PhotoGrid.png?updatedAt=1752469379170",
       alt: "Beautiful outdoor session",
-      category: "Pre-Wedding"
+      category: "Portraits"
     },
     {
       id: 66,
@@ -440,25 +440,25 @@ const Gallery = () => {
       id: 67,
       url: "https://ik.imagekit.io/7xgikoq8o/39.png",
       alt: "Wedding photography collection",
-      category: "Portraits"
+      category: "Pre-Wedding"
     },
     {
       id: 70,
       url: "https://ik.imagekit.io/7xgikoq8o/38.png",
       alt: "Elegant bridal portraits",
-      category: "Portraits"
+      category: "Ceremony"
     },
     {
       id: 71,
       url: "https://ik.imagekit.io/7xgikoq8o/37.png",
       alt: "Wedding celebration moments",
-      category: "Reception"
+      category: "Pre-Wedding"
     },
     {
       id: 72,
       url: "https://ik.imagekit.io/7xgikoq8o/35.png",
       alt: "Traditional wedding ceremony",
-      category: "Ceremony"
+      category: "Pre-Wedding"
     },
     {
       id: 73,
@@ -470,55 +470,55 @@ const Gallery = () => {
       id: 74,
       url: "https://ik.imagekit.io/7xgikoq8o/32.png",
       alt: "Candid wedding moments",
-      category: "Candid"
+      category: "Portraits"
     },
     {
       id: 75,
       url: "https://ik.imagekit.io/7xgikoq8o/34.png",
       alt: "Wedding details and decor",
-      category: "Details"
+      category: "Pre-Wedding"
     },
     {
       id: 76,
       url: "https://ik.imagekit.io/7xgikoq8o/30.png",
       alt: "Family wedding portraits",
-      category: "Family"
+      category: "Pre-Wedding"
     },
     {
       id: 77,
       url: "https://ik.imagekit.io/7xgikoq8o/27.png",
       alt: "Artistic wedding photography",
-      category: "Cinematic"
+      category: "Pre-Wedding"
     },
     {
       id: 78,
       url: "https://ik.imagekit.io/7xgikoq8o/28.png",
       alt: "Romantic couple moments",
-      category: "Portraits"
+      category: "Pre-Wedding"
     },
     {
       id: 79,
       url: "https://ik.imagekit.io/7xgikoq8o/33.png",
       alt: "Wedding ceremony rituals",
-      category: "Ceremony"
+      category: "Portraits"
     },
     {
       id: 80,
       url: "https://ik.imagekit.io/7xgikoq8o/31.png",
       alt: "Beautiful bridal shots",
-      category: "Portraits"
+      category: "Ceremony"
     },
     {
       id: 81,
       url: "https://ik.imagekit.io/7xgikoq8o/26.png",
       alt: "Wedding reception celebration",
-      category: "Reception"
+      category: "Portraits"
     },
     {
       id: 84,
       url: "https://ik.imagekit.io/7xgikoq8o/23.png",
       alt: "Traditional Indian wedding",
-      category: "Ceremony"
+      category: "Portraits"
     },
     {
       id: 85,
@@ -530,37 +530,37 @@ const Gallery = () => {
       id: 86,
       url: "https://ik.imagekit.io/7xgikoq8o/21.png",
       alt: "Wedding candid photography",
-      category: "Candid"
+      category: "Portraits"
     },
     {
       id: 87,
       url: "https://ik.imagekit.io/7xgikoq8o/15.png",
       alt: "Elegant wedding portraits",
-      category: "Portraits"
+      category: "Ceremony"
     },
     {
       id: 88,
       url: "https://ik.imagekit.io/7xgikoq8o/20.png",
       alt: "Wedding ceremony moments",
-      category: "Ceremony"
+      category: "Portraits"
     },
     {
       id: 89,
       url: "https://ik.imagekit.io/7xgikoq8o/19.png",
       alt: "Cinematic wedding storytelling",
-      category: "Cinematic"
+      category: "Portraits"
     },
     {
       id: 91,
       url: "https://ik.imagekit.io/7xgikoq8o/14.png",
       alt: "Beautiful couple portraits",
-      category: "Portraits"
+      category: "Ceremony"
     },
     {
       id: 92,
       url: "https://ik.imagekit.io/7xgikoq8o/17.png",
       alt: "Wedding detail shots",
-      category: "Details"
+      category: "Portraits"
     },
     {
       id: 93,
@@ -572,79 +572,79 @@ const Gallery = () => {
       id: 94,
       url: "https://ik.imagekit.io/7xgikoq8o/16.png",
       alt: "Wedding family moments",
-      category: "Family"
+      category: "Portraits"
     },
     {
       id: 95,
       url: "https://ik.imagekit.io/7xgikoq8o/12.png",
       alt: "Romantic wedding photography",
-      category: "Portraits"
+      category: "Pre-Wedding"
     },
     {
       id: 96,
       url: "https://ik.imagekit.io/7xgikoq8o/11.png",
       alt: "Wedding ceremony traditions",
-      category: "Ceremony"
+      category: "Pre-Wedding"
     },
     {
       id: 97,
       url: "https://ik.imagekit.io/7xgikoq8o/10.png",
       alt: "Beautiful bridal moments",
-      category: "Portraits"
+      category: "Pre-Wedding"
     },
     {
       id: 98,
       url: "https://ik.imagekit.io/7xgikoq8o/9.png",
       alt: "Wedding celebration joy",
-      category: "Reception"
+      category: "Ceremony"
     },
     {
       id: 99,
       url: "https://ik.imagekit.io/7xgikoq8o/8.png",
       alt: "Cinematic couple photography",
-      category: "Cinematic"
+      category: "Pre-Wedding"
     },
     {
       id: 100,
       url: "https://ik.imagekit.io/7xgikoq8o/7.png",
       alt: "Traditional wedding rituals",
-      category: "Ceremony"
+      category: "Pre-Wedding"
     },
     {
       id: 101,
       url: "https://ik.imagekit.io/7xgikoq8o/6.png",
       alt: "Pre-wedding love story",
-      category: "Pre-Wedding"
+      category: "Portraits"
     },
     {
       id: 102,
       url: "https://ik.imagekit.io/7xgikoq8o/5.png",
       alt: "Wedding detail photography",
-      category: "Details"
+      category: "Reception"
     },
     {
       id: 103,
       url: "https://ik.imagekit.io/7xgikoq8o/4.png",
       alt: "Family wedding portraits",
-      category: "Family"
+      category: "Portraits"
     },
     {
       id: 104,
       url: "https://ik.imagekit.io/7xgikoq8o/3.png",
       alt: "Candid wedding photography",
-      category: "Candid"
+      category: "Ceremony"
     },
     {
       id: 105,
       url: "https://ik.imagekit.io/7xgikoq8o/2.png",
       alt: "Artistic wedding moments",
-      category: "Cinematic"
+      category: "Pre-Wedding"
     },
     {
       id: 106,
       url: "https://ik.imagekit.io/7xgikoq8o/1.png",
       alt: "Beautiful couple portraits",
-      category: "Portraits"
+      category: "Pre-Wedding"
     }
   ];
 
