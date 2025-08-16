@@ -91,10 +91,11 @@ Sent from The Wedding Cult website
   };
   return <section className="py-20 px-4 bg-gradient-to-b from-background to-beige-light">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12 animate-fade-in-up">
-          <h2 className="font-amsterdam text-chocolate mb-4 text-2xl">
-            Let's Create Magic Together
-          </h2>
+        <div className="text-center mb-6 animate-fade-in-up">
+          <h2 className="font-amsterdam text-chocolate mb-4 text-2xl leading-loose">
+  Let's Create Magic Together
+</h2>
+
           <p className="font-playfair text-lg text-muted-foreground max-w-2xl mx-auto">
             Tell us about your special day and let's begin crafting your cinematic love story.
           </p>
@@ -103,7 +104,7 @@ Sent from The Wedding Cult website
         <div className="bg-card rounded-lg shadow-romantic p-8 animate-fade-in-up" style={{
         animationDelay: "0.2s"
       }}>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="name" className="font-poppins font-medium text-chocolate">
