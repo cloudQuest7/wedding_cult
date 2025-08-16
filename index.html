@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <!-- UPDATED: More accessible viewport tag -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+
 
     <title>The Wedding Cult - Cinematic Wedding Photography & Films | Mumbai</title>
     <meta name="description" content="The Wedding Cult - Premium wedding photography & films in Mumbai. Quality, the way you deserve. Story, the way you want. Memories, the way your forever begins." />
@@ -45,8 +46,16 @@
       }
 
       /* ADDED: Prevent unwanted zoom while maintaining accessibility */
-      html, body {
-        touch-action: manipulation;
+          html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+      }
+
+      .page-wrapper {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
       }
       
       /* Prevent input zoom on iOS Safari */
