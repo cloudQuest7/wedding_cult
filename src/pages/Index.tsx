@@ -25,14 +25,11 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Floating Ball Background */}
-      <FloatingBallBackground />
-      
+    <main className="min-h-screen bg-background w-full ">
       <Hero />
       
       {/* Main Content Sections */}
-      <div className="relative z-10 bg-background">
+      <div className=" relative z-10 bg-background max-w-[100vw] overflow-hidden">
         <About />
         <WhyChooseUs />
         <VideoPreview />
@@ -43,7 +40,7 @@ const Index = () => {
         <FeedbackSection />
         <Footer />
       </div>
-    </div> 
+    </main>
   );
 };
 

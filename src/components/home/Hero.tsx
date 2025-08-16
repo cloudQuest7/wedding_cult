@@ -24,7 +24,7 @@ const Hero = () => {
   }, [])
 
   return (
-    <section ref={heroRef} className="relative h-[85vh] sm:h-screen w-full flex items-center justify-center overflow-hidden">
+    <section ref={heroRef} className="relative h-[85vh] sm:h-screen w-full flex items-center justify-center mx-auto px-3 sm:px-6">
       {/* Professional Corner Curves - Smaller on mobile */}
       <div className="absolute inset-0 z-10">
         {/* Top Left Corner */}
