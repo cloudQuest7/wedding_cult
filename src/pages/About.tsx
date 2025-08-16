@@ -262,37 +262,10 @@ const About = () => {
           </div>
         </div>
 
-        {/* FIXED Stats Section */}
-        <div ref={statsRef} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat, index) => {
-              const IconComponent = stat.icon;
-              return (
-                <div key={index} className="text-center group">
-                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-chocolate/10 hover:shadow-xl transition-all duration-500 hover:scale-105">
-                    {/* FIXED: Added text-white to make icon visible */}
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-chocolate to-chocolate-light rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="w-6 h-6 text-white" />
-                    </div>
-                    
-                    {/* FIXED: Made text more visible with better color and size */}
-                    <div className="font-amsterdam text-3xl sm:text-4xl text-chocolate font-bold mb-2">
-                      {stat.number}
-                    </div>
-                    
-                    {/* FIXED: Made label text darker and more readable */}
-                    <div className="font-poppins text-sm font-medium text-chocolate/80">
-                      {stat.label}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+       
 
         {/* About Section - Enhanced */}
-        <div ref={aboutRef} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+        <div ref={aboutRef} className="max-w-5xl mx-auto sm:px-6 lg:px-8 mb-20">
           <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 sm:p-12 shadow-2xl border border-chocolate/10 overflow-hidden">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-chocolate/5 rounded-full -translate-y-16 translate-x-16"></div>
@@ -303,7 +276,7 @@ const About = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-chocolate to-chocolate-light rounded-full mb-6">
                   <Quote className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="font-amsterdam text-3xl sm:text-4xl text-chocolate mb-4">
+                <h2 className="font-amsterdam text-2xl sm:text-3xl text-chocolate mb-4">
                   Our Story
                 </h2>
               </div>

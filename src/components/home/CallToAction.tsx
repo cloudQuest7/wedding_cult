@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 const CallToAction = () => {
   return <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-        <h2 className="font-amsterdam text-lg sm:text-2xl md:text-2xl text-chocolate mb-6 sm:mb-7 mx-0 px-0">
+       <h2 className="font-amsterdam text-m sm:text-2xl md:text-2xl text-chocolate mb-7 sm:mb-8 mx-0 px-0 leading-loose">
   Your Story Deserves to be Remembered the Right Way
 </h2>
+
+
 
         <p className="font-playfair text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-10 max-w-2xl mx-auto px-4 sm:px-0">
           Let's capture your forever.

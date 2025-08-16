@@ -51,26 +51,23 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="bg-gradient-to-b from-beige-light to-cream">
+    <footer className="bg-gradient-to-b from-beige-light to-cream mb-20">
       {/* Main Footer - Significantly reduced padding */}
       <section className="bg-chocolate text-cream pt-4 sm:pt-6 lg:pt-8 pb-3 sm:pb-4">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
           {/* Hero Text - New elegant text with cursive elements */}
-          <div className="text-center mb-2">
-            <h2 className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-2 leading-tight font-light tracking-wide text-cream">
-              Where love meets art and<br />
-              dreams become eternal<br />
-              <span className="font-playfair text-cream/90 font-semibold tracking-wider text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">Wedding Memories</span>
-            </h2>
+          <div className="text-center mt-2">
+          <h3 className="font-amsterdam text-lg sm:text-xl lg:text-2xl mb-1.5">The Wedding Cult</h3>
           </div>
 
           {/* Spinning Elegant Flower - Properly centered */}
-          <div className="flex justify-center mb-2">
+          <div className="flex justify-center ">
             <div 
-              ref={flowerRef}
-              className="w-36 h-36 sm:w-44 sm:h-44 lg:w-52 lg:h-52 opacity-90"
-            >
+  ref={flowerRef}
+  className="w-44 h-44 sm:w-52 sm:h-52 lg:w-60 lg:h-60 opacity-90"
+>
+
               <svg viewBox="0 0 200 200" className="w-full h-full fill-cream/70">
                 {/* Enhanced Elegant Flower Design - Centered at 100,100 with spinning animation */}
                 <g transform="translate(100,100)">
@@ -117,7 +114,7 @@ const Footer = () => {
           {/* Brand & Social - Much reduced spacing */}
           <div className="text-center space-y-2 mb-3">
             <div>
-              <h3 className="font-amsterdam text-lg sm:text-xl lg:text-2xl mb-1.5">The Wedding Cult</h3>
+              
               <p className="font-playfair text-cream/80 text-xs sm:text-sm lg:text-base leading-relaxed mb-2 max-w-xl mx-auto px-4">
                 "Capturing timeless love stories with cinematic beauty and emotional truth in Mumbai."
               </p>
