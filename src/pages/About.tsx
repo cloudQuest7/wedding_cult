@@ -442,7 +442,7 @@ const About = () => {
                 <Camera className="w-8 h-8 text-white" />
               </div>
               
-              <h2 className="font-amsterdam text-2xl sm:text-2xl md:text-3xl text-white mb-4">
+              <h2 className="font-amsterdam text-xl sm:text-2xl md:text-3xl text-white mb-4">
                 Ready to Join Our Story?
               </h2>
               <p className="font-playfair text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
