@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Offers from "@/components/Offers"
 import FloatingBallBackground from "@/components/common/FloatingBallBackground"
 import SocialFloatingButton from "@/components/common/SocialFloatingButton"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -200,6 +201,7 @@ const FAQ = () => {
             </Accordion>
           </div>
         </div>
+
 
         {/* Still have questions section - Enhanced */}
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 overflow-hidden">

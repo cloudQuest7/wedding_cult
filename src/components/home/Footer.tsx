@@ -65,7 +65,7 @@ const Footer = () => {
           <div className="flex justify-center ">
             <div 
   ref={flowerRef}
-  className="w-44 h-44 sm:w-52 sm:h-52 lg:w-60 lg:h-60 opacity-90"
+  className="w-44 h-44 sm:w-52 sm:h-52 lg:w-70 lg:h-70 opacity-90"
 >
 
               <svg viewBox="0 0 200 200" className="w-full h-full fill-cream/70">

@@ -288,7 +288,7 @@ const Portfolio = () => {
                                         md:w-4 md:h-4" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <span className="text-white font-amsterdam text-xs block truncate
+                  <span className="text-white font-fairplay text-xs block truncate
                                    sm:text-sm
                                    md:text-base">{currentVideo.couple}</span>
                   <span className="text-white/80 text-xs block truncate
