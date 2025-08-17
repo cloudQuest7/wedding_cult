@@ -74,7 +74,7 @@ const Hero = () => {
           </div>
 
           {/* Main Brand Title - Responsive but well-sized */}
-          <h1 className="font-amsterdam text-white text-2xl sm:text-4xl md:text-5xl lg:text-4xl font-light tracking-wide leading-snug drop-shadow-2xl">
+          <h1 className="font-amsterdam text-white text-2xl sm:text-4xl md:text-5xl lg:text-3xl font-light tracking-wide leading-snug drop-shadow-2xl">
   The Wedding   Cult
   
 </h1>

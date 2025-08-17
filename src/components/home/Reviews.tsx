@@ -362,7 +362,7 @@ const Reviews = () => {
   return (
     <section 
       ref={sectionRef}
-      className="py-8 sm:py-16 md:py-20 lg:py-24 px-3 sm:px-6 bg-gradient-to-br from-cream/80 via-background to-beige-light/60 relative overflow-hidden min-h-screen flex flex-col justify-center"
+      className=" w-full overflow-hidden py-8 sm:py-16 md:py-20 lg:py-24 px-3 sm:px-6 bg-gradient-to-br from-cream/80 via-background to-beige-light/60 relative max-h-screen flex flex-col justify-center"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
@@ -392,8 +392,8 @@ const Reviews = () => {
 
      <div className="max-w-7xl mx-auto relative z-10 flex-1 flex flex-col justify-center">
   {/* Mobile-Optimized Header Section */}
-  <div className="text-center mb-8 sm:mb-16 md:mb-20">
-    <div className="relative">
+  <div className="text-center mb-8 sm:mb-16 md:mb-20 pr-10">
+    <div className="relative w-full">
       <h2 
         ref={titleRef}
         className="font-amsterdam text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-4xl text-chocolate mb-3 sm:mb-6 leading-tight px-2 py-2 sm:py-3"
@@ -413,18 +413,19 @@ const Reviews = () => {
   </div>
 
   {/* Mobile-Optimized Reviews Slider */}
-  <div className="relative">
+  <div className="relative ">
     {/* Main slider container with reduced padding */}
     <div 
-      className="overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-white/50 to-cream/30 backdrop-blur-sm border border-white/30 shadow-xl sm:shadow-2xl p-3 sm:p-6"
+      className="rounded-2xl sm:rounded-3xl bg-gradient-to-br from-white/50 to-cream/30 backdrop-blur-sm border border-white/30 shadow-xl sm:shadow-2xl p-3 sm:p-6"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      <div 
-        className="flex transition-all duration-500 ease-out"
+      <div
+        className="flex transition-transform duration-500 ease-out w-full pr-"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
+
         {Array.from({ length: totalSlides }, (_, slideIndex) => (
           <div 
             key={slideIndex} 
@@ -491,7 +492,7 @@ const Reviews = () => {
     </div>
 
     {/* Mobile-Optimized Navigation */}
-    <div className="flex justify-center items-center mt-6 sm:mt-10 space-x-2 sm:space-x-4">
+    <div className="flex justify-center items-center mt-6 sm:mt-10 space-x-2 sm:space-x-4 ">
       {Array.from({ length: totalSlides }, (_, index) => (
         <button
           key={index}
@@ -512,7 +513,7 @@ const Reviews = () => {
     </div>
 
     {/* Mobile swipe indicator */}
-    <div className="flex justify-center mt-4 sm:hidden">
+    <div className="flex justify-center mt-4 sm:hidden pr-10">
       <div className="flex items-center gap-2 text-xs text-muted-foreground/70">
         <ChevronLeft className="w-4 h-4" />
         <span>Swipe to navigate</span>
@@ -538,7 +539,7 @@ const Reviews = () => {
   </div>
 
   {/* Mobile-Optimized Bottom CTA */}
-  <div className="text-center mt-8 sm:mt-16">
+  <div className="text-center mt-8 sm:mt-16 pr-10">
     <div className="inline-flex flex-col sm:flex-row items-center gap-3 sm:gap-6 px-4 sm:px-10 py-4 sm:py-6 bg-gradient-to-r from-white/90 to-cream/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-chocolate/20 shadow-xl sm:shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 max-w-full">
       <div className="p-2 sm:p-3 bg-gradient-to-br from-chocolate to-amber-600 rounded-xl sm:rounded-2xl">
         <Heart className="w-4 sm:w-6 h-4 sm:h-6 text-white animate-pulse" />

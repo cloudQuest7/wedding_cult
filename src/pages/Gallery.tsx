@@ -104,7 +104,7 @@ const Gallery = () => {
       id: 1,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000488.jpg?updatedAt=1752122341261",
       alt: "Nilkeshi & Saevesh - Wedding ceremony moment",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 2,
@@ -116,7 +116,7 @@ const Gallery = () => {
       id: 3,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-zephyr-events-2153609654-32864600.jpg?updatedAt=1752122336721",
       alt: "Ruturaj & Krutika - Wedding celebration",
-      category: "Reception"
+      category: "Wedding"
     },
     {
       id: 4,
@@ -140,7 +140,7 @@ const Gallery = () => {
       id: 7,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-suraj-galgale-1822752-16196490.jpg?updatedAt=1752122329114",
       alt: "Moments",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 8,
@@ -152,7 +152,7 @@ const Gallery = () => {
       id: 9,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000471.jpg?updatedAt=1752122333713",
       alt: "Cinematic wedding collection",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 10,
@@ -176,19 +176,19 @@ const Gallery = () => {
       id: 13,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000480.jpg?updatedAt=1752122335536",
       alt: "Couple dancing",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 14,
       url: "https://ik.imagekit.io/7xgikoq8o/Nilkeshi%20+%20Saevesh%20Cinematic.00_04_33_23.Still015.png?updatedAt=1752122785721",
       alt: "Nilkeshi & Saevesh portrait",
-      category: "Ceremony" //
+      category: "Wedding" //
     },
     {
       id: 15,
       url: "https://ik.imagekit.io/7xgikoq8o/Nilkeshi%20+%20Saevesh%20Cinematic.00_06_24_13.Still024.png?updatedAt=1752122785580",
       alt: "Nilkeshi & Saevesh moments",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 16,
@@ -206,7 +206,7 @@ const Gallery = () => {
       id: 18,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9210801.jpg?updatedAt=1752218451384",
       alt: "Beautiful couple portrait",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 19,
@@ -230,7 +230,7 @@ const Gallery = () => {
       id: 22,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-amit-chowdhury-2402860-18077025.jpg?updatedAt=1752218490697",
       alt: "Wedding photography session",
-      category: "Portraits" //
+      category: "Wedding" 
     },
     {
       id: 23,
@@ -242,25 +242,25 @@ const Gallery = () => {
       id: 24,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-varun-118342-5759527.jpg?updatedAt=1752218488581",
       alt: "Elegant bridal portrait",
-      category: "Portraits" //
+      category: "Pre-Wedding" //
     },
     {
       id: 25,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000484.jpg?updatedAt=1752218488535",
       alt: "Wedding ceremony traditions",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 26,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000464.jpg?updatedAt=1752218486011",
       alt: "Candid wedding moments",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 27,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000479.jpg?updatedAt=1752218483021",
       alt: "Wedding celebration",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 28,
@@ -284,19 +284,19 @@ const Gallery = () => {
       id: 31,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9400897.jpg?updatedAt=1752218465131",
       alt: "Romantic couple moments",
-      category: "Pre-Wedding"
+      category: "Wedding"
     },
     {
       id: 32,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9400896.jpg?updatedAt=1752218464809",
       alt: "Pre-wedding photography",
-      category: "Pre-Wedding"
+      category: "Wedding"
     },
     {
       id: 33,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9400899.jpg?updatedAt=1752218464719",
       alt: "Beautiful couple shoot",
-      category: "Reception"
+      category: "Wedding"
     },
     {
       id: 34,
@@ -308,13 +308,13 @@ const Gallery = () => {
       id: 35,
       url: "https://ik.imagekit.io/7xgikoq8o/wedding-9325562.jpg?updatedAt=1752218463122",
       alt: "Wedding celebration moments",
-      category: "Reception"
+      category: "Wedding"
     },
     {
       id: 36,
       url: "https://ik.imagekit.io/7xgikoq8o/fotographiya-wedding-photography-9325561.jpg?updatedAt=1752218460012",
       alt: "Artistic wedding photography",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 37,
@@ -332,7 +332,7 @@ const Gallery = () => {
       id: 39,
       url: "https://ik.imagekit.io/7xgikoq8o/wedding-photography-9371876.jpg?updatedAt=1752218461631",
       alt: "Wedding photography excellence",
-      category: "Reception"
+      category: "Pre-Wedding"
     },
     {
       id: 40,
@@ -350,7 +350,7 @@ const Gallery = () => {
       id: 42,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9210812.jpg?updatedAt=1752218453773",
       alt: "Couple portraits",
-      category: "Reception"
+      category: "Wedding"
     },
     {
       id: 43,
@@ -380,7 +380,7 @@ const Gallery = () => {
       id: 47,
       url: "https://ik.imagekit.io/7xgikoq8o/wedding-photography-8443234.jpg?updatedAt=1752218451592",
       alt: "Wedding photography masterpiece",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 52,
@@ -392,7 +392,7 @@ const Gallery = () => {
       id: 54,
       url: "https://ik.imagekit.io/7xgikoq8o/DSC01828.jpg?updatedAt=1752469017255",
       alt: "Little Moments",
-      category: "All"//
+      category: "Ceremony"//
     },
     {
       id: 60,
@@ -554,7 +554,7 @@ const Gallery = () => {
       id: 91,
       url: "https://ik.imagekit.io/7xgikoq8o/14.png",
       alt: "Beautiful couple portraits",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 92,
@@ -565,8 +565,8 @@ const Gallery = () => {
     {
       id: 93,
       url: "https://ik.imagekit.io/7xgikoq8o/13.png",
-      alt: "Pre-wedding couple session",
-      category: "Pre-Wedding"
+      alt: "wedding couple session",
+      category: "Wedding"
     },
     {
       id: 94,
@@ -596,7 +596,7 @@ const Gallery = () => {
       id: 98,
       url: "https://ik.imagekit.io/7xgikoq8o/9.png",
       alt: "Wedding celebration joy",
-      category: "Ceremony"
+      category: "Wedding"
     },
     {
       id: 99,
@@ -620,7 +620,7 @@ const Gallery = () => {
       id: 102,
       url: "https://ik.imagekit.io/7xgikoq8o/5.png",
       alt: "Wedding detail photography",
-      category: "Reception"
+      category: "Wedding"
     },
     {
       id: 103,
@@ -660,7 +660,7 @@ const Gallery = () => {
     : galleryImages.filter(img => img.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 relative">
+    <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 relative mb-20">
       {/* Animated Background Patterns */}
       <AnimatedPatterns />
       <FloatingBallBackground />
