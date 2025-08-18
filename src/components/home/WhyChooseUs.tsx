@@ -264,7 +264,7 @@ const WhyChooseUs = () => {
 
                   {/* Mobile-optimized content */}
                   <div className="relative space-y-2 sm:space-y-3 lg:space-y-4 flex-1 flex flex-col justify-center">
-                    <h3 className="feature-title font-amsterdam text-sm sm:text-xl lg:text-2xl text-chocolate transition-all duration-300 leading-tight">
+                    <h3 className="feature-title font-amsterdam text-sm sm:text-xl lg:text-xl text-chocolate transition-all duration-300 leading-loose">
                       {feature.title}
                     </h3>
                     
