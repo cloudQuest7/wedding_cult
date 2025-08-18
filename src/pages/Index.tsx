@@ -10,6 +10,7 @@ import CallToAction from "@/components/home/CallToAction";
 import EnquiryForm from "@/components/home/EnquiryForm";
 import FeedbackSection from "@/components/feedback/FeedbackSection";
 import Footer from "@/components/home/Footer";
+import OffersSection from "@/components/home/OffersSection";
 
 const Index = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -31,6 +32,7 @@ const Index = () => {
       {/* Main Content Sections */}
       <div className=" relative z-10 bg-background max-w-[100vw] overflow-hidden">
         <About />
+        <OffersSection />
         <WhyChooseUs />
         <VideoPreview />
         <PhotoGallery />

@@ -416,7 +416,7 @@ const About = () => {
               </div>
               
               <h2 className="font-amsterdam text-xl sm:text-2xl md:text-3xl text-white mb-4">
-                Ready to Join Our Story?
+                Join Our Story
               </h2>
               <p className="font-playfair text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
                 Let's create something beautiful together. Your love story deserves cinematic treatment.
