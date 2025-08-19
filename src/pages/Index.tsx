@@ -36,7 +36,7 @@ const Index = () => {
         <WhyChooseUs />
         <VideoPreview />
         <PhotoGallery />
-        <Reviews />
+        {/* <Reviews /> */}
         <CallToAction />
         <EnquiryForm />
         <FeedbackSection />
