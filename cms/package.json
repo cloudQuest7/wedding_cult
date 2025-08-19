@@ -15,13 +15,13 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "^5.18.0",
+    "@strapi/plugin-cloud": "^4.15.0",
     "@strapi/plugin-users-permissions": "^4.12.0",
     "@strapi/strapi": "^4.25.23",
     "better-sqlite3": "11.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.0.0",
+    "react-router-dom": "^5.3.4",
     "styled-components": "^6.0.0"
   },
   "devDependencies": {

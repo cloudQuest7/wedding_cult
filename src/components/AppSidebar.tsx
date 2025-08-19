@@ -353,7 +353,7 @@ function MobileBottomNav() {
         <div className="fixed inset-0 z-50 bg-gradient-to-b from-chocolate via-chocolate-light to-chocolate backdrop-blur-sm">
           <div className="h-full flex flex-col">
             {/* Header with logo and close button */}
-            <div className="flex items-center justify-between p-6 border-b border-cream/25 bg-chocolate/90 backdrop-blur-md">
+            <div className="flex items-center justify-between p-6 border-b border-cream/25 bg-cream">
               <img src={logo} alt="The Wedding Film Co" className="h-10 w-auto" />
               <button
                 onClick={() => setIsMenuOpen(false)}
@@ -392,26 +392,27 @@ function MobileBottomNav() {
               </nav>
 
               {/* CTA Section */}
-              <div className="mt-8 mb-4">
-                <div className="rounded-2xl p-6 text-center shadow-lg border-2 bg-cream/20 border-cream/30 backdrop-blur-sm">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center shadow-md bg-cream">
-                    <Heart className="w-8 h-8 text-chocolate" />
-                  </div>
-                  <h3 className="font-playfair font-semibold text-xl mb-3 text-cream">
-                    Ready to begin?
-                  </h3>
-                  <p className="text-sm mb-6 leading-relaxed text-cream/90">
-                    Let's create your perfect wedding story together.
-                  </p>
-                  <Link
-                    to="/contact"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="inline-block w-full font-poppins font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 bg-cream text-chocolate"
-                  >
-                    Enquire Now
-                  </Link>
-                </div>
-              </div>
+              <div className="mt-6 mb-3">
+  <div className="rounded-xl p-4 text-center shadow-md border border-cream/30 backdrop-blur-sm bg-cream/20">
+    <div className="w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center shadow-sm bg-cream">
+      <Heart className="w-6 h-6 text-chocolate" />
+    </div>
+    <h3 className="font-playfair font-semibold text-lg mb-2 text-cream">
+      Ready to begin?
+    </h3>
+    <p className="text-xs mb-4 leading-relaxed text-cream/90">
+      Let's create your perfect wedding story together.
+    </p>
+    <Link
+      to="/contact"
+      onClick={() => setIsMenuOpen(false)}
+      className="inline-block w-full font-poppins font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 bg-cream text-chocolate text-sm"
+    >
+      Enquire Now
+    </Link>
+  </div>
+</div>
+
             </div>
           </div>
         </div>
