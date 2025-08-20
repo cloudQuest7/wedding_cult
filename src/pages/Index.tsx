@@ -32,7 +32,7 @@ const Index = () => {
       {/* Main Content Sections */}
       <div className=" relative z-10 bg-background max-w-[100vw] overflow-hidden">
         <About />
-        <OffersSection />
+        {/* <OffersSection /> */}
         <WhyChooseUs />
         <VideoPreview />
         <PhotoGallery />
