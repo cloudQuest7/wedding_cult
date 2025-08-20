@@ -2,6 +2,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./AppSidebar";
 import { Menu } from "lucide-react";
 import SocialFloatingButton from "@/components/common/SocialFloatingButton";
+import MobilePageIndicator from "@/components/common/MobilePageIndicator";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -19,8 +20,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <SidebarTrigger className="p-2 hover:bg-muted/60 rounded-lg transition-all duration-200">
               <Menu className="h-5 w-5" />
             </SidebarTrigger>
-            <span className="ml-3 font-playfair font-bold text-lg text-foreground">The Wedding Cult</span>
+            <span className="ml-3 font-dancing text-2xl text-chocolate">The Wedding Cult</span>
           </header>
+
+          {/* Mobile Page Indicator */}
+          <MobilePageIndicator />
 
           {/* Main content */}
           <main className="flex-1 overflow-auto">
