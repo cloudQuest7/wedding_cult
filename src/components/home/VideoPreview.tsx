@@ -38,8 +38,10 @@ const VideoPreview = () => {
 
   const currentVideo = videos[currentVideoIndex]
 
-  // Auto-slide functionality - switch every 5 seconds
+  // Auto-slide functionality - switch every 5 seconds, but pause when a video is playing
   useEffect(() => {
+    if (activeVideo !== null) return; // Pause auto-slide when a video is playing
+
     const interval = setInterval(() => {
       setCurrentVideoIndex((prev) => (prev + 1) % videos.length)
       setActiveVideo(null)
@@ -47,7 +49,7 @@ const VideoPreview = () => {
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [videos.length])
+  }, [videos.length, activeVideo])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -254,21 +256,21 @@ const VideoPreview = () => {
               </div>
             </div>
 
-            {/* Main Title - Mobile Optimized Typography */}
-           {/* Main Title - Improved Typography */}
-<div className="mb-6 sm:mb-8">
-  <div className="mb-3 sm:mb-4">
-    <p className="font-playfair text-xs sm:text-sm text-chocolate/70 mb-1 uppercase tracking-widest font-light">
-      Featured In
-    </p>
-    <p className="font-playfair text-base sm:text-lg md:text-xl text-chocolate mb-2 font-medium tracking-wide">
-      The Wedding Cult
-    </p>
-  </div>
-  <h3 className="font-amsterdam text-xl sm:text-2xl md:text-3xl text-chocolate leading-tight font-normal">
-    {currentVideo.coupleNames}
-  </h3>
-</div>
+                        {/* Main Title - Mobile Optimized Typography */}
+                      {/* Main Title - Improved Typography */}
+            <div className="mb-6 sm:mb-8">
+              <div className="mb-3 sm:mb-4">
+                <p className="font-playfair text-xs sm:text-sm text-chocolate/70 mb-1 uppercase tracking-widest font-light">
+                  Featured In
+                </p>
+                <p className="font-playfair text-base sm:text-lg md:text-xl text-chocolate mb-2 font-medium tracking-wide">
+                  The Wedding Cult
+                </p>
+              </div>
+              <h3 className="font-amsterdam text-xl sm:text-2xl md:text-3xl text-chocolate leading-tight font-normal">
+                {currentVideo.coupleNames}
+              </h3>
+            </div>
 
 
             {/* Breadcrumb Navigation - Mobile Optimized */}

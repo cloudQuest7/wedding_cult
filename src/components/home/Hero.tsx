@@ -121,7 +121,7 @@ const Hero = () => {
         <div className="flex flex-col items-center space-y-2 sm:space-y-3 text-white/80">
           <div className="w-px h-12 sm:h-14 lg:h-16 bg-gradient-to-b from-transparent to-white/60"></div>
           <ArrowDown className="h-5 w-5 sm:h-5 sm:w-5 lg:h-6 lg:w-6 animate-bounce" />
-          <span className="text-xs font-light tracking-[0.1em] uppercase">Scroll</span>
+          <span className="text-xs font-light tracking-[0.1em] uppercase"></span>
         </div>
       </div>
 

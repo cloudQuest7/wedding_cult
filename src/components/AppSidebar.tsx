@@ -334,7 +334,7 @@ export default function MobileBottomNav() {
       >
         <button
           onClick={() => setIsMenuOpen(true)}
-          className={`flex items-center justify-center py-4 px-8 pr-10 rounded-r-full transition-all duration-300 relative overflow-hidden group ${
+          className={`flex items-center justify-center py-3 px-7 pr-8 rounded-r-full transition-all duration-300 relative overflow-hidden group ${
             isMenuOpen 
               ? "bg-gradient-to-r from-chocolate to-chocolate-light text-cream border-2 border-chocolate/50" 
               : "bg-gradient-to-r from-cream to-beige-warm text-chocolate/90 hover:from-beige-warm hover:to-cream hover:border-chocolate/40 border-2 border-chocolate/25"
@@ -346,7 +346,7 @@ export default function MobileBottomNav() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
           
-          <Menu className="h-6 w-6 mr-3 relative z-10" />
+          {/* <Menu className="h-6 w-6 mr-3 relative z-10" /> */}
           <span className="text-base font-poppins font-bold relative z-10 tracking-wide">MENU</span>
         </button>
       </div>
@@ -359,7 +359,7 @@ export default function MobileBottomNav() {
       >
         <Link
           to="/contact"
-          className={`flex items-center justify-center py-4 px-8 pl-10 rounded-l-full transition-all duration-300 relative overflow-hidden group ${
+          className={`flex items-center justify-center py-3 px-6 pl-10 rounded-l-full transition-all duration-300 relative overflow-hidden group ${
             isActive("/contact") 
               ? "bg-gradient-to-l from-chocolate to-chocolate-light text-cream border-2 border-chocolate/50" 
               : "bg-gradient-to-l from-cream to-beige-warm text-chocolate/90 hover:from-beige-warm hover:to-cream hover:border-chocolate/40 border-2 border-chocolate/25"
@@ -372,7 +372,7 @@ export default function MobileBottomNav() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
           
           <span className="text-base font-poppins font-bold relative z-10 tracking-wide">ENQUIRE</span>
-          <Heart className="h-6 w-6 ml-3 relative z-10" />
+          {/* <Heart className="h-6 w-6 ml-3 relative z-10" /> */}
         </Link>
       </div>
 
