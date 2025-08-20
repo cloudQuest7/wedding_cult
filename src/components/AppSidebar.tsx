@@ -262,167 +262,236 @@ const navigationItems = [
 ];
 
 // Clean Mobile Bottom Navigation with Cream + Coffee Theme - UPDATED
-function MobileBottomNav() {
+
+export default function MobileBottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isActive = (path: string) => currentPath === path;
+  const [isVisible, setIsVisible] = useState(true);
+  const [scrollTimeout, setScrollTimeout] = useState(null);
+  const isActive = (path) => currentPath === path;
 
-  // Close menu on route change
+  // Handle scroll visibility
   useEffect(() => {
-    setIsMenuOpen(false);
-  }, [currentPath]);
+    let lastScrollY = window.scrollY;
 
-  // Prevent scroll when menu is open
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      
+      lastScrollY = currentScrollY;
+
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+
+      const newTimeout = setTimeout(() => {
+        setIsVisible(true);
+      }, 1000);
+
+      setScrollTimeout(newTimeout);
     };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+    };
+  }, [scrollTimeout]);
+
+  useEffect(() => { setIsMenuOpen(false); }, [currentPath]);
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
+    return () => { document.body.style.overflow = "unset"; };
   }, [isMenuOpen]);
 
   return (
     <>
-      {/* UPDATED: Fixed Top Navbar - Clean Logo without Border */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cream/95 via-cream/90 to-beige-warm/95 backdrop-blur-sm shadow-lg border-b border-chocolate/20 w-full">
-        <div className="flex items-center justify-between px-6 py-0.5 w-full max-w-full">
-          {/* Company Name on Left */}
-          <div className="text-left flex-1">
-            <h1 className="text-sm font-poppins text-chocolate">
-              The Wedding Cult
-            </h1>
-          </div>
+      {/* Top Navbar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cream/95 via-cream/90 to-beige-warm/95 backdrop-blur-lg border-b-2 border-chocolate/30">
+        <div className="flex items-center justify-between px-6 py-4">
+          <h1 className="text-m font-playfair  text-chocolate tracking-tight">
+            The Wedding Cult
+          </h1>
+          <img src={logo} alt="Logo" className="h-12 w-auto" />
+        </div>
+      </div>
+      <div className="h-20" />
+
+      {/* Left Side Menu Capsule - Professional Border */}
+      <div 
+        className={`fixed bottom-8 left-0 z-50 transition-all duration-500 ease-in-out ${
+          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+        }`}
+      >
+        <button
+          onClick={() => setIsMenuOpen(true)}
+          className={`flex items-center justify-center py-4 px-8 pr-10 rounded-r-full transition-all duration-300 relative overflow-hidden group ${
+            isMenuOpen 
+              ? "bg-gradient-to-r from-chocolate to-chocolate-light text-cream border-2 border-chocolate/50" 
+              : "bg-gradient-to-r from-cream to-beige-warm text-chocolate/90 hover:from-beige-warm hover:to-cream hover:border-chocolate/40 border-2 border-chocolate/25"
+          }`}
+          style={{
+            background: `linear-gradient(135deg, #f5f2e8 0%, #e8d5b7 100%)`,
+            minWidth: '120px'
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
           
-          {/* UPDATED: Logo on Right - Clean without border/frame */}
-          <div className="flex-shrink-0">
-            <img 
-              src={logo} 
-              alt="The Wedding Cult Logo" 
-              className="h-16 w-auto hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-        </div>
+          <Menu className="h-6 w-6 mr-3 relative z-10" />
+          <span className="text-base font-poppins font-bold relative z-10 tracking-wide">MENU</span>
+        </button>
       </div>
 
-      {/* Top padding to prevent content from being hidden by fixed navbar */}
-      <div className="h-16" />
-
-      {/* UPDATED: Fixed Bottom Navigation Bar - Reduced Padding */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 shadow-2xl bg-gradient-to-r from-chocolate to-chocolate-light border-t border-cream/30">
-        <div className="flex items-center justify-between px-6 py-3 max-w-md mx-auto">
-          {/* Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="flex flex-col items-center justify-center p-1 rounded-lg transition-all duration-200 hover:scale-110"
-          >
-            <Menu className="h-6 w-6 mb-1 text-cream" />
-            <span className="text-xs font-medium text-cream">Menu</span>
-          </button>
-
-          {/* UPDATED: Logo Space in the Middle - Slightly smaller */}
-          <div className="flex-1 flex justify-center">
-            <Link 
-              to="/" 
-              className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden border-2 border-cream bg-cream/10 p-2 transition-transform duration-200 hover:scale-110"
-            >
-              <img 
-                src={centerlogo} 
-                alt="The Wedding Cult Logo" 
-                className="w-full h-full object-contain rounded-full"
-              />
-            </Link>
-          </div>
-
-          {/* Enquire Button */}
-          <Link
-            to="/contact"
-            className="flex flex-col items-center justify-center p-1 rounded-lg transition-all duration-200 hover:scale-110"
-          >
-            <Phone className="h-6 w-6 mb-2 text-cream" />
-            <span className="text-xs font-medium text-cream">Enquire</span>
-          </Link>
-        </div>
+      {/* Right Side Enquire Capsule - Professional Border */}
+      <div 
+        className={`fixed bottom-8 right-0 z-50 transition-all duration-500 ease-in-out ${
+          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+        }`}
+      >
+        <Link
+          to="/contact"
+          className={`flex items-center justify-center py-4 px-8 pl-10 rounded-l-full transition-all duration-300 relative overflow-hidden group ${
+            isActive("/contact") 
+              ? "bg-gradient-to-l from-chocolate to-chocolate-light text-cream border-2 border-chocolate/50" 
+              : "bg-gradient-to-l from-cream to-beige-warm text-chocolate/90 hover:from-beige-warm hover:to-cream hover:border-chocolate/40 border-2 border-chocolate/25"
+          }`}
+          style={{
+            background: `linear-gradient(225deg, #f5f2e8 0%, #e8d5b7 100%)`,
+            minWidth: '140px'
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
+          
+          <span className="text-base font-poppins font-bold relative z-10 tracking-wide">ENQUIRE</span>
+          <Heart className="h-6 w-6 ml-3 relative z-10" />
+        </Link>
       </div>
 
-      {/* Full Screen Menu Overlay - Cream + Coffee Theme */}
+      {/* Clean Modal with Professional Borders */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-gradient-to-b from-chocolate via-chocolate-light to-chocolate backdrop-blur-sm">
-          <div className="h-full flex flex-col">
-            {/* Header with logo and close button */}
-            <div className="flex items-center justify-between p-6 border-b border-cream/25 bg-cream">
-              <img src={logo} alt="The Wedding Film Co" className="h-10 w-auto" />
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-lg flex items-center justify-center p-4 transition-all duration-500">
+          <div className="relative bg-gradient-to-br from-cream via-beige-warm to-cream rounded-3xl w-full max-w-md mx-auto overflow-hidden border-3 border-chocolate/40 premium-modal">
+            
+            {/* Decorative top border */}
+            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-chocolate via-chocolate-light to-chocolate" />
+            
+            {/* Modal header with clean border */}
+            <div className="flex items-center justify-between p-6 border-b-2 border-chocolate/20 bg-gradient-to-r from-cream/95 to-beige-warm/95">
+              <div className="flex items-center gap-4">
+                <img src={logo} alt="Logo" className="h-12 w-auto" />
+                <div>
+                  <h2 className="font-amsterdam text-chocolate text-m">The Wedding Cult</h2>
+                  
+                </div>
+              </div>
               <button
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-200 bg-cream/20 hover:bg-cream/30"
+                className="w-14 h-14 rounded-full bg-gradient-to-br from-white/90 to-cream/70 hover:from-chocolate/10 hover:to-chocolate/20 flex items-center justify-center transition-all duration-300 border-2 border-chocolate/20 hover:border-chocolate/30 hover:scale-105"
+                aria-label="Close Menu"
               >
-                <X className="h-6 w-6 text-cream" />
+                <X className="h-7 w-7 text-chocolate" />
               </button>
             </div>
-
-            {/* Navigation Items */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">
-              <nav className="space-y-2">
-                {navigationItems.map((item) => {
-                  const IconComponent = item.icon;
-                  const active = isActive(item.url);
-
-                  return (
-                    <Link
-                      key={item.title}
-                      to={item.url}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`flex items-center space-x-4 px-4 py-4 rounded-xl text-lg font-medium transition-all duration-200 ${
-                        active 
-                          ? 'shadow-md bg-cream/20 text-cream border-l-4 border-cream' 
-                          : 'text-cream/90 hover:bg-cream/10'
-                      }`}
-                    >
-                      <IconComponent className="h-6 w-6 text-cream" />
-                      <span>{item.title}</span>
-                      {active && (
-                        <div className="ml-auto w-2 h-2 rounded-full bg-cream" />
-                      )}
-                    </Link>
-                  );
-                })}
-              </nav>
-
-              {/* CTA Section */}
-              <div className="mt-6 mb-3">
-  <div className="rounded-xl p-4 text-center shadow-md border border-cream/30 backdrop-blur-sm bg-cream/20">
-    <div className="w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center shadow-sm bg-cream">
-      <Heart className="w-6 h-6 text-chocolate" />
-    </div>
-    <h3 className="font-playfair font-semibold text-lg mb-2 text-cream">
-      Ready to begin?
-    </h3>
-    <p className="text-xs mb-4 leading-relaxed text-cream/90">
-      Let's create your perfect wedding story together.
-    </p>
-    <Link
-      to="/contact"
-      onClick={() => setIsMenuOpen(false)}
-      className="inline-block w-full font-poppins font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 bg-cream text-chocolate text-sm"
-    >
-      Enquire Now
-    </Link>
-  </div>
-</div>
-
-            </div>
+            
+            {/* Navigation items with professional borders */}
+            <nav className="p-6 space-y-3 pb-8">
+              {navigationItems.map((item, index) => {
+                const IconComponent = item.icon;
+                const active = isActive(item.url);
+                return (
+                  <Link
+                    key={item.title}
+                    to={item.url}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`flex items-center space-x-4 px-4 py-3 rounded-2xl text-lg font-poppins font-medium transition-all duration-300 relative overflow-hidden group ${
+                      active 
+                        ? "bg-gradient-to-r from-chocolate via-chocolate-light to-chocolate text-cream border-2 border-chocolate/50" 
+                        : "text-chocolate hover:bg-gradient-to-r hover:from-white/60 hover:to-cream/40 border-2 border-chocolate/15 hover:border-chocolate/30"
+                    }`}
+                    style={{ 
+                      animationDelay: `${index * 0.1}s`
+                    }}
+                  >
+                    {/* Shimmer effect */}
+                    {!active && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
+                    )}
+                    
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center relative z-10 ${
+                      active 
+                        ? 'bg-white/20 border border-white/30' 
+                        : 'bg-gradient-to-br from-cream to-beige-warm/90 group-hover:bg-white/50 border border-chocolate/15 group-hover:border-chocolate/25'
+                    }`}>
+                      <IconComponent className={`h-6 w-6 ${active ? "text-cream" : "text-chocolate"}`} />
+                    </div>
+                    <span className="relative z-10 flex-1">{item.title}</span>
+                    {active && (
+                      <div className="w-3 h-3 rounded-full bg-cream/90 border border-white/30 animate-pulse relative z-10" />
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
         </div>
       )}
+      
+      <div className="h-28" />
 
-      {/* UPDATED: Bottom padding to prevent content from being hidden */}
-      <div className="h-18" />
+      {/* CSS Animations */}
+      <style jsx>{`
+        .premium-modal {
+          animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .border-3 {
+          border-width: 3px;
+        }
+        
+        @keyframes modalSlideIn {
+          from { 
+            opacity: 0; 
+            transform: scale(0.85) translateY(60px) rotateX(20deg); 
+          }
+          to   { 
+            opacity: 1; 
+            transform: scale(1) translateY(0) rotateX(0); 
+          }
+        }
+        
+        nav > a {
+          animation: menuItemSlide 0.6s ease-out forwards;
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        
+        @keyframes menuItemSlide {
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        nav > a:nth-child(1) { animation-delay: 0.1s; }
+        nav > a:nth-child(2) { animation-delay: 0.2s; }
+        nav > a:nth-child(3) { animation-delay: 0.3s; }
+        nav > a:nth-child(4) { animation-delay: 0.4s; }
+        nav > a:nth-child(5) { animation-delay: 0.5s; }
+        nav > a:nth-child(6) { animation-delay: 0.6s; }
+      `}</style>
     </>
   );
 }
+
 
 // Desktop Sidebar Component
 export function AppSidebar() {

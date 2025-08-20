@@ -84,49 +84,90 @@ const Navigation = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Modern Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden animate-fade-in-down">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-card rounded-lg mt-2 shadow-soft">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`block px-3 py-2 text-base font-medium transition-smooth ${
-                    location.pathname === item.path
-                      ? "text-chocolate bg-secondary rounded-md"
-                      : "text-foreground hover:bg-secondary hover:text-chocolate rounded-md"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              
-              {/* Mobile Social Links */}
-              <div className="flex justify-center space-x-4 pt-4 border-t border-border">
-                {socialLinks.map((social) => {
-                  const IconComponent = social.icon;
-                  return (
-                    <a
-                      key={social.label}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-chocolate transition-smooth"
+          <div className="fixed inset-0 z-50 md:hidden">
+            {/* Backdrop */}
+            <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
+            
+            {/* Navigation Panel */}
+            <div className="fixed inset-y-0 right-0 w-[85%] max-w-sm bg-gradient-to-b from-cream via-background to-cream/90 backdrop-blur-md shadow-2xl">
+              {/* Content Container */}
+              <div className="flex flex-col h-full">
+                {/* Header */}
+                <div className="p-4 border-b border-chocolate/10">
+                  <h2 className="font-dancing text-2xl text-chocolate text-center">Menu</h2>
+                </div>
+
+                {/* Navigation Links */}
+                <div className="flex-1 overflow-y-auto py-6 px-4">
+                  <div className="space-y-4">
+                    {navItems.map((item) => (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        className="group block"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <div className={`relative px-4 py-3 rounded-xl transition-all duration-300 ${
+                          location.pathname === item.path
+                            ? "bg-chocolate/10 text-chocolate"
+                            : "hover:bg-chocolate/5"
+                        }`}>
+                          <div className="flex items-center">
+                            <span className={`font-dancing text-xl ${
+                              location.pathname === item.path
+                                ? "text-chocolate"
+                                : "text-chocolate/70 group-hover:text-chocolate"
+                            }`}>
+                              {item.label}
+                            </span>
+                            <div className="ml-auto">
+                              <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                location.pathname === item.path
+                                  ? "bg-chocolate"
+                                  : "bg-chocolate/0 group-hover:bg-chocolate/40"
+                              }`} />
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Footer with Social Links and CTA */}
+                <div className="p-4 border-t border-chocolate/10 bg-cream/50">
+                  {/* Social Links */}
+                  <div className="flex justify-center space-x-6 mb-4">
+                    {socialLinks.map((social) => {
+                      const IconComponent = social.icon;
+                      return (
+                        <a
+                          key={social.label}
+                          href={social.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={social.label}
+                          title={social.label}
+                          className="text-chocolate/70 hover:text-chocolate transition-all duration-300 hover:scale-110"
+                        >
+                          <IconComponent className="h-5 w-5" />
+                        </a>
+                      );
+                    })}
+                  </div>
+
+                  {/* CTA Button */}
+                  <Link to="/contact" onClick={() => setIsOpen(false)}>
+                    <Button 
+                      className="w-full bg-gradient-to-r from-chocolate to-chocolate-light hover:opacity-90 text-cream shadow-lg" 
+                      variant="default"
                     >
-                      <IconComponent className="h-5 w-5" />
-                    </a>
-                  );
-                })}
-              </div>
-              
-              <div className="pt-2">
-                <Link to="/contact" onClick={() => setIsOpen(false)}>
-                  <Button className="w-full" variant="default">
-                    Let's Begin Your Story
-                  </Button>
-                </Link>
+                      Let's Begin Your Story
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
