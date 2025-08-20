@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import FloatingBallBackground from "@/components/common/FloatingBallBackground";
 import SocialFloatingButton from "@/components/common/SocialFloatingButton";
 
@@ -95,7 +95,52 @@ const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [activeCategory, setActiveCategory] = useState<string>("All");
+
+  const handleImageClick = (imageUrl: string, index: number) => {
+    setSelectedImage(imageUrl);
+    setSelectedIndex(index);
+  };
+
+  const handlePrevImage = () => {
+    if (selectedIndex > 0) {
+      setSelectedIndex(selectedIndex - 1);
+      setSelectedImage(filteredImages[selectedIndex - 1].url);
+    }
+  };
+
+  const handleNextImage = () => {
+    if (selectedIndex < filteredImages.length - 1) {
+      setSelectedIndex(selectedIndex + 1);
+      setSelectedImage(filteredImages[selectedIndex + 1].url);
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartX.current) return;
+    
+    const touchEndX = e.touches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+
+    // Swipe threshold of 50px
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        // Swipe left
+        handleNextImage();
+      } else {
+        // Swipe right
+        handlePrevImage();
+      }
+      touchStartX.current = null;
+    }
+  };
+
+  const touchStartX = useRef<number | null>(null);
 
   // Complete Gallery Images - ALL IMAGES INCLUDED
   const galleryImages = [
@@ -704,8 +749,21 @@ const Gallery = () => {
             </p>
           </div>
 
+          {/* Mobile Scroll Indicator */}
+          <div className="md:hidden mb-4 text-center">
+            <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
+              <svg className="w-5 h-5 text-chocolate/70 animate-bounce-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+              <span className="text-chocolate/70 text-sm">Slide to explore</span>
+              <svg className="w-5 h-5 text-chocolate/70 animate-bounce-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </div>
+          </div>
+
           {/* Masonry-style Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-max">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-max overflow-x-auto hide-scrollbar pb-4 snap-x snap-mandatory">
             {filteredImages.map((photo, index) => {
               // Random height classes for masonry effect
               const heightClasses = [
@@ -716,12 +774,12 @@ const Gallery = () => {
               return (
                 <div 
                   key={photo.id} 
-                  className={`group cursor-pointer animate-fade-in hover-scale ${randomHeight}`}
+                  className={`group cursor-pointer animate-fade-in hover-scale snap-center ${randomHeight}`}
                   style={{
                     animationDelay: `${index * 0.05}s`,
                     animationFillMode: 'both'
                   }} 
-                  onClick={() => setSelectedImage(photo.url)}
+                  onClick={() => handleImageClick(photo.url, index)}
                 >
                   <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-700 hover:-translate-y-2 h-full">
                     {/* Image */}
@@ -777,13 +835,22 @@ const Gallery = () => {
 
       {/* Enhanced Lightbox Modal */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setSelectedImage(null)}>
+        <div 
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm" 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedImage(null);
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+        >
           <div className="relative max-w-6xl max-h-full animate-fade-in">
             <img 
               src={selectedImage} 
               alt="Gallery image" 
               className="w-full h-auto max-h-[90vh] object-contain rounded-xl shadow-2xl" 
             />
+
+            {/* Close Button */}
             <button 
               onClick={() => setSelectedImage(null)} 
               className="absolute top-4 right-4 bg-white/90 hover:bg-white text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm" 
@@ -795,10 +862,43 @@ const Gallery = () => {
               </svg>
             </button>
             
-            {/* Image Navigation */}
+            {/* Navigation Buttons */}
+            <div className="absolute inset-y-0 left-4 right-4 flex items-center justify-between pointer-events-none">
+              {selectedIndex > 0 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePrevImage();
+                  }}
+                  className="pointer-events-auto bg-white/90 hover:bg-white text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
+                  aria-label="Previous image"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M15 18l-6-6 6-6" />
+                  </svg>
+                </button>
+              )}
+              
+              {selectedIndex < filteredImages.length - 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNextImage();
+                  }}
+                  className="pointer-events-auto bg-white/90 hover:bg-white text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
+                  aria-label="Next image"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </button>
+              )}
+            </div>
+            
+            {/* Image Counter */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-full px-6 py-2">
               <p className="text-chocolate font-poppins text-sm">
-                Press <kbd className="px-2 py-1 bg-chocolate/10 rounded">Esc</kbd> to close
+                {selectedIndex + 1} / {filteredImages.length}
               </p>
             </div>
           </div>
@@ -809,45 +909,70 @@ const Gallery = () => {
       <SocialFloatingButton />
       
       {/* Custom CSS for animations */}
-      <style jsx>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.3; transform: scale(0.8); }
-          50% { opacity: 1; transform: scale(1.2); }
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          33% { transform: translateY(-10px) rotate(5deg); }
-          66% { transform: translateY(5px) rotate(-3deg); }
-        }
-        
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-twinkle { animation: twinkle linear infinite; }
-        .animate-float { animation: float ease-in-out infinite; }
-        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-        .hover-scale { transition: transform 0.3s ease; }
-        .hover-scale:hover { transform: scale(1.02); }
-        
-        .grid {
-          grid-auto-rows: 200px;
-        }
-        
-        @media (min-width: 768px) {
-          .grid {
-            grid-auto-rows: 250px;
+      <style>
+        {`
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
           }
-        }
-        
-        @media (min-width: 1024px) {
-          .grid {
-            grid-auto-rows: 220px;
+          
+          @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(5deg); }
+            66% { transform: translateY(5px) rotate(-3deg); }
           }
-        }
-      `}</style>
+          
+          @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes bounce-x {
+            0%, 100% { transform: translateX(-2px); }
+            50% { transform: translateX(2px); }
+          }
+          
+          .animate-twinkle { animation: twinkle linear infinite; }
+          .animate-float { animation: float ease-in-out infinite; }
+          .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+          .animate-bounce-x { animation: bounce-x 1.5s ease-in-out infinite; }
+          .hover-scale { transition: transform 0.3s ease; }
+          .hover-scale:hover { transform: scale(1.02); }
+          
+          .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          
+          .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+
+          .snap-x {
+            scroll-snap-type: x mandatory;
+          }
+          
+          .snap-center {
+            scroll-snap-align: center;
+          }
+          
+          .grid {
+            grid-auto-rows: 200px;
+          }
+          
+          @media (min-width: 768px) {
+            .grid {
+              grid-auto-rows: 250px;
+            }
+          }
+          
+          @media (min-width: 1024px) {
+            .grid {
+              grid-auto-rows: 220px;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };

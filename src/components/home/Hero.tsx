@@ -74,17 +74,37 @@ const Hero = () => {
           </div>
 
           {/* Main Brand Title - Responsive but well-sized */}
-          <h1 className="font-amsterdam text-white text-2xl sm:text-4xl md:text-3xl lg:text-3xl font-light tracking-wide leading-snug drop-shadow-2xl">
-  The Wedding   Cult
-  
-</h1>
-
-
+          <h1 className="font-amsterdam text-white text-2xl sm:text-2xl md:text-3xl lg:text-3xl font-light tracking-wide leading-snug drop-shadow-2xl">
+            The Wedding   Cult
+          </h1>
 
           {/* Professional Tagline */}
           <div className="space-y-1 sm:space-y-2 text-white/95 text-base sm:text-base lg:text-lg font-light leading-relaxed drop-shadow-lg">
             <p className="italic">"Come and witness the Divine in</p>
             <p className="italic">this soul stirring love story."</p>
+          </div>
+
+          {/* Portfolio Button */}
+          <div className="pt-4 sm:pt-6">
+            <a
+              href="/portfolio"
+              className="inline-flex items-center px-6 py-2.5 text-sm sm:text-base border border-white/20 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:scale-105 shadow-lg"
+            >
+              View Portfolio
+              <svg 
+                className="ml-2 -mr-1 w-4 h-4" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="2" 
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
           </div>
 
           {/* Decorative Line */}
