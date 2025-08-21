@@ -248,7 +248,8 @@ const Portfolio = () => {
       `}</style>
 
       {/* Mobile-First Header - Fixed width constraints */}
-      <div className="hero-content text-center px-4 pt-12 pb-6 w-full container-fix">
+      <div className="hero-content text-center px-4 pt-12 pb-6
+       w-full container-fix">
         <div className="max-w-4xl mx-auto w-full">
           <h1 className="font-amsterdam text-2xl leading-tight mb-3 text-chocolate 
                          xs:text-3xl xs:mb-4
@@ -522,8 +523,8 @@ const Portfolio = () => {
       {/* FIXED: Testimonials Section - Enhanced visibility and spacing with all 6 couples */}
       <div className="px-3 mb-16 sm:px-4 sm:mb-20 md:mb-24 w-full container-fix relative z-20">
         <div className="max-w-6xl mx-auto w-full">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="font-amsterdam text-2xl text-chocolate mb-4 py-3 px-4 leading-relaxed
+          <div className="text-center mb-8 sm:mb-6">
+            <h2 className="font-amsterdam text-2xl text-chocolate mb-4 py-3 px-4 leading-loose
                sm:text-3xl sm:mb-6 sm:py-4 sm:px-6 sm:leading-relaxed
                md:text-3xl md:mb-8 md:py-6 md:px-8 md:leading-relaxed
                lg:text-3xl lg:py-6 lg:px-10 lg:leading-relaxed">
@@ -555,17 +556,7 @@ const Portfolio = () => {
                       <div className="flex flex-col items-center gap-6 text-center
                                       md:flex-row md:gap-8 md:text-left
                                       lg:gap-10">
-                        <div className="flex-shrink-0
-                                        md:w-1/3">
-                          <img 
-                            src={testimonial.image} 
-                            alt={testimonial.name}
-                            className="w-20 h-20 rounded-full object-cover shadow-lg mx-auto
-                                       sm:w-24 sm:h-24
-                                       md:w-32 md:h-32
-                                       lg:w-40 lg:h-40"
-                          />
-                        </div>
+                        {/* Image removed as requested */}
                         <div className="flex-1
                                         md:w-2/3">
                           <div className="flex justify-center mb-3

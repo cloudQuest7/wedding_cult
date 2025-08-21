@@ -870,8 +870,8 @@ const Gallery = () => {
                     e.stopPropagation();
                     handlePrevImage();
                   }}
-                  className="pointer-events-auto bg-white/90 hover:bg-white text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
-                  aria-label="Previous image"
+                   className="pointer-events-auto bg-white/70 hover:bg-white/90 text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
+                    aria-label="previous image"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M15 18l-6-6 6-6" />
@@ -884,10 +884,10 @@ const Gallery = () => {
                   onClick={(e) => {
                     e.stopPropagation();
                     handleNextImage();
-                  }}
-                  className="pointer-events-auto bg-white/90 hover:bg-white text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
-                  aria-label="Next image"
-                >
+                    }}
+                    className="pointer-events-auto bg-white/70 hover:bg-white/90 text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
+                    aria-label="Next image"
+                  >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M9 18l6-6-6-6" />
                   </svg>
@@ -895,12 +895,7 @@ const Gallery = () => {
               )}
             </div>
             
-            {/* Image Counter */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-full px-6 py-2">
-              <p className="text-chocolate font-poppins text-sm">
-                {selectedIndex + 1} / {filteredImages.length}
-              </p>
-            </div>
+            
           </div>
         </div>
       )}
