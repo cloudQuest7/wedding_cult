@@ -318,7 +318,7 @@ export default function MobileBottomNav() {
       {/* Top Navbar */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cream/95 via-cream/90 to-beige-warm/95 backdrop-blur-lg border-b-2 border-chocolate/30">
         <div className="flex items-center justify-between px-6 py-2">
-          <h1 className="text-m font-playfair  text-chocolate tracking-tight">
+          <h1 className="text-base font-playfair  text-chocolate tracking-tight">
             The Wedding Cult
           </h1>
           <img src={logo} alt="Logo" className="h-12 w-auto" />
@@ -389,7 +389,7 @@ export default function MobileBottomNav() {
               <div className="flex items-center gap-4">
                 <img src={logo} alt="Logo" className="h-12 w-auto" />
                 <div>
-                  <h2 className="font-amsterdam text-chocolate text-m">The Wedding Cult</h2>
+                  <h2 className="font-amsterdam text-chocolate text-sm">The Wedding Cult</h2>
                   
                 </div>
               </div>
