@@ -93,14 +93,48 @@ const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
   );
 };
 
+import { useEffect } from "react";
+
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [activeCategory, setActiveCategory] = useState<string>("All");
+  const scrollPosition = useRef(0);
+
+  // Cleanup effect
+  useEffect(() => {
+    // Clean up if component unmounts while modal is open
+    return () => {
+      if (selectedImage) {
+        unlockScroll();
+      }
+    };
+  }, [selectedImage]);
+
+  const lockScroll = () => {
+    // Store current scroll position
+    scrollPosition.current = window.scrollY;
+    // Add styles to body to prevent scrolling
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollPosition.current}px`;
+    document.body.style.width = '100%';
+  };
+
+  const unlockScroll = () => {
+    // Remove styles from body
+    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty('position');
+    document.body.style.removeProperty('top');
+    document.body.style.removeProperty('width');
+    // Restore scroll position
+    window.scrollTo(0, scrollPosition.current);
+  };
 
   const handleImageClick = (imageUrl: string, index: number) => {
     setSelectedImage(imageUrl);
     setSelectedIndex(index);
+    lockScroll();
   };
 
   const handlePrevImage = () => {
@@ -833,26 +867,40 @@ const Gallery = () => {
         </div>
       </div>
 
-      {/* Enhanced Lightbox Modal */}
+      {/* Enhanced Lightbox Modal with improved touch handling */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm" 
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm overscroll-none touch-none" 
           onClick={(e) => {
-            if (e.target === e.currentTarget) setSelectedImage(null);
+            if (e.target === e.currentTarget) {
+              setSelectedImage(null);
+              unlockScroll();
+            }
           }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
+          onTouchStart={(e) => {
+            e.stopPropagation(); // Prevent background interactions
+            handleTouchStart(e);
+          }}
+          onTouchMove={(e) => {
+            e.preventDefault(); // Prevent any scrolling
+            e.stopPropagation();
+            handleTouchMove(e);
+          }}
         >
-          <div className="relative max-w-6xl max-h-full animate-fade-in">
+          <div className="relative max-w-6xl max-h-full animate-fade-in select-none">
             <img 
               src={selectedImage} 
               alt="Gallery image" 
               className="w-full h-auto max-h-[90vh] object-contain rounded-xl shadow-2xl" 
+              draggable="false" 
             />
 
             {/* Close Button */}
             <button 
-              onClick={() => setSelectedImage(null)} 
+              onClick={() => {
+                setSelectedImage(null);
+                unlockScroll();
+              }} 
               className="absolute top-4 right-4 bg-white/90 hover:bg-white text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm" 
               aria-label="Close lightbox"
             >
