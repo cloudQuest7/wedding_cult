@@ -295,7 +295,7 @@ export default function MobileBottomNav() {
           // Set a new timeout to show the buttons after scrolling stops
           scrollTimeout = setTimeout(() => {
             setIsVisible(true);
-          }, 1300);
+          }, 800);
           
           lastScrollY = currentScrollY;
           ticking = false;
