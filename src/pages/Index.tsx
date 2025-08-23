@@ -11,6 +11,7 @@ import EnquiryForm from "@/components/home/EnquiryForm";
 import FeedbackSection from "@/components/feedback/FeedbackSection";
 import Footer from "@/components/home/Footer";
 import OffersSection from "@/components/home/OffersSection";
+import FilmStripGSAP from "@/components/home/FilmStripGSAP";
 
 const Index = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -35,6 +36,7 @@ const Index = () => {
         {/* <OffersSection /> */}
         <WhyChooseUs />
         <VideoPreview />
+        <FilmStripGSAP />
         <PhotoGallery />
         {/* <Reviews /> */}
         <CallToAction />
