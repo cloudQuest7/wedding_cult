@@ -53,14 +53,14 @@ const PrivacyPolicy = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+    <div className="min-h-screen bg-background">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-rose-600 via-pink-600 to-rose-700 text-white">
+      <div className="bg-chocolate text-cream">
         <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex justify-center mb-6">
-              <div className="p-4 bg-white/10 rounded-full backdrop-blur-sm">
-                <ShieldCheckIcon className="w-12 h-12 text-white" />
+              <div className="p-4 bg-cream/10 rounded-full backdrop-blur-sm">
+                <ShieldCheckIcon className="w-12 h-12 text-cream" />
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
@@ -79,14 +79,14 @@ const PrivacyPolicy = () => {
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         {/* Introduction */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-12 border border-rose-100">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 mb-12 border border-chocolate/10 shadow-romantic">
           <div className="flex items-start space-x-4">
             <div className="flex-shrink-0">
-              <HeartIcon className="w-8 h-8 text-rose-500 mt-1" />
+              <HeartIcon className="w-8 h-8 text-chocolate mt-1" />
             </div>
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Our Commitment to You</h2>
-              <p className="text-gray-700 leading-relaxed text-lg">
+              <h2 className="font-amsterdam text-2xl text-chocolate mb-4">Our Commitment to You</h2>
+              <p className="font-playfair text-lg text-muted-foreground">
                 At The Wedding Cult ("we," "our," or "us"), we value your trust and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard the details you share with us.
               </p>
             </div>
@@ -96,23 +96,23 @@ const PrivacyPolicy = () => {
         {/* Privacy Sections */}
         <div className="space-y-8">
           {sections.map((section, index) => (
-            <div key={section.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div key={section.id} className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-romantic hover:shadow-xl transition-shadow duration-300 border border-chocolate/10">
               <div className="p-8">
                 <div className="flex items-center space-x-4 mb-6">
-                  <div className="flex-shrink-0 p-3 bg-gradient-to-br from-rose-500 to-pink-500 rounded-xl text-white">
+                  <div className="flex-shrink-0 p-3 bg-chocolate rounded-xl text-cream">
                     {section.icon}
                   </div>
-                  <h3 className="text-2xl font-semibold text-gray-900">{section.title}</h3>
+                  <h3 className="font-amsterdam text-2xl text-chocolate">{section.title}</h3>
                 </div>
                 
                 {section.isText ? (
-                  <p className="text-gray-700 leading-relaxed text-lg">{section.content}</p>
+                  <p className="font-playfair text-lg text-muted-foreground">{section.content}</p>
                 ) : (
                   <ul className="space-y-3">
                     {section.content.map((item, itemIndex) => (
                       <li key={itemIndex} className="flex items-start space-x-3">
-                        <ChevronRightIcon className="w-5 h-5 text-rose-500 mt-1 flex-shrink-0" />
-                        <span className="text-gray-700 text-lg">{item}</span>
+                        <ChevronRightIcon className="w-5 h-5 text-chocolate mt-1 flex-shrink-0" />
+                        <span className="font-playfair text-lg text-muted-foreground">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -123,59 +123,59 @@ const PrivacyPolicy = () => {
         </div>
 
         {/* Rights Section */}
-        <div className="bg-gradient-to-r from-rose-500 to-pink-600 rounded-2xl shadow-xl p-8 mt-12 text-white">
-          <h3 className="text-2xl font-semibold mb-4 flex items-center">
+        <div className="bg-chocolate rounded-3xl shadow-romantic p-8 mt-12 text-cream">
+          <h3 className="font-amsterdam text-2xl mb-4 flex items-center">
             <UserGroupIcon className="w-8 h-8 mr-3" />
             Your Rights
           </h3>
-          <p className="text-rose-100 leading-relaxed text-lg">
+          <p className="font-playfair text-lg text-cream/90">
             You may request access, correction, or deletion of your personal information by contacting us at:{' '}
-            <a href="mailto:info@theweddingcult.com" className="text-white font-semibold hover:text-rose-200 underline decoration-2 underline-offset-2">
+            <a href="mailto:info@theweddingcult.com" className="text-cream font-semibold hover:text-cream/80 underline decoration-2 underline-offset-2">
               info@theweddingcult.com
             </a>
           </p>
         </div>
 
         {/* Policy Updates */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mt-8 border border-gray-100">
-          <h3 className="text-2xl font-semibold mb-4 text-gray-900 flex items-center">
-            <DocumentTextIcon className="w-7 h-7 mr-3 text-rose-500" />
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-romantic p-8 mt-8 border border-chocolate/10">
+          <h3 className="font-amsterdam text-2xl mb-4 text-chocolate flex items-center">
+            <DocumentTextIcon className="w-7 h-7 mr-3 text-chocolate" />
             Changes to This Privacy Policy
           </h3>
-          <p className="text-gray-700 leading-relaxed text-lg">
+          <p className="font-playfair text-lg text-muted-foreground">
             We may update this policy from time to time. Any changes will be posted on this page with the updated date.
           </p>
         </div>
 
         {/* Contact Section */}
-        <div className="bg-gradient-to-br from-gray-50 to-rose-50 rounded-2xl shadow-lg p-8 mt-8 border border-rose-100">
-          <h3 className="text-2xl font-semibold mb-6 text-gray-900 flex items-center">
-            <PhoneIcon className="w-7 h-7 mr-3 text-rose-500" />
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-romantic p-8 mt-8 border border-chocolate/10">
+          <h3 className="font-amsterdam text-2xl mb-6 text-chocolate flex items-center">
+            <PhoneIcon className="w-7 h-7 mr-3 text-chocolate" />
             Contact Us
           </h3>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <p className="text-gray-700 mb-4 text-lg">
+              <p className="font-playfair text-lg text-muted-foreground mb-4">
                 If you have any questions about this Privacy Policy, please don't hesitate to reach out to us:
               </p>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-rose-500 rounded-full"></div>
-                  <span className="text-gray-600">Email:</span>
-                  <a href="mailto:info@theweddingcult.com" className="text-rose-600 font-medium hover:text-rose-700">
+                  <div className="w-2 h-2 bg-chocolate rounded-full"></div>
+                  <span className="text-muted-foreground">Email:</span>
+                  <a href="mailto:info@theweddingcult.com" className="text-chocolate font-medium hover:text-chocolate/80">
                     info@theweddingcult.com
                   </a>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-rose-500 rounded-full"></div>
-                  <span className="text-gray-600">Location:</span>
-                  <span className="text-gray-800 font-medium">Mumbai, India</span>
+                  <div className="w-2 h-2 bg-chocolate rounded-full"></div>
+                  <span className="text-muted-foreground">Location:</span>
+                  <span className="text-chocolate font-medium">Mumbai, India</span>
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-center">
-              <div className="p-6 bg-white rounded-xl shadow-md">
-                <HeartIcon className="w-16 h-16 text-rose-400" />
+              <div className="p-6 bg-white/95 rounded-3xl shadow-romantic">
+                <HeartIcon className="w-16 h-16 text-chocolate" />
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@ const PrivacyPolicy = () => {
 
         {/* Footer Note */}
         <div className="text-center mt-12 py-8">
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm font-playfair">
             © 2025 The Wedding Cult. All rights reserved.
           </p>
         </div>

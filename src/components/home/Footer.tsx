@@ -1,6 +1,7 @@
-import { Instagram, Youtube, Mail, Phone } from "lucide-react";
+import { Instagram, Youtube, Mail, Phone, Link as LinkIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const flowerRef = useRef(null);
@@ -166,9 +167,9 @@ const Footer = () => {
           <div className="border-t border-cream/20 pt-2 flex flex-col sm:flex-row justify-between items-center text-xs text-cream/60 font-poppins space-y-1 sm:space-y-0">
             <p className="text-center sm:text-left">Copyright © 2024. All rights reserved.</p>
             <div className="flex space-x-3 sm:space-x-4">
-              <a href="/privacy" className="hover:text-cream transition-colors">Privacy Policy</a>
+              <Link to="/privacy-policy" className="hover:text-cream transition-colors">Privacy Policy</Link>
               <span>|</span>
-              <a href="/terms" className="hover:text-cream transition-colors">Terms & Condition</a>
+              <Link to="/terms" className="hover:text-cream transition-colors">Terms & Conditions</Link>
             </div>
           </div>
         </div>

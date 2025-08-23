@@ -14,7 +14,8 @@ import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Offers from "./pages/Offers";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsAndConditions from "@/pages/TermsAndConditions";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,10 @@ const App = () => (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/offers" element={<Offers />} />
+            {/* Legal Pages */}
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsAndConditions />} />
+            <Route path="/privacypolicy" element={<PrivacyPolicy />} /> {/* Fallback for old URL */}
             {/* Add more routes as needed */}
             
             {/* Catch-all route for 404 Not Found */}
