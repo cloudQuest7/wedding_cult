@@ -274,27 +274,35 @@ export default function MobileBottomNav() {
   // Handle scroll visibility
   useEffect(() => {
     let lastScrollY = window.scrollY;
+    let ticking = false;
+    let scrollTimeout: NodeJS.Timeout | null = null;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          // Hide immediately when scrolling down
+          if (currentScrollY > lastScrollY && currentScrollY > 200) {
+            setIsVisible(false);
+          }
+          
+          // Clear any existing timeout
+          if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+          }
+          
+          // Set a new timeout to show the buttons after scrolling stops
+          scrollTimeout = setTimeout(() => {
+            setIsVisible(true);
+          }, 1300);
+          
+          lastScrollY = currentScrollY;
+          ticking = false;
+        });
+
+        ticking = true;
       }
-      
-      lastScrollY = currentScrollY;
-
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-
-      const newTimeout = setTimeout(() => {
-        setIsVisible(true);
-      }, 1000);
-
-      setScrollTimeout(newTimeout);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -305,7 +313,7 @@ export default function MobileBottomNav() {
         clearTimeout(scrollTimeout);
       }
     };
-  }, [scrollTimeout]);
+  }, []);
 
   useEffect(() => { setIsMenuOpen(false); }, [currentPath]);
   useEffect(() => {
@@ -328,8 +336,8 @@ export default function MobileBottomNav() {
 
       {/* Left Side Menu Capsule - Professional Border */}
       <div 
-        className={`fixed bottom-8 left-0 z-50 transition-all duration-500 ease-in-out ${
-          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+        className={`fixed bottom-8 left-0 z-50 transition-all duration-150 ease-out will-change-transform ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
         }`}
       >
         <button
@@ -353,8 +361,8 @@ export default function MobileBottomNav() {
 
       {/* Right Side Enquire Capsule - Professional Border */}
       <div 
-        className={`fixed bottom-8 right-0 z-50 transition-all duration-500 ease-in-out ${
-          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+        className={`fixed bottom-8 right-0 z-50 transition-all duration-150 ease-out will-change-transform ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
         }`}
       >
         <Link
@@ -378,8 +386,8 @@ export default function MobileBottomNav() {
 
       {/* Clean Modal with Professional Borders */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-lg flex items-center justify-center p-4 transition-all duration-500">
-          <div className="relative bg-gradient-to-br from-cream via-beige-warm to-cream rounded-3xl w-full max-w-md mx-auto overflow-hidden border-3 border-chocolate/40 premium-modal">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-lg flex items-center justify-center p-4 transition-opacity duration-300 ease-out">
+          <div className="relative bg-gradient-to-br from-cream via-beige-warm to-cream rounded-3xl w-full max-w-md mx-auto overflow-hidden border-3 border-chocolate/40 transform transition-transform duration-300 ease-out will-change-transform premium-modal">
             
             {/* Decorative top border */}
             <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-chocolate via-chocolate-light to-chocolate" />
