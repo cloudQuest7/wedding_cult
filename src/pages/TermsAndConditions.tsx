@@ -70,7 +70,7 @@ const TermsAndConditions = () => {
                 <BookOpenIcon className="w-12 h-12 text-cream" />
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
               Terms & Conditions
             </h1>
             <p className="text-xl text-cream/90 max-w-3xl mx-auto leading-relaxed">
@@ -103,13 +103,13 @@ const TermsAndConditions = () => {
         {/* Terms Sections */}
         <div className="space-y-8">
           {sections.map((section) => (
-            <div key={section.id} className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-romantic hover:shadow-xl transition-shadow duration-300 border border-chocolate/10">
+            <div key={section.id} className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-romantic hover:shadow-xl transition-shadow duration-300 border border-chocolate/10 leading-loose">
               <div className="p-8">
                 <div className="flex items-center space-x-4 mb-6">
                   <div className="flex-shrink-0 p-3 bg-chocolate rounded-xl text-cream">
                     {section.icon}
                   </div>
-                  <h3 className="font-amsterdam text-2xl text-chocolate">{section.title}</h3>
+                  <h3 className="font-amsterdam text-2xl text-chocolate leading-loose">{section.title}</h3>
                 </div>
                 
                 {section.isList ? (

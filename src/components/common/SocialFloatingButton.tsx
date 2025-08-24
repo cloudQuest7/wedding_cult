@@ -74,11 +74,7 @@ const SocialFloatingButton = () => {
         }`}
         size="icon"
       >
-        {isOpen ? (
-          <X className="w-6 h-6 text-white" />
-        ) : (
-          <Plus className="w-6 h-6 text-cream" />
-        )}
+        <MessageCircle className="w-6 h-6 text-white" />
       </Button>
     </div>
   );

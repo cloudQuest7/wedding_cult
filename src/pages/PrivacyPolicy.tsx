@@ -56,14 +56,14 @@ const PrivacyPolicy = () => {
     <div className="min-h-screen bg-background">
       {/* Header Section */}
       <div className="bg-chocolate text-cream">
-        <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-2 xs:px-4 py-8 xs:py-12 sm:py-16 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-4 xs:mb-6">
               <div className="p-4 bg-cream/10 rounded-full backdrop-blur-sm">
                 <ShieldCheckIcon className="w-12 h-12 text-cream" />
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 tracking-loose">
               Privacy Policy
             </h1>
             <p className="text-xl text-rose-100 max-w-3xl mx-auto leading-relaxed">
@@ -77,15 +77,15 @@ const PrivacyPolicy = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+      <div className="w-full max-w-3xl mx-auto px-2 py-4 xs:px-4 sm:py-12 sm:px-6">
         {/* Introduction */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 mb-12 border border-chocolate/10 shadow-romantic">
-          <div className="flex items-start space-x-4">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-3 xs:p-4 sm:p-6 mb-4 xs:mb-6 sm:mb-8 border border-chocolate/10 shadow-romantic">
+          <div className="flex flex-col sm:flex-row sm:items-start space-y-3 xs:space-y-4 sm:space-y-0 sm:space-x-4">
             <div className="flex-shrink-0">
               <HeartIcon className="w-8 h-8 text-chocolate mt-1" />
             </div>
             <div>
-              <h2 className="font-amsterdam text-2xl text-chocolate mb-4">Our Commitment to You</h2>
+              <h2 className="font-amsterdam text-2xl text-chocolate mb-4 leading-loose">Our Commitment to You</h2>
               <p className="font-playfair text-lg text-muted-foreground">
                 At The Wedding Cult ("we," "our," or "us"), we value your trust and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard the details you share with us.
               </p>
@@ -94,25 +94,25 @@ const PrivacyPolicy = () => {
         </div>
 
         {/* Privacy Sections */}
-        <div className="space-y-8">
+        <div className="space-y-3 xs:space-y-4 sm:space-y-6">
           {sections.map((section, index) => (
-            <div key={section.id} className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-romantic hover:shadow-xl transition-shadow duration-300 border border-chocolate/10">
-              <div className="p-8">
-                <div className="flex items-center space-x-4 mb-6">
+            <div key={section.id} className="bg-white/90 backdrop-blur-sm rounded-2xl xs:rounded-3xl shadow-romantic hover:shadow-xl transition-shadow duration-300 border border-chocolate/10">
+              <div className="p-3 xs:p-4 sm:p-6">
+                <div className="flex items-center space-x-2 xs:space-x-3 sm:space-x-4 mb-3 xs:mb-4 sm:mb-6">
                   <div className="flex-shrink-0 p-3 bg-chocolate rounded-xl text-cream">
                     {section.icon}
                   </div>
-                  <h3 className="font-amsterdam text-2xl text-chocolate">{section.title}</h3>
+                  <h3 className="font-amsterdam text-xl sm:text-2xl text-chocolate leading-loose">{section.title}</h3>
                 </div>
                 
                 {section.isText ? (
-                  <p className="font-playfair text-lg text-muted-foreground">{section.content}</p>
+                  <p className="font-playfair text-base sm:text-lg text-muted-foreground">{section.content}</p>
                 ) : (
-                  <ul className="space-y-3">
+                  <ul className="space-y-2 sm:space-y-3">
                     {section.content.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-start space-x-3">
-                        <ChevronRightIcon className="w-5 h-5 text-chocolate mt-1 flex-shrink-0" />
-                        <span className="font-playfair text-lg text-muted-foreground">{item}</span>
+                      <li key={itemIndex} className="flex items-start space-x-2 sm:space-x-3">
+                        <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5 text-chocolate mt-1 flex-shrink-0" />
+                        <span className="font-playfair text-base sm:text-lg text-muted-foreground">{item}</span>
                       </li>
                     ))}
                   </ul>
