@@ -918,10 +918,10 @@ const Gallery = () => {
                     e.stopPropagation();
                     handlePrevImage();
                   }}
-                   className="pointer-events-auto bg-white/70 hover:bg-white/90 text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
+                   className="pointer-events-auto bg-transparent hover:bg-white/20 text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
                     aria-label="previous image"
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2">
                     <path d="M15 18l-6-6 6-6" />
                   </svg>
                 </button>
@@ -933,12 +933,12 @@ const Gallery = () => {
                     e.stopPropagation();
                     handleNextImage();
                     }}
-                    className="pointer-events-auto bg-white/70 hover:bg-white/90 text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
+                    className="pointer-events-auto bg-transparent hover:bg-white/20 text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
                     aria-label="Next image"
-                  >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2">
                     <path d="M9 18l6-6-6-6" />
-                  </svg>
+                    </svg>
                 </button>
               )}
             </div>

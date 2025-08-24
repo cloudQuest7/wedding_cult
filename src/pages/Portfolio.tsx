@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { ChevronLeft, ChevronRight, ArrowRight, PlayCircle, Eye, Star } from "lucide-react"
+import { ChevronLeft, ChevronRight, ArrowRight, PlayCircle, Eye, Star, X } from "lucide-react"
 import gsap from "gsap"
 import { Link } from "react-router-dom"
 
@@ -9,6 +9,9 @@ const Portfolio = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1)
+  const scrollPosition = useRef(0)
   const filmStripRef = useRef(null)
 
   // UPDATED: Portfolio items with all 6 couples
@@ -184,6 +187,10 @@ const Portfolio = () => {
       ease: "power2.out"
     })
   }, [])
+
+  function handleImageClick(url: string, index: number): void {
+    throw new Error("Function not implemented.")
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 w-full">
@@ -383,6 +390,40 @@ const Portfolio = () => {
         </div>
       </div>
 
+      {/* Image Modal */}
+      {selectedImage && (
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center">
+          <button
+            onClick={handleCloseModal}
+            className="absolute top-4 right-4 text-white/80 hover:text-white z-50 p-2"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          
+          <button
+            onClick={handlePrevImage}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white z-50 p-2"
+            disabled={selectedIndex === 0}
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </button>
+
+          <img
+            src={selectedImage}
+            alt="Selected gallery image"
+            className="max-h-[90vh] max-w-[90vw] object-contain"
+          />
+
+          <button
+            onClick={handleNextImage}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white z-50 p-2"
+            disabled={selectedIndex === featuredGalleryImages.length - 1}
+          >
+            <ChevronRight className="w-8 h-8" />
+          </button>
+        </div>
+      )}
+
       {/* Compact Gallery Section - Fixed width constraints */}
       <div className="gallery-section px-3 mb-8 sm:px-4 sm:mb-10 md:mb-12 w-full container-fix">
         <div className="max-w-6xl mx-auto w-full">
@@ -409,6 +450,7 @@ const Portfolio = () => {
             {featuredGalleryImages.map((photo, index) => (
               <div 
                 key={photo.id}
+                onClick={() => handleImageClick(photo.url, index)}
                 className="group cursor-pointer relative overflow-hidden rounded-lg shadow-sm hover:shadow-lg transform transition-all duration-500 hover:scale-105 w-full
                            sm:rounded-xl
                            md:rounded-2xl"
@@ -461,61 +503,6 @@ const Portfolio = () => {
               <ArrowRight className="w-3 h-3
                                    sm:w-4 sm:h-4" />
             </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* UPDATED: Film Strip Belt - Now manually scrollable, no animation */}
-      <div className="mb-12 sm:mb-16 md:mb-20 w-full container-fix">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4">
-          <div className="bg-gradient-to-r from-black via-gray-900 to-black py-6 rounded-lg relative shadow-2xl
-                          sm:py-8 sm:rounded-xl sm:shadow-2xl
-                          md:py-12 md:rounded-2xl
-                          lg:py-16">
-            
-            {/* Manual scrollable film strip container */}
-            <div className="film-strip-container">
-              <div ref={filmStripRef} className="flex gap-3 px-3 min-w-max
-                                                sm:gap-4 sm:px-4
-                                                md:gap-6 md:px-6">
-                {[
-                  "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000488.jpg?updatedAt=1752122341261",
-                  "https://ik.imagekit.io/7xgikoq8o/pexels-theindiaweddings-28144255.jpg?updatedAt=1752122336598", 
-                  "https://ik.imagekit.io/7xgikoq8o/pexels-zephyr-events-2153609654-32864600.jpg?updatedAt=1752122336721",
-                  "https://ik.imagekit.io/7xgikoq8o/pexels-varun-118342-5759464.jpg?updatedAt=1752122335592",
-                  "https://ik.imagekit.io/7xgikoq8o/couple-9210801.jpg?updatedAt=1752218451384",
-                  "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000488.jpg?updatedAt=1752122341261",
-                  "https://ik.imagekit.io/7xgikoq8o/pexels-theindiaweddings-28144255.jpg?updatedAt=1752122336598",
-                ].map((src, i) => (
-                  <div key={i} className="w-32 h-24 flex-shrink-0
-                                          sm:w-40 sm:h-32
-                                          md:w-56 md:h-40
-                                          lg:w-72 lg:h-48
-                                          xl:w-80 xl:h-56">
-                    <div className="w-full h-full bg-gray-800 rounded-md overflow-hidden border-2 border-gray-600 hover:border-chocolate/70 transition-all duration-500 shadow-xl
-                                    sm:rounded-lg sm:shadow-2xl sm:border-2
-                                    md:rounded-xl md:border-3">
-                      <img 
-                        src={src} 
-                        alt="Portfolio film strip" 
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" 
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* Enhanced Film perforations */}
-            <div className="flex justify-center mt-3 gap-1.5
-                            sm:mt-4 sm:gap-2
-                            md:mt-6 md:gap-3">
-              {[...Array(12)].map((_, i) => (
-                <div key={i} className="w-1.5 h-1.5 bg-gray-500 rounded-sm opacity-80
-                                        sm:w-2 sm:h-2
-                                        md:w-3 md:h-3"></div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
