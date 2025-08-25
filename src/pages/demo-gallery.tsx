@@ -1,6 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import FloatingBallBackground from "@/components/common/FloatingBallBackground";
 import SocialFloatingButton from "@/components/common/SocialFloatingButton";
+import OptimizedImage from "@/components/common/OptimizedImage";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 // Animated Background Pattern Component
 const AnimatedPatterns = () => {
@@ -72,8 +74,6 @@ const AnimatedPatterns = () => {
   );
 };
 
-// Enhanced Gallery Filter Component - EXCLUDES "Cinematic", "Family", "Details"
-
 const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
   return (
     <div className="flex flex-wrap justify-center gap-3 mb-12">
@@ -129,36 +129,32 @@ const Gallery = () => {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [displayedCount, setDisplayedCount] = useState<number>(20); // Initial load count
   const [loading, setLoading] = useState<boolean>(false);
-  const [visibleImages, setVisibleImages] = useState<Set<number>>(new Set()); // Track which images are in viewport
-  const imageRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set()); // Track loaded images
   const scrollPosition = useRef(0);
   
   const IMAGES_PER_LOAD = 15; // How many images to load each time
 
-  // Intersection Observer for lazy loading
+  // Preload critical images (first few)
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const imageId = Number(entry.target.getAttribute('data-image-id'));
-          if (entry.isIntersecting) {
-            setVisibleImages(prev => new Set([...prev, imageId]));
-          }
-        });
-      },
-      {
-        rootMargin: '50px 0px', // Start loading images 50px before they enter viewport
-        threshold: 0.1
-      }
-    );
+    const preloadImages = async () => {
+      const criticalImages = galleryImages.slice(0, 6); // Preload first 6 images
+      
+      criticalImages.forEach((image) => {
+        const img = new Image();
+        const optimizedUrl = image.url.includes('imagekit.io') 
+          ? `${image.url}${image.url.includes('?') ? '&' : '?'}tr=q-80,f-auto,w-400`
+          : image.url;
+        img.src = optimizedUrl;
+      });
+    };
 
-    // Observe all image containers
-    Object.values(imageRefs.current).forEach(ref => {
-      if (ref) observer.observe(ref);
-    });
+    preloadImages();
+  }, []);
 
-    return () => observer.disconnect();
-  }, [displayedCount]); // Re-run when more images are loaded
+  // Track loaded images for performance monitoring
+  const handleImageLoad = useCallback((imageId: number) => {
+    setLoadedImages(prev => new Set([...prev, imageId]));
+  }, []);
 
   // Cleanup effect
   useEffect(() => {
@@ -196,9 +192,12 @@ const Gallery = () => {
   };
 
   const handleImageClick = (imageUrl: string, index: number) => {
-    setSelectedImage(imageUrl);
-    setSelectedIndex(index);
-    lockScroll();
+    // Only allow click if image is loaded
+    if (loadedImages.has(displayedImages[index]?.id)) {
+      setSelectedImage(imageUrl);
+      setSelectedIndex(index);
+      lockScroll();
+    }
   };
 
   const handleLoadMore = () => {
@@ -865,92 +864,61 @@ const Gallery = () => {
             {displayedImages.map((photo, index) => (
               <div 
                 key={photo.id} 
-                ref={el => imageRefs.current[photo.id] = el}
-                data-image-id={photo.id}
                 className="group cursor-pointer animate-fade-in hover-scale break-inside-avoid mb-4"
                 style={{
                   animationDelay: `${index * 0.05}s`,
                   animationFillMode: 'both'
                 }} 
-                onClick={() => handleImageClick(photo.url, index)}
               >
                 <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-700 hover:-translate-y-2">
-                  {/* Image Container with Aspect Ratio */}
-                  <div className="relative w-full pb-[133.33%]"> {/* 4:3 aspect ratio */}
-                    <div className="absolute inset-0">
-                      {/* Low-res placeholder */}
-                      <div 
-                        className="absolute inset-0 bg-gradient-to-br from-beige-warm/10 to-cream/20"
-                        style={{
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                          filter: 'blur(10px)',
-                          transform: 'scale(1.1)',
-                        }}
-                      />
-
-                      {/* Main Image with Fade-in */}
-                      {visibleImages.has(photo.id) && (
-                        <img 
-                          src={photo.url} 
-                          alt={photo.alt}
-                          className="absolute inset-0 w-full h-full object-cover opacity-0 animate-image-fade-in group-hover:scale-110 transition-all duration-1000 filter group-hover:brightness-110 group-hover:contrast-105" 
-                          loading="lazy"
-                          onLoad={(e) => {
-                            // Remove blur and show image once loaded
-                            const img = e.target as HTMLImageElement;
-                            img.classList.remove('opacity-0');
-                          }}
-                        />
-                      )}
-
-                      {/* Loading Overlay */}
-                      {!visibleImages.has(photo.id) && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-beige-warm/5 to-cream/10 backdrop-blur-sm">
-                          <div className="flex flex-col items-center gap-2">
-                            <div className="w-8 h-8 rounded-full border-2 border-chocolate/20 border-t-chocolate/40 animate-smooth-spin" />
-                            <span className="text-xs text-chocolate/40 font-poppins tracking-wider">Loading</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  {/* Optimized Image with Lazy Loading */}
+                  <OptimizedImage
+                    src={photo.url}
+                    alt={photo.alt}
+                    className="w-full h-auto object-cover group-hover:scale-110 transition-all duration-1000 filter group-hover:brightness-110 group-hover:contrast-105"
+                    onLoad={() => handleImageLoad(photo.id)}
+                    onClick={() => handleImageClick(photo.url, index)}
+                  />
                   
-                  {/* Gradient Overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-transparent to-secondary/30 opacity-0 group-hover:opacity-40 transition-all duration-500" />
-                  
-                  {/* Category Badge */}
-                  <div className="absolute top-4 left-4 transform -translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
-                    <span className="bg-gradient-to-r from-cream/95 to-beige-light/95 backdrop-blur-sm text-chocolate px-4 py-2 rounded-full text-xs font-poppins font-semibold shadow-xl border border-white/20">
-                      {photo.category}
-                    </span>
-                  </div>
-                  
-                  {/* Photo Title on Hover */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-all duration-500 delay-200">
-                    <h3 className="text-white font-playfair font-semibold text-lg mb-2 leading-tight">
-                      {photo.alt}
-                    </h3>
-                    <div className="flex items-center justify-between">
-                      <div className="flex space-x-2">
-                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                        <div className="w-2 h-2 bg-secondary rounded-full animate-pulse opacity-70" style={{ animationDelay: '0.5s' }} />
-                        <div className="w-2 h-2 bg-primary/70 rounded-full animate-pulse opacity-50" style={{ animationDelay: '1s' }} />
+                  {/* Gradient Overlays - Only show when image is loaded */}
+                  {loadedImages.has(photo.id) && (
+                    <>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-transparent to-secondary/30 opacity-0 group-hover:opacity-40 transition-all duration-500" />
+                      
+                      {/* Category Badge */}
+                      <div className="absolute top-4 left-4 transform -translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                        <span className="bg-gradient-to-r from-cream/95 to-beige-light/95 backdrop-blur-sm text-chocolate px-4 py-2 rounded-full text-xs font-poppins font-semibold shadow-xl border border-white/20">
+                          {photo.category}
+                        </span>
                       </div>
-                      <span className="text-white/80 text-xs font-poppins">Click to view</span>
-                    </div>
-                  </div>
-                  
-                  {/* Hover Border Glow */}
-                  <div className="absolute inset-0 rounded-2xl ring-0 group-hover:ring-4 group-hover:ring-primary/20 transition-all duration-500" />
-                  
-                  {/* Sparkle Effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
-                    <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '1s' }} />
-                    <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '1.5s' }} />
-                  </div>
+                      
+                      {/* Photo Title on Hover */}
+                      <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-all duration-500 delay-200">
+                        <h3 className="text-white font-playfair font-semibold text-lg mb-2 leading-tight">
+                          {photo.alt}
+                        </h3>
+                        <div className="flex items-center justify-between">
+                          <div className="flex space-x-2">
+                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                            <div className="w-2 h-2 bg-secondary rounded-full animate-pulse opacity-70" style={{ animationDelay: '0.5s' }} />
+                            <div className="w-2 h-2 bg-primary/70 rounded-full animate-pulse opacity-50" style={{ animationDelay: '1s' }} />
+                          </div>
+                          <span className="text-white/80 text-xs font-poppins">Click to view</span>
+                        </div>
+                      </div>
+                      
+                      {/* Hover Border Glow */}
+                      <div className="absolute inset-0 rounded-2xl ring-0 group-hover:ring-4 group-hover:ring-primary/20 transition-all duration-500" />
+                      
+                      {/* Sparkle Effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
+                        <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '1s' }} />
+                        <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '1.5s' }} />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
@@ -965,7 +933,7 @@ const Gallery = () => {
         </div>
       </div>
 
-      {/* Enhanced Lightbox Modal with improved touch handling */}
+      {/* Enhanced Lightbox Modal with optimized image loading */}
       {selectedImage && (
         <div 
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm overscroll-none touch-none" 
@@ -986,11 +954,11 @@ const Gallery = () => {
           }}
         >
           <div className="relative max-w-6xl max-h-full animate-fade-in select-none">
-            <img 
-              src={selectedImage} 
-              alt="Gallery image" 
-              className="w-full h-auto max-h-[90vh] object-contain rounded-xl shadow-2xl" 
-              draggable="false" 
+            <OptimizedImage
+              src={selectedImage}
+              alt="Gallery image"
+              className="w-full h-auto max-h-[90vh] object-contain rounded-xl shadow-2xl"
+              style={{}}
             />
 
             {/* Close Button */}
@@ -1072,23 +1040,11 @@ const Gallery = () => {
             0%, 100% { transform: translateX(-2px); }
             50% { transform: translateX(2px); }
           }
-
-          @keyframes image-fade-in {
-            0% { opacity: 0; transform: scale(1.1); }
-            100% { opacity: 1; transform: scale(1); }
-          }
-
-          @keyframes smooth-spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
           
           .animate-twinkle { animation: twinkle linear infinite; }
           .animate-float { animation: float ease-in-out infinite; }
           .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
           .animate-bounce-x { animation: bounce-x 1.5s ease-in-out infinite; }
-          .animate-image-fade-in { animation: image-fade-in 0.8s ease-out forwards; }
-          .animate-smooth-spin { animation: smooth-spin 1.2s linear infinite; }
           .hover-scale { transition: transform 0.3s ease; }
           .hover-scale:hover { transform: scale(1.02); }
           
