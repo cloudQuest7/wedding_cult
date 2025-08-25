@@ -135,19 +135,20 @@ const Gallery = () => {
   
   const IMAGES_PER_LOAD = 15; // How many images to load each time
 
-  // Intersection Observer for lazy loading
+  // Simple intersection observer for lazy loading
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const imageId = Number(entry.target.getAttribute('data-image-id'));
           if (entry.isIntersecting) {
+            // Trigger image load when it comes into view
             setVisibleImages(prev => new Set([...prev, imageId]));
           }
         });
       },
       {
-        rootMargin: '50px 0px', // Start loading images 50px before they enter viewport
+        rootMargin: '50px 0px',
         threshold: 0.1
       }
     );
@@ -199,6 +200,27 @@ const Gallery = () => {
     setSelectedImage(imageUrl);
     setSelectedIndex(index);
     lockScroll();
+    
+    // Preload next and previous images
+    const preloadImages = () => {
+      // Preload next image
+      if (index < displayedImages.length - 1) {
+        const nextImg = new Image();
+        nextImg.src = `${displayedImages[index + 1].url}${displayedImages[index + 1].url.includes('?') ? '&' : '?'}tr=w-1200,h-1200,q-85`;
+      }
+      // Preload previous image
+      if (index > 0) {
+        const prevImg = new Image();
+        prevImg.src = `${displayedImages[index - 1].url}${displayedImages[index - 1].url.includes('?') ? '&' : '?'}tr=w-1200,h-1200,q-85`;
+      }
+    };
+    
+    // Use requestIdleCallback for non-critical preloading
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(preloadImages);
+    } else {
+      setTimeout(preloadImages, 1000);
+    };
   };
 
   const handleLoadMore = () => {
@@ -889,20 +911,29 @@ const Gallery = () => {
                         }}
                       />
 
-                      {/* Main Image with Fade-in */}
-                      {visibleImages.has(photo.id) && (
-                        <img 
-                          src={photo.url} 
-                          alt={photo.alt}
-                          className="absolute inset-0 w-full h-full object-cover opacity-0 animate-image-fade-in group-hover:scale-110 transition-all duration-1000 filter group-hover:brightness-110 group-hover:contrast-105" 
-                          loading="lazy"
-                          onLoad={(e) => {
-                            // Remove blur and show image once loaded
-                            const img = e.target as HTMLImageElement;
-                            img.classList.remove('opacity-0');
-                          }}
-                        />
-                      )}
+                      {/* Main Image with Progressive Loading */}
+                      <img 
+                        src={photo.url.includes('imagekit.io') 
+                          ? `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-400,h-400,q-60`
+                          : photo.url}
+                        alt={photo.alt}
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${visibleImages.has(photo.id) ? 'opacity-100' : 'opacity-0'} group-hover:scale-110 transition-all duration-1000 filter group-hover:brightness-110 group-hover:contrast-105`}
+                        loading="lazy"
+                        onLoad={(e) => {
+                          const img = e.target as HTMLImageElement;
+                          if (img.complete) {
+                            // Load high quality version after thumbnail is shown
+                            if (photo.url.includes('imagekit.io')) {
+                              const highQualityImg = new Image();
+                              highQualityImg.src = `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-800,q-80,f-auto`;
+                              highQualityImg.onload = () => {
+                                img.src = highQualityImg.src;
+                              };
+                            }
+                            setVisibleImages(prev => new Set([...prev, photo.id]));
+                          }
+                        }}
+                      />
 
                       {/* Loading Overlay */}
                       {!visibleImages.has(photo.id) && (
@@ -987,7 +1018,9 @@ const Gallery = () => {
         >
           <div className="relative max-w-6xl max-h-full animate-fade-in select-none">
             <img 
-              src={selectedImage} 
+              src={selectedImage?.includes('imagekit.io') 
+                ? `${selectedImage}${selectedImage.includes('?') ? '&' : '?'}tr=w-1200,h-1200,q-85,f-auto`
+                : selectedImage} 
               alt="Gallery image" 
               className="w-full h-auto max-h-[90vh] object-contain rounded-xl shadow-2xl" 
               draggable="false" 
