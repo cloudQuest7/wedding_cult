@@ -23,8 +23,7 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
-import logo from "@/assets/brand-logo.png";
-import centerlogo from "@/assets/new-logo.png";
+import logo from "@/assets/logoo.png";
 import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { useIsMobile } from "@/hooks/use-mobile";
