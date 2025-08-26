@@ -436,18 +436,18 @@ const Gallery = () => {
       alt: "Wedding celebration",
       category: "Wedding"
     },
-    {
-      id: 28,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-ajay-donga-1113836-2235390.jpg?updatedAt=1752218480207",
-      alt: "Traditional Indian wedding",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 29,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-ajay-donga-1113836-2221392.jpg?updatedAt=1752218479074",
-      alt: "Wedding rituals captured",
-      category: "Pre-Wedding"
-    },
+    // {
+    //   id: 28,
+    //   url: "https://ik.imagekit.io/7xgikoq8o/pexels-ajay-donga-1113836-2235390.jpg?updatedAt=1752218480207",
+    //   alt: "Traditional Indian wedding",
+    //   category: "Pre-Wedding"
+    // },
+    // {
+    //   id: 29,
+    //   url: "https://ik.imagekit.io/7xgikoq8o/pexels-ajay-donga-1113836-2221392.jpg?updatedAt=1752218479074",
+    //   alt: "Wedding rituals captured",
+    //   category: "Pre-Wedding"
+    // },
     {
       id: 30,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187414.jpg?updatedAt=1752218469371",
