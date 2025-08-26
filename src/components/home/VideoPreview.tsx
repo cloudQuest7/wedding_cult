@@ -16,22 +16,20 @@ const VideoPreview = () => {
   const videos = [
     {
       id: "video1",
-      embedId: "jF_kNaTp-KA",
-      title: "Neel & Jheel Wedding Film",
-      coupleNames: "Neel & Jheel",
-      location: "Jaipur, Rajasthan",
-      year: "2024",
-      duration: "12:45",
-      category: "Traditional Wedding",
+      embedId: "Mb3u8RnwU6k",
+      title: "Yash & Kejal Wedding Film",
+      coupleNames: "Yash & Kejal",
+      year: "2025",
+      duration: "0:59",
+      category: "Sangeet Ceremony",
     },
     {
       id: "video2",
       embedId: "XOyKGqbR2nM",
       title: "Rahul & Manisha Wedding Film",
       coupleNames: "Rahul & Manisha",
-      location: "Mumbai, Maharashtra",
       year: "2024",
-      duration: "15:20",
+      duration: "0:59",
       category: "Modern Wedding",
     },
   ]
@@ -277,19 +275,16 @@ const VideoPreview = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 mb-6 sm:mb-8 text-xs sm:text-sm space-y-1 sm:space-y-0">
               <div className="flex items-center space-x-3">
                 <span className="text-muted-foreground hover:text-chocolate cursor-pointer transition-colors">
-                  The Wedding Cult
+     
                 </span>
-                <span className="text-muted-foreground/50">/</span>
+                <span className="text-muted-foreground/50"></span>
                 <span className="text-muted-foreground hover:text-chocolate cursor-pointer transition-colors">
                   {currentVideo.category}
                 </span>
               </div>
-              <div className="flex items-center space-x-3 sm:space-x-0">
+              <div className="flex items-center space-x-6 sm:space-x-0">
                 <span className="text-muted-foreground/50 hidden sm:inline">/</span>
                 <span className="text-chocolate font-medium">{currentVideo.coupleNames}</span>
-              </div>
-              <div className="text-muted-foreground text-xs sm:text-sm sm:ml-auto">
-                📍 {currentVideo.location}
               </div>
             </div>
 
