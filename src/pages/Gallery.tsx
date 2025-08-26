@@ -490,12 +490,12 @@ const Gallery = () => {
       alt: "Artistic wedding photography",
       category: "Wedding"
     },
-    {
-      id: 37,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187294.jpg?updatedAt=1752218462738",
-      alt: "Cinematic wedding capture",
-      category: "Pre-Wedding"
-    },
+    // {
+    //   id: 37,
+    //   url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187294.jpg?updatedAt=1752218462738",
+    //   alt: "Cinematic wedding capture",
+    //   category: "Pre-Wedding"
+    // },
     {
       id: 38,
       url: "https://ik.imagekit.io/7xgikoq8o/couple-9400893.jpg?updatedAt=1752218462662",
