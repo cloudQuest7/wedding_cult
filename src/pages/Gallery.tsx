@@ -316,12 +316,12 @@ const Gallery = () => {
       alt: "Moments",
       category: "Wedding"
     },
-    {
-      id: 8,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-sampark-films-samparkfilms-com-1300296201-32081698.jpg?updatedAt=1752122335732",
-      alt: "Wedding celebration",
-      category: "Portraits"
-    },
+    // {
+    //   id: 8,
+    //   url: "https://ik.imagekit.io/7xgikoq8o/pexels-sampark-films-samparkfilms-com-1300296201-32081698.jpg?updatedAt=1752122335732",
+    //   alt: "Wedding celebration",
+    //   category: "Portraits"
+    // },
     {
       id: 9,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000471.jpg?updatedAt=1752122333713",
