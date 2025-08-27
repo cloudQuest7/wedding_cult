@@ -317,7 +317,9 @@ const Portfolio = () => {
                   className="w-full h-full border-none"
                   allowFullScreen
                   title={`Video of ${currentVideo.couple} - ${currentVideo.type}`}
+                  loading="lazy"
                 />
+
               ) : (
                 <div
                   className="relative w-full h-full bg-cover bg-center cursor-pointer group"

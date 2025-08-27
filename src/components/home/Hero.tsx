@@ -5,11 +5,10 @@ import { gsap } from "gsap"
 
 const Hero = () => {
   const heroRef = useRef(null)
-  const titleRef = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Floating animations
+      // Floating animations - animate transform: translateY (y)
       gsap.to(".floating-element", {
         y: -20,
         duration: 3,
@@ -17,14 +16,18 @@ const Hero = () => {
         yoyo: true,
         repeat: -1,
         stagger: 0.5,
+        force3D: true, // GPU acceleration for smoother animation
       })
-    })
+    }, heroRef)
 
     return () => ctx.revert()
   }, [])
 
   return (
-    <section ref={heroRef} className="relative h-[85vh] sm:h-screen w-full flex items-center justify-center mx-auto px-3 sm:px-6">
+    <section
+      ref={heroRef}
+      className="relative h-[85vh] sm:h-screen w-full flex items-center justify-center mx-auto px-3 sm:px-6"
+    >
       {/* Professional Corner Curves - Smaller on mobile */}
       <div className="absolute inset-0 z-10">
         {/* Top Left Corner */}
@@ -38,7 +41,7 @@ const Hero = () => {
       </div>
 
       {/* Professional Location & Date Header - Much closer to top on mobile */}
-      <div className="absolute top-2 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-30">
+      <div className="absolute top-2 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-20">
         <div className="bg-black/60 backdrop-blur-md text-white px-3 py-1.5 sm:px-4 sm:py-2.5 lg:px-6 lg:py-3 rounded-full border border-white/20 shadow-2xl">
           <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 text-xs sm:text-sm font-light">
             <span className="tracking-[0.15em] sm:tracking-[0.2em] uppercase">MUMBAI</span>
@@ -55,6 +58,8 @@ const Hero = () => {
           src="https://www.youtube.com/embed/jF_kNaTp-KA?autoplay=1&mute=1&loop=1&playlist=jF_kNaTp-KA&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1"
           title="The Wedding Cult Hero Video"
           allow="autoplay; fullscreen"
+          loading="lazy"
+          decoding="async"
         />
         {/* Professional Cinematic Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/40"></div>
@@ -62,7 +67,7 @@ const Hero = () => {
       </div>
 
       {/* Professional Brand Text - Same positioning as desktop */}
-      <div className="absolute bottom-6 left-6 sm:bottom-6 sm:left-6 lg:bottom-8 lg:left-8 z-30 max-w-sm sm:max-w-md">
+      <div className="absolute bottom-6 left-6 sm:bottom-6 sm:left-6 lg:bottom-8 lg:left-8 z-20 max-w-sm sm:max-w-md">
         <div className="space-y-3 sm:space-y-3 lg:space-y-4">
           {/* Location & Date */}
           <div className="flex items-center space-x-3 sm:space-x-3 lg:space-x-4 text-white/80">
@@ -75,7 +80,7 @@ const Hero = () => {
 
           {/* Main Brand Title - Responsive but well-sized */}
           <h1 className="font-amsterdam text-white text-2xl sm:text-2xl md:text-3xl lg:text-3xl font-light tracking-wide leading-snug drop-shadow-2xl">
-            The Wedding   Cult
+            The Wedding Cult
           </h1>
 
           {/* Professional Tagline */}
@@ -91,18 +96,8 @@ const Hero = () => {
               className="inline-flex items-center px-6 py-2.5 text-sm sm:text-base border border-white/20 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:scale-105 shadow-lg"
             >
               View Portfolio
-              <svg 
-                className="ml-2 -mr-1 w-4 h-4" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth="2" 
-                  d="M9 5l7 7-7 7"
-                />
+              <svg className="ml-2 -mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
               </svg>
             </a>
           </div>
@@ -117,7 +112,7 @@ const Hero = () => {
       </div>
 
       {/* Professional Scroll Indicator */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 sm:bottom-6 lg:bottom-8 z-30">
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 sm:bottom-6 lg:bottom-8 z-20">
         <div className="flex flex-col items-center space-y-2 sm:space-y-3 text-white/80">
           <div className="w-px h-12 sm:h-14 lg:h-16 bg-gradient-to-b from-transparent to-white/60"></div>
           <ArrowDown className="h-5 w-5 sm:h-5 sm:w-5 lg:h-6 lg:w-6 animate-bounce" />
@@ -126,18 +121,20 @@ const Hero = () => {
       </div>
 
       {/* Floating Decorative Elements */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-5">
-        <div className="floating-element absolute top-1/4 left-1/4 w-2 h-2 sm:w-2 sm:h-2 bg-white/20 rounded-full blur-sm"></div>
-        <div className="floating-element absolute top-3/4 right-1/4 w-3 h-3 sm:w-3 sm:h-3 bg-white/15 rounded-full blur-sm"></div>
-        <div className="floating-element absolute bottom-1/3 left-1/3 w-1 h-1 bg-white/25 rounded-full blur-sm"></div>
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
+        <div className="floating-element absolute top-1/4 left-1/4 w-2 h-2 sm:w-2 sm:h-2 bg-white/20 rounded-full blur-sm will-change-transform"></div>
+        <div className="floating-element absolute top-3/4 right-1/4 w-3 h-3 sm:w-3 sm:h-3 bg-white/15 rounded-full blur-sm will-change-transform"></div>
+        <div className="floating-element absolute bottom-1/3 left-1/3 w-1 h-1 bg-white/25 rounded-full blur-sm will-change-transform"></div>
       </div>
 
       {/* Film Grain Effect */}
-      <div className="absolute inset-0 z-5 opacity-20 mix-blend-overlay pointer-events-none">
-        <div className="w-full h-full bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.4%22/%3E%3C/svg%3E')] animate-pulse"></div>
+      <div className="absolute inset-0 z-10 opacity-20 mix-blend-overlay pointer-events-none">
+        <div
+          className="w-full h-full bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.4%22/%3E%3C/svg%3E')] animate-pulse"
+        ></div>
       </div>
     </section>
-  ) //here
+  )
 }
 
 export default Hero
