@@ -73,9 +73,10 @@ const Hero = () => {
           <div className="flex items-center space-x-3 sm:space-x-3 lg:space-x-4 text-white/80">
             <span className="text-sm sm:text-sm font-light tracking-[0.2em] sm:tracking-[0.2em] uppercase">MUMBAI</span>
             <div className="w-5 sm:w-6 h-px bg-white/40"></div>
-            <span className="text-sm sm:text-sm font-light tracking-[0.15em] sm:tracking-[0.15em] uppercase">
-              {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }).toUpperCase()}
-            </span>
+           <span className="text-sm sm:text-sm font-light tracking-[0.15em] sm:tracking-[0.15em] uppercase">
+            AUGUST 2024
+          </span>
+
           </div>
 
           {/* Main Brand Title - Responsive but well-sized */}

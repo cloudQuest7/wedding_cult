@@ -13,15 +13,59 @@ const Portfolio = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1)
   const scrollPosition = useRef(0)
   const filmStripRef = useRef(null)
+  const testimonialsRef = useRef(null)
+  const touchStartX = useRef(0)
+
+  // Video touch handlers
+  const handleVideoTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleVideoTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartX.current) return
+    const touchEndX = e.touches[0].clientX
+    const diff = touchStartX.current - touchEndX
+
+    if (Math.abs(diff) > 50) {  // 50px threshold for swipe
+      if (diff > 0 && currentVideoIndex < portfolioItems.length - 1) {
+        setCurrentVideoIndex(prev => prev + 1)
+        setIsPlaying(false)
+      } else if (diff < 0 && currentVideoIndex > 0) {
+        setCurrentVideoIndex(prev => prev - 1)
+        setIsPlaying(false)
+      }
+      touchStartX.current = touchEndX
+    }
+  }
+
+  // Touch event handlers for testimonials
+  const handleTestimonialTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleTestimonialTouchMove = (e: React.TouchEvent) => {
+    if (!testimonialsRef.current) return
+    const touchEndX = e.touches[0].clientX
+    const diff = touchStartX.current - touchEndX
+
+    if (Math.abs(diff) > 50) {  // Threshold of 50px for swipe
+      if (diff > 0 && currentTestimonial < testimonials.length - 1) {
+        setCurrentTestimonial(currentTestimonial + 1)
+      } else if (diff < 0 && currentTestimonial > 0) {
+        setCurrentTestimonial(currentTestimonial - 1)
+      }
+      touchStartX.current = touchEndX
+    }
+  }
 
   // UPDATED: Portfolio items with all 6 couples
   const portfolioItems = [
-    { id: 1, couple: "Yash & Kejal", location: "Jaipur", type: "Pre-Wedding", embedId: "ly9ejEF1DqU" },
-    { id: 2, couple: "Jobin & Jesline", location: "Kerala", type: "Wedding Film", embedId: "VWkzOkb21UA" },
-    { id: 3, couple: "Pranay & Aishwarya", location: "Mumbai", type: "Pre-Wedding", embedId: "II_KVGp3WKM" },
-    { id: 4, couple: "Gaurav & Shikhanshi", location: "Himachal", type: "Pre-Wedding", embedId: "4s3wKpLEZ5w" },
-    { id: 5, couple: "Rajvi & Tejas", location: "Gujarat", type: "Wedding Teaser", embedId: "K8LlckrZJxw" },
-    { id: 6, couple: "Yash & Kejal", location: "Rajasthan", type: "Wedding Film", embedId: "Mb3u8RnwU6k" },
+    { id: 1, couple: "Yash & Kejal",  type: "Pre-Wedding", embedId: "ly9ejEF1DqU" },
+    { id: 2, couple: "Jobin & Jesline", type: "Christian Wedding", embedId: "VWkzOkb21UA" },
+    { id: 3, couple: "Pranay & Aishwarya",  type: "Pre-Wedding", embedId: "II_KVGp3WKM" },
+    { id: 4, couple: "Gaurav & Shikhanshi",  type: "Pre-Wedding", embedId: "4s3wKpLEZ5w" },
+    { id: 5, couple: "Rajvi & Tejas",  type: "Wedding Teaser", embedId: "K8LlckrZJxw" },
+    { id: 6, couple: "Yash & Kejal",type: "Wedding Film", embedId: "Mb3u8RnwU6k" },
   ]
 
   // Featured gallery images
@@ -309,8 +353,13 @@ const Portfolio = () => {
               </span>
             </div>
             
-            {/* Video Container - Responsive aspect ratio */}
-            <div className="relative aspect-video w-full">
+            {/* Video Container - Responsive aspect ratio with touch support */}
+            <div 
+              className="relative aspect-video w-full"
+              onTouchStart={handleVideoTouchStart}
+              onTouchMove={handleVideoTouchMove}
+              onTouchEnd={() => { touchStartX.current = 0 }}
+            >
               {isPlaying ? (
                 <iframe
                   src={`https://www.youtube.com/embed/${currentVideo.embedId}?autoplay=1`}
@@ -528,9 +577,14 @@ const Portfolio = () => {
           </div>
 
           <div className="relative w-full">
-            <div className="overflow-hidden rounded-xl
+            <div 
+              ref={testimonialsRef}
+              className="overflow-hidden rounded-xl
                             sm:rounded-2xl
-                            md:rounded-3xl">
+                            md:rounded-3xl"
+              onTouchStart={handleTestimonialTouchStart}
+              onTouchMove={handleTestimonialTouchMove}
+            >
               <div 
                 className="flex transition-transform duration-700 ease-in-out w-full"
                 style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
