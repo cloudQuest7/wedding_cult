@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Star, Quote, Heart, Camera, Film, Award } fr
 import { Button } from "@/components/ui/button";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import FeedbackSection from "@/components/feedback/FeedbackSection";
 
 // Register GSAP plugin
 if (typeof window !== "undefined") {
@@ -431,6 +432,11 @@ const About = () => {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Feedback Section */}
+        <div className="mb-20">
+          <FeedbackSection />
         </div>
 
         {/* Enhanced Call to Action */}

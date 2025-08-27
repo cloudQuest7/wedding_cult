@@ -41,7 +41,7 @@ const Index = () => {
         {/* <Reviews /> */}
         <CallToAction />
         <EnquiryForm />
-        <FeedbackSection />
+        {/* <FeedbackSection /> */}
         <Footer />
       </div>
     </main>
