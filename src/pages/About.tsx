@@ -18,6 +18,31 @@ const About = () => {
   const reviewsRef = useRef(null);
   const ctaRef = useRef(null);
   const statsRef = useRef(null);
+  const touchStartX = useRef(0);
+
+  // Touch event handlers for review cards
+  const handleReviewTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleReviewTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartX.current) return;
+    const touchEndX = e.touches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+
+    if (Math.abs(diff) > 50) { // 50px threshold for swipe
+      if (diff > 0 && currentReview < reviews.length - 1) {
+        setCurrentReview(prev => prev + 1);
+      } else if (diff < 0 && currentReview > 0) {
+        setCurrentReview(prev => prev - 1);
+      }
+      touchStartX.current = touchEndX;
+    }
+  };
+
+  const handleReviewTouchEnd = () => {
+    touchStartX.current = 0;
+  };
 
   const reviews = [
     {
@@ -328,8 +353,14 @@ const About = () => {
             </p>
           </div>
 
-          {/* Enhanced Review Carousel */}
-          <div ref={reviewsRef} className="relative">
+          {/* Enhanced Review Carousel with Touch Support */}
+          <div 
+            ref={reviewsRef} 
+            className="relative"
+            onTouchStart={handleReviewTouchStart}
+            onTouchMove={handleReviewTouchMove}
+            onTouchEnd={handleReviewTouchEnd}
+          >
             <div className="bg-gradient-to-br from-white/95 to-beige-light/50 backdrop-blur-sm rounded-3xl p-8 sm:p-12 shadow-2xl border border-chocolate/10 overflow-hidden">
               {/* Decorative quote marks */}
               <div className="absolute top-6 left-6 text-6xl text-chocolate/10 font-serif">"</div>
