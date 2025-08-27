@@ -96,7 +96,7 @@ const GalleryImage = ({ photo, index, onClick, isVisible }) => {
     <div 
       className="group cursor-pointer break-inside-avoid mb-4"
       style={{
-        animationDelay: `${index * 0.02}s`, // Reduced delay
+        animationDelay: `${index * 0.02}s`,
         animationFillMode: 'both'
       }} 
       onClick={() => onClick(photo.url, index)}
@@ -163,42 +163,23 @@ const GalleryImage = ({ photo, index, onClick, isVisible }) => {
   );
 };
 
-// Virtual scrolling hook for better performance
-const useVirtualScrolling = (items, containerRef) => {
-  const [visibleRange, setVisibleRange] = useState({ start: 0, end: 20 });
+// Load More Button Component
+const LoadMoreButton = ({ onClick, loading, hasMore }) => {
+  if (!hasMore) return null;
   
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    let ticking = false;
-    
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollTop = window.pageYOffset;
-          const windowHeight = window.innerHeight;
-          
-          // Calculate visible range with buffer
-          const buffer = 5;
-          const itemHeight = 300; // Approximate item height
-          const start = Math.max(0, Math.floor(scrollTop / itemHeight) - buffer);
-          const end = Math.min(items.length, start + Math.ceil(windowHeight / itemHeight) + buffer * 2);
-          
-          setVisibleRange({ start, end });
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [items.length]);
-
-  return visibleRange;
+  return (
+    <div className="text-center py-12">
+      <button
+        onClick={onClick}
+        disabled={loading}
+        className={`px-8 py-4 bg-gradient-to-r from-chocolate to-chocolate-light text-cream rounded-full font-poppins font-semibold text-lg shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
+          loading ? 'animate-pulse' : 'hover:-translate-y-1'
+        }`}
+      >
+        {loading ? 'Loading...' : 'Load More'}
+      </button>
+    </div>
+  );
 };
 
 const Gallery = () => {
@@ -210,30 +191,32 @@ const Gallery = () => {
   const [visibleImages, setVisibleImages] = useState(new Set());
   const galleryRef = useRef(null);
   const scrollPosition = useRef(0);
+  const touchStartX = useRef(null);
   
   const IMAGES_PER_LOAD = 15;
 
-  // Optimized intersection observer
+  // Fixed intersection observer - images stay visible once loaded
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        const newVisible = new Set(visibleImages);
-        entries.forEach((entry) => {
-          const imageId = Number(entry.target.getAttribute('data-image-id'));
-          if (entry.isIntersecting) {
-            newVisible.add(imageId);
-          }
+        setVisibleImages(prev => {
+          const newVisible = new Set(prev);
+          entries.forEach((entry) => {
+            const imageId = Number(entry.target.getAttribute('data-image-id'));
+            if (entry.isIntersecting) {
+              newVisible.add(imageId); // Only add, never remove
+            }
+          });
+          return newVisible;
         });
-        if (newVisible.size !== visibleImages.size) {
-          setVisibleImages(newVisible);
-        }
       },
       {
-        rootMargin: '100px 0px',
+        rootMargin: '200px 0px', // Larger margin for better UX
         threshold: 0.1
       }
     );
 
+    // Observe new images when displayedCount changes
     const images = document.querySelectorAll('[data-image-id]');
     images.forEach(img => observer.observe(img));
 
@@ -298,40 +281,32 @@ const Gallery = () => {
     }
   }, [selectedIndex]);
 
-  // Memoized gallery images
+  // Mobile touch handlers
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchMove = useCallback((e) => {
+    if (!touchStartX.current) return;
+    
+    const touchEndX = e.touches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+
+    // Swipe threshold of 50px
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        // Swipe left - next image
+        handleNextImage();
+      } else {
+        // Swipe right - previous image
+        handlePrevImage();
+      }
+      touchStartX.current = null;
+    }
+  }, [handleNextImage, handlePrevImage]);
+  // Memoized gallery images - reduced set for testing
   const galleryImages = useMemo(() => [
-    {
-      id: 1,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000488.jpg?updatedAt=1752122341261",
-      alt: "Nilkeshi & Saevesh - Wedding ceremony moment",
-      category: "Wedding"
-    },
-    {
-      id: 2,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-theindiaweddings-28144255.jpg?updatedAt=1752122336598",
-      alt: "Dhiraj & Rajashri - Bride and groom portrait",
-      category: "Portraits"
-    },
-    {
-      id: 3,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-zephyr-events-2153609654-32864600.jpg?updatedAt=1752122336721",
-      alt: "Ruturaj & Krutika - Wedding celebration",
-      category: "Wedding"
-    },
-    {
-      id: 4,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-varun-118342-5759464.jpg?updatedAt=1752122335592",
-      alt: "Jobin & Jesline - Cinematic wedding moments",
-      category: "Portraits"
-    },
-    {
-      id: 5,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-sourav-kundu-87262483-31230267.jpg?updatedAt=1752122328085",
-      alt: "Love Stories - Pre-wedding shoot",
-      category: "Pre-Wedding"
-    },
-   
-    // Homepage PhotoGallery images
+  
     {
       id: 1,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000488.jpg?updatedAt=1752122341261",
@@ -878,7 +853,7 @@ const Gallery = () => {
       alt: "Beautiful couple portraits",
       category: "Pre-Wedding"
     }
-  ], []);
+  ]); 
 
   // Memoized categories
   const categories = useMemo(() => {
@@ -964,34 +939,35 @@ const Gallery = () => {
           </div>
 
           {/* Load More Button */}
-          {hasMoreImages && (
-            <div className="text-center py-12">
-              <button
-                onClick={handleLoadMore}
-                disabled={loading}
-                className={`px-8 py-4 bg-gradient-to-r from-chocolate to-chocolate-light text-cream rounded-full font-poppins font-semibold text-lg shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
-                  loading ? 'animate-pulse' : 'hover:-translate-y-1'
-                }`}
-              >
-                {loading ? 'Loading...' : 'Load More'}
-              </button>
-            </div>
-          )}
+          <LoadMoreButton 
+            onClick={handleLoadMore}
+            loading={loading}
+            hasMore={hasMoreImages}
+          />
         </div>
       </div>
 
-      {/* Optimized Lightbox Modal */}
+      {/* Lightbox Modal with mobile swipe */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm" 
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm overscroll-none touch-none" 
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setSelectedImage(null);
               unlockScroll();
             }
           }}
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            handleTouchStart(e);
+          }}
+          onTouchMove={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleTouchMove(e);
+          }}
         >
-          <div className="relative max-w-6xl max-h-full">
+          <div className="relative max-w-6xl max-h-full select-none">
             <img 
               src={selectedImage?.includes('imagekit.io') 
                 ? `${selectedImage}${selectedImage.includes('?') ? '&' : '?'}tr=w-1200,h-1200,q-85,f-auto`
@@ -999,6 +975,7 @@ const Gallery = () => {
               alt="Gallery image" 
               className="w-full h-auto max-h-[90vh] object-contain rounded-xl shadow-2xl" 
               loading="eager"
+              draggable="false"
             />
 
             {/* Close Button */}
@@ -1050,6 +1027,44 @@ const Gallery = () => {
       )}
       
       <SocialFloatingButton />
+
+      {/* CSS Animations */}
+      <style>
+        {`
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+          }
+          
+          @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(5deg); }
+            66% { transform: translateY(5px) rotate(-3deg); }
+          }
+          
+          .animate-twinkle { animation: twinkle linear infinite; }
+          .animate-float { animation: float ease-in-out infinite; }
+
+          /* Pinterest-style columns layout */
+          .columns-2 { column-count: 2; column-gap: 1rem; }
+          
+          @media (min-width: 640px) {
+            .sm\\:columns-2 { column-count: 2; }
+          }
+          
+          @media (min-width: 768px) {
+            .md\\:columns-3 { column-count: 3; }
+          }
+          
+          @media (min-width: 1024px) {
+            .lg\\:columns-4 { column-count: 4; }
+          }
+          
+          @media (min-width: 1280px) {
+            .xl\\:columns-5 { column-count: 5; }
+          }
+        `}
+      </style>
     </div>
   );
 };
