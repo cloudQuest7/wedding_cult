@@ -153,10 +153,10 @@ const EnquiryForm = () => {
                   Wedding
                 </ToggleGroupItem>
                 <ToggleGroupItem
-                  value="pre-event"
+                  value="pre-Wedding"
                   className="bg-beige-light/30 data-[state=on]:bg-chocolate data-[state=on]:text-white px-4 py-2 rounded-lg font-poppins"
                 >
-                  Pre-Event
+                  Pre-Wedding
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   value="other"
