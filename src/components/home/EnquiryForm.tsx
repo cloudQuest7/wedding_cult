@@ -83,7 +83,6 @@ const EnquiryForm = () => {
                 <Input
                   id="name"
                   name="name"
-                  required
                   className="border-beige focus:border-chocolate"
                   placeholder="Your full name"
                 />
@@ -96,7 +95,6 @@ const EnquiryForm = () => {
                   id="email"
                   name="email"
                   type="email"
-                  required
                   className="border-beige focus:border-chocolate"
                   placeholder="your.email@example.com"
                 />
@@ -112,7 +110,6 @@ const EnquiryForm = () => {
                   id="phone"
                   name="phone"
                   type="tel"
-                  required
                   className="border-beige focus:border-chocolate"
                   placeholder="+91 12345 67890"
                 />
@@ -186,7 +183,6 @@ const EnquiryForm = () => {
               <Textarea
                 id="message"
                 name="message"
-                required
                 rows={4}
                 className="border-beige focus:border-chocolate resize-none"
                 placeholder="Share details about your event, preferred style, location, or any special requirements..."
