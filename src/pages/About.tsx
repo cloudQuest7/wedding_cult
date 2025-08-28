@@ -128,6 +128,18 @@ const About = () => {
       rating: 5
     },
     {
+      names: "Tanvi & Rajesh",
+      location: "Pune",
+      review: "Emotions captured so beautifully. Family ko bhi pasand aya!",
+      rating: 5
+    },
+    {
+      names: "Shruti & Karthik",
+      location: "Chennai",
+      review: "Travelled from chennai. Totally worth it!",
+      rating: 5
+    },
+    {
       names: "Manisha & Rahul",
       location: "Mumbai",
       review: "Har frame mai Pyar dikh rha hai. Amazing work!",

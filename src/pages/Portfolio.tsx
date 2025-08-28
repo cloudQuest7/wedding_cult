@@ -60,7 +60,7 @@ const Portfolio = () => {
 
   // UPDATED: Portfolio items with all 6 couples
   const portfolioItems = [
-    { id: 1, couple: "Yash & Kejal",  type: "Pre-Wedding", embedId: "ly9ejEF1DqU" },
+    { id: 1, couple: "Yash & Kejal",  type: "Sangeet Ceremony", embedId: "ly9ejEF1DqU" },
     { id: 2, couple: "Jobin & Jesline", type: "Christian Wedding", embedId: "VWkzOkb21UA" },
     { id: 3, couple: "Pranay & Aishwarya",  type: "Pre-Wedding", embedId: "II_KVGp3WKM" },
     { id: 4, couple: "Gaurav & Shikhanshi",  type: "Pre-Wedding", embedId: "4s3wKpLEZ5w" },
