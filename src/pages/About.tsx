@@ -52,6 +52,7 @@ const About = () => {
       review: "The Wedding Cult captured our day with raw emotions. It felt magical.",
       rating: 5
     },
+
     {
       names: "Neha & Arjun",
       location: "Thane",
@@ -92,6 +93,44 @@ const About = () => {
       names: "Kavya & Siddharth",
       location: "Mumbai",
       review: "Each shot was like a scene from a beautiful movie.",
+      rating: 5
+    },
+
+
+    {
+      names: "Karan & Ishika",
+      location: "Mumbai",
+      review: "Hamari Shaadi ko itna royal banaya ki lagta hai hum actors hai.",
+      rating: 5
+    },
+    {
+      names: "Rohit & Meera",
+      location: "Faridabad",
+      review: "Itna Beautiful work kiya hai ki dhekte he reh gaye. Sach mai amazing!",
+      rating: 5
+    },
+    {
+      names: "Vikash & Swati",
+      location: "Noida",
+      review: "Bilkul Filmi jaisa lag raha hai. Sabko lagta hai Professional crew tha.",
+      rating: 5
+    },
+    {
+      names: "Amit & Pooja",
+      location: "Gurgaon",
+      review: "Hamari Wedding moments ko itna khoobsurat capture kiya. Dil se Shukriya!",
+      rating: 5
+    },
+    {
+      names: "Divya & Suresh",
+      location: "Kandivali",
+      review: "They don't just shoot, they create magic with every frame.",
+      rating: 5
+    },
+    {
+      names: "Manisha & Rahul",
+      location: "Mumbai",
+      review: "Har frame mai Pyar dikh rha hai. Amazing work!",
       rating: 5
     },
     {

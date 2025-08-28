@@ -337,13 +337,13 @@ export default function MobileBottomNav() {
 
       {/* Left Side Menu Capsule - Professional Border */}
       <div 
-        className={`fixed bottom-8 left-0 z-50 transition-all duration-150 ease-out will-change-transform ${
+        className={`fixed bottom-8 left-0 z-50 transition-all duration-75 ease-out will-change-transform ${
           isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
         }`}
       >
         <button
           onClick={() => setIsMenuOpen(true)}
-          className={`flex items-center justify-center py-3 px-7 pr-8 rounded-r-full transition-all duration-300 relative overflow-hidden group ${
+          className={`flex items-center justify-center py-3 px-7 pr-8 rounded-r-full transition-all duration-75 relative overflow-hidden group ${
             isMenuOpen 
               ? "bg-gradient-to-r from-chocolate to-chocolate-light text-cream border-2 border-chocolate/50" 
               : "bg-gradient-to-r from-cream to-beige-warm text-chocolate/90 hover:from-beige-warm hover:to-cream hover:border-chocolate/40 border-2 border-chocolate/25"
@@ -362,13 +362,13 @@ export default function MobileBottomNav() {
 
       {/* Right Side Enquire Capsule - Professional Border */}
       <div 
-        className={`fixed bottom-8 right-0 z-50 transition-all duration-150 ease-out will-change-transform ${
+        className={`fixed bottom-8 right-0 z-50 transition-all duration-75 ease-out will-change-transform ${
           isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
         }`}
       >
         <Link
           to="/contact"
-          className={`flex items-center justify-center py-3 px-6 pl-10 rounded-l-full transition-all duration-300 relative overflow-hidden group ${
+          className={`flex items-center justify-center py-3 px-6 pl-10 rounded-l-full transition-all duration-75 relative overflow-hidden group ${
             isActive("/contact") 
               ? "bg-gradient-to-l from-chocolate to-chocolate-light text-cream border-2 border-chocolate/50" 
               : "bg-gradient-to-l from-cream to-beige-warm text-chocolate/90 hover:from-beige-warm hover:to-cream hover:border-chocolate/40 border-2 border-chocolate/25"

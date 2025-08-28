@@ -47,15 +47,21 @@ const Contact = () => {
       <FloatingBallBackground />
       
       {/* Hero Section */}
-      <section className="relative pt-10 pb-4 px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-20 pb-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center animate-fade-in-up">
-            <div className="inline-flex items-center mb-2 px-3 py-1.5 bg-chocolate/10 rounded-full">
+            <div className="inline-flex items-center gap-2 mb-2 px-3 py-1.5 bg-chocolate/10 rounded-full">
               <Heart className="w-4 h-4 text-chocolate fill-chocolate" />
               <span className="font-poppins text-sm font-medium text-chocolate">Let's Create Something Beautiful</span>
             </div>
             
-           
+            <h1 className="font-amsterdam text-xl sm:text-xl md:text-3xl text-chocolate mb-5 mt-3 leading-tight">
+              Let's Create Magic Together
+            </h1>
+            
+            <p className="font-playfair text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Ready to begin your cinematic love story? We're excited to hear about your special day.
+            </p>
           </div>
         </div>
       </section>

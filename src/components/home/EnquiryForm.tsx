@@ -7,10 +7,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 const EnquiryForm = () => {
   const formRef = useRef<HTMLFormElement>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [eventType, setEventType] = useState<string>("")
+  const [otherEventType, setOtherEventType] = useState<string>("")
   const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,12 +23,22 @@ const EnquiryForm = () => {
     setIsSubmitting(true)
 
     try {
+      // Add event type to form data before sending
+      const eventTypeInput = document.createElement("input")
+      eventTypeInput.type = "hidden"
+      eventTypeInput.name = "eventType"
+      eventTypeInput.value = eventType === "other" ? otherEventType : eventType
+      formRef.current.appendChild(eventTypeInput)
+
       await emailjs.sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         formRef.current,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       )
+
+      // Clean up the temporary input
+      formRef.current.removeChild(eventTypeInput)
 
       toast({
         title: "Enquiry Sent!",
@@ -46,10 +59,10 @@ const EnquiryForm = () => {
   }
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-background to-beige-light">
+    <section className="py-15 px-4 bg-gradient-to-b from-background to-beige-light">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-6 animate-fade-in-up">
-          <h2 className="font-amsterdam text-chocolate mb-4 text-2xl leading-loose">
+          <h2 className="font-amsterdam text-chocolate mb-4 text-xl leading-loose">
             Let’s Create Magic Together
           </h2>
           <p className="font-playfair text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -111,10 +124,59 @@ const EnquiryForm = () => {
                 <Input
                   id="eventDate"
                   name="eventDate"
-                  type="date"
+                  type="text"
                   className="border-beige focus:border-chocolate"
+                  placeholder="e.g., 15th December 2025"
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="font-poppins font-medium text-chocolate mb-2 block">
+                Event Type
+              </Label>
+              <ToggleGroup
+                type="single"
+                value={eventType}
+                onValueChange={(value) => {
+                  setEventType(value)
+                  if (value !== "other") {
+                    setOtherEventType("")
+                  }
+                }}
+                className="flex flex-wrap gap-2"
+              >
+                <ToggleGroupItem
+                  value="wedding"
+                  className="bg-beige-light/30 data-[state=on]:bg-chocolate data-[state=on]:text-white px-4 py-2 rounded-lg font-poppins"
+                >
+                  Wedding
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="pre-event"
+                  className="bg-beige-light/30 data-[state=on]:bg-chocolate data-[state=on]:text-white px-4 py-2 rounded-lg font-poppins"
+                >
+                  Pre-Event
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="other"
+                  className="bg-beige-light/30 data-[state=on]:bg-chocolate data-[state=on]:text-white px-4 py-2 rounded-lg font-poppins"
+                >
+                  Other
+                </ToggleGroupItem>
+              </ToggleGroup>
+              {eventType === "other" && (
+                <div className="mt-2">
+                  <Input
+                    id="otherEventType"
+                    name="otherEventType"
+                    value={otherEventType}
+                    onChange={(e) => setOtherEventType(e.target.value)}
+                    className="border-beige focus:border-chocolate"
+                    placeholder="Please specify your event type"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
