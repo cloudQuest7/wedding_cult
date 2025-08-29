@@ -188,7 +188,6 @@ const EnquiryForm = () => {
                 placeholder="Share details about your event, preferred style, location, or any special requirements..."
               />
             </div>
-
             <div className="text-center">
               <Button
                 type="submit"

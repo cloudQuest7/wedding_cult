@@ -314,10 +314,50 @@ export default function MobileBottomNav() {
     };
   }, []);
 
-  useEffect(() => { setIsMenuOpen(false); }, [currentPath]);
+  // Close menu when route changes
+  useEffect(() => { 
+    setIsMenuOpen(false); 
+  }, [currentPath]);
+
+  // Enhanced background scroll prevention
   useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
-    return () => { document.body.style.overflow = "unset"; };
+    if (isMenuOpen) {
+      // Store the current scroll position
+      const scrollY = window.scrollY;
+      
+      // Apply styles to prevent scrolling
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        // Restore the scroll position when menu closes
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        
+        // Restore scroll position
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isMenuOpen]);
+
+  // Prevent scrolling on touch devices when menu is open
+  useEffect(() => {
+    const preventTouchMove = (e) => {
+      if (isMenuOpen) {
+        e.preventDefault();
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('touchmove', preventTouchMove, { passive: false });
+      return () => {
+        document.removeEventListener('touchmove', preventTouchMove);
+      };
+    }
   }, [isMenuOpen]);
 
   return (
@@ -355,7 +395,6 @@ export default function MobileBottomNav() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
           
-          {/* <Menu className="h-6 w-6 mr-3 relative z-10" /> */}
           <span className="text-base font-poppins font-bold relative z-10 tracking-wide">MENU</span>
         </button>
       </div>
@@ -381,14 +420,19 @@ export default function MobileBottomNav() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
           
           <span className="text-base font-poppins font-bold relative z-10 tracking-wide">ENQUIRE</span>
-          {/* <Heart className="h-6 w-6 ml-3 relative z-10" /> */}
         </Link>
       </div>
 
       {/* Clean Modal with Professional Borders */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-lg flex items-center justify-center p-4 transition-opacity duration-300 ease-out">
-          <div className="relative bg-gradient-to-br from-cream via-beige-warm to-cream rounded-3xl w-full max-w-md mx-auto overflow-hidden border-3 border-chocolate/40 transform transition-transform duration-300 ease-out will-change-transform premium-modal">
+        <div 
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-lg flex items-center justify-center p-4 transition-opacity duration-300 ease-out"
+          onClick={() => setIsMenuOpen(false)} // Close on backdrop click
+        >
+          <div 
+            className="relative bg-gradient-to-br from-cream via-beige-warm to-cream rounded-3xl w-full max-w-md mx-auto overflow-hidden border-3 border-chocolate/40 transform transition-transform duration-300 ease-out will-change-transform premium-modal"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+          >
             
             {/* Decorative top border */}
             <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-chocolate via-chocolate-light to-chocolate" />
@@ -399,7 +443,6 @@ export default function MobileBottomNav() {
                 <img src={logo} alt="Logo" className="h-12 w-auto" />
                 <div>
                   <h2 className="font-amsterdam text-chocolate text-sm">The Wedding Cult</h2>
-                  
                 </div>
               </div>
               <button
@@ -500,6 +543,7 @@ export default function MobileBottomNav() {
     </>
   );
 }
+
 
 
 // Desktop Sidebar Component
