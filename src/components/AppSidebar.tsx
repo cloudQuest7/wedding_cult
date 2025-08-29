@@ -269,12 +269,12 @@ export default function MobileBottomNav() {
   const [scrollTimeout, setScrollTimeout] = useState(null);
   const isActive = (path) => currentPath === path;
 
-  // Handle menu item clicks with home page scroll-to-top feature
+  // Enhanced menu item clicks with scroll-to-top feature for all pages
   const handleMenuClick = (url) => {
     setIsMenuOpen(false);
     
-    // If clicking on home while already on home page, scroll to top
-    if (url === '/' && currentPath === '/') {
+    // If clicking on the same page that's currently active, scroll to top
+    if (url === currentPath) {
       // Use requestAnimationFrame to ensure menu closes first
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -336,7 +336,7 @@ export default function MobileBottomNav() {
     setIsMenuOpen(false); 
   }, [currentPath]);
 
-  // Enhanced background scroll prevention (SIMPLIFIED - this was causing the issue)
+  // Enhanced background scroll prevention
   useEffect(() => {
     if (isMenuOpen) {
       // Prevent scrolling while menu is open
