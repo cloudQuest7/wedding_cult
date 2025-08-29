@@ -261,7 +261,6 @@ const navigationItems = [
 ];
 
 // Clean Mobile Bottom Navigation with Cream + Coffee Theme - UPDATED
-
 export default function MobileBottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -269,6 +268,24 @@ export default function MobileBottomNav() {
   const [isVisible, setIsVisible] = useState(true);
   const [scrollTimeout, setScrollTimeout] = useState(null);
   const isActive = (path) => currentPath === path;
+
+  // Handle menu item clicks with home page scroll-to-top feature
+  const handleMenuClick = (url) => {
+    setIsMenuOpen(false);
+    
+    // If clicking on home while already on home page, scroll to top
+    if (url === '/' && currentPath === '/') {
+      // Use requestAnimationFrame to ensure menu closes first
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+          });
+        });
+      });
+    }
+  };
 
   // Handle scroll visibility
   useEffect(() => {
@@ -319,27 +336,15 @@ export default function MobileBottomNav() {
     setIsMenuOpen(false); 
   }, [currentPath]);
 
-  // Enhanced background scroll prevention
+  // Enhanced background scroll prevention (SIMPLIFIED - this was causing the issue)
   useEffect(() => {
     if (isMenuOpen) {
-      // Store the current scroll position
-      const scrollY = window.scrollY;
-      
-      // Apply styles to prevent scrolling
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
+      // Prevent scrolling while menu is open
       document.body.style.overflow = 'hidden';
       
       return () => {
-        // Restore the scroll position when menu closes
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
+        // Just restore overflow - don't mess with scroll position
         document.body.style.overflow = '';
-        
-        // Restore scroll position
-        window.scrollTo(0, scrollY);
       };
     }
   }, [isMenuOpen]);
@@ -427,11 +432,11 @@ export default function MobileBottomNav() {
       {isMenuOpen && (
         <div 
           className="fixed inset-0 z-50 bg-black/50 backdrop-blur-lg flex items-center justify-center p-4 transition-opacity duration-300 ease-out"
-          onClick={() => setIsMenuOpen(false)} // Close on backdrop click
+          onClick={() => setIsMenuOpen(false)}
         >
           <div 
             className="relative bg-gradient-to-br from-cream via-beige-warm to-cream rounded-3xl w-full max-w-md mx-auto overflow-hidden border-3 border-chocolate/40 transform transition-transform duration-300 ease-out will-change-transform premium-modal"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+            onClick={(e) => e.stopPropagation()}
           >
             
             {/* Decorative top border */}
@@ -463,7 +468,7 @@ export default function MobileBottomNav() {
                   <Link
                     key={item.title}
                     to={item.url}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={() => handleMenuClick(item.url)}
                     className={`flex items-center space-x-4 px-4 py-3 rounded-2xl text-lg font-poppins font-medium transition-all duration-300 relative overflow-hidden group ${
                       active 
                         ? "bg-gradient-to-r from-chocolate via-chocolate-light to-chocolate text-cream border-2 border-chocolate/50" 
