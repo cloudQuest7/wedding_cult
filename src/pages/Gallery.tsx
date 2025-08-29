@@ -78,12 +78,6 @@ const GalleryImage = ({ photo, index, onClick, isVisible }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
 
-  // Calculate aspect ratio based on image index for variety
-  const aspectRatio = useMemo(() => {
-    const ratios = [1.33, 1.5, 0.75, 1.2, 0.8]; // Different aspect ratios
-    return ratios[index % ratios.length];
-  }, [index]);
-
   const handleImageLoad = useCallback(() => {
     setImageLoaded(true);
   }, []);
@@ -102,61 +96,60 @@ const GalleryImage = ({ photo, index, onClick, isVisible }) => {
       onClick={() => onClick(photo.url, index)}
     >
       <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1">
-        {/* Fixed aspect ratio container */}
-        <div 
-          className="relative w-full"
-          style={{ paddingBottom: `${(1 / aspectRatio) * 100}%` }}
-        >
-          <div className="absolute inset-0">
-            {/* Placeholder with fixed size */}
-            <div 
-              className="absolute inset-0 bg-gradient-to-br from-beige-warm/20 to-cream/30"
-              style={{
-                backgroundColor: '#f5f5f0'
-              }}
+        {/* Natural aspect ratio container - no forced padding */}
+        <div className="relative w-full">
+          {/* Placeholder that maintains natural dimensions */}
+          <div 
+            className={`w-full bg-gradient-to-br from-beige-warm/20 to-cream/30 ${
+              !imageLoaded && isVisible ? 'h-48' : 'h-auto'
+            }`}
+            style={{
+              backgroundColor: '#f5f5f0'
+            }}
+          />
+
+          {/* Image with natural aspect ratio */}
+          {isVisible && !imageFailed && (
+            <img 
+              src={photo.url.includes('imagekit.io') 
+                ? `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-400,q-75,f-auto`
+                : photo.url}
+              alt={photo.alt}
+              className={`${
+                imageLoaded ? 'relative' : 'absolute inset-0'
+              } w-full h-auto object-contain transition-opacity duration-300 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              } group-hover:scale-105 transition-transform duration-500`}
+              loading="lazy"
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+              decoding="async"
             />
+          )}
 
-            {/* Only load image if visible */}
-            {isVisible && !imageFailed && (
-              <img 
-                src={photo.url.includes('imagekit.io') 
-                  ? `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-400,h-${Math.floor(400/aspectRatio)},q-70,f-auto`
-                  : photo.url}
-                alt={photo.alt}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-                  imageLoaded ? 'opacity-100' : 'opacity-0'
-                } group-hover:scale-105 transition-transform duration-500`}
-                loading="lazy"
-                onLoad={handleImageLoad}
-                onError={handleImageError}
-                decoding="async"
-              />
-            )}
+          {/* Loading indicator */}
+          {isVisible && !imageLoaded && !imageFailed && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-chocolate/20 border-t-chocolate/60 rounded-full animate-spin" />
+            </div>
+          )}
 
-            {/* Loading indicator */}
-            {isVisible && !imageLoaded && !imageFailed && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-6 h-6 border-2 border-chocolate/20 border-t-chocolate/60 rounded-full animate-spin" />
-              </div>
-            )}
+          {/* Hover overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          
+          {/* Category Badge */}
+          <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="bg-white/90 text-chocolate px-3 py-1 rounded-full text-xs font-medium">
+              {photo.category}
+            </span>
           </div>
-        </div>
-        
-        {/* Simplified hover overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        
-        {/* Category Badge */}
-        <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <span className="bg-white/90 text-chocolate px-3 py-1 rounded-full text-xs font-medium">
-            {photo.category}
-          </span>
-        </div>
-        
-        {/* Photo Title on Hover */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <h3 className="text-white font-medium text-sm leading-tight">
-            {photo.alt}
-          </h3>
+          
+          {/* Photo Title on Hover */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h3 className="text-white font-medium text-sm leading-tight">
+              {photo.alt}
+            </h3>
+          </div>
         </div>
       </div>
     </div>
