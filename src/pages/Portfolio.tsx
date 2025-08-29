@@ -66,6 +66,10 @@ const Portfolio = () => {
     { id: 4, couple: "Gaurav & Shikhanshi",  type: "Pre-Wedding", embedId: "4s3wKpLEZ5w" },
     { id: 5, couple: "Rajvi & Tejas",  type: "Wedding Teaser", embedId: "K8LlckrZJxw" },
     { id: 6, couple: "Yash & Kejal",type: "Wedding Film", embedId: "Mb3u8RnwU6k" },
+    { id: 7, couple: "Harshdeep & Muskan",type: "Wedding Teaser", embedId: "_uy6TDq8QPw" },
+    { id: 8, couple: "Ajay & Nidhi",type: "South Indian Wedding", embedId: "rNyVc9mUuT0" },
+    { id: 9, couple: "Aayshi & Shreys", type: "Wedding Teaser", embedId: "qUXfKc5SzFI" },
+    { id: 10, couple: "Jheel & Neel", type: "Wedding Highlights", embedId: "jF_kNaTp-KA" },
   ]
 
   // Featured gallery images
