@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { ChevronLeft, ChevronRight, Sparkles, Heart, Star } from "lucide-react"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
@@ -13,26 +13,32 @@ if (typeof window !== "undefined") {
 const PhotoGallery = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  
+  // Touch/Swipe state
+  const [touchStart, setTouchStart] = useState(null)
+  const [touchEnd, setTouchEnd] = useState(null)
+  const [isSwipping, setIsSwipping] = useState(false)
+  
   const sectionRef = useRef(null)
   const cardsRef = useRef(null)
   const titleRef = useRef(null)
   const subtitleRef = useRef(null)
-  const particlesRef = useRef(null)
+  const autoPlayRef = useRef(null)
 
-  // Original wedding photos only
-  const photos = [
+  // Memoized photos array
+  const photos = useMemo(() => [
     {
       id: 1,
       url: "https://ik.imagekit.io/7xgikoq8o/6(1).png?updatedAt=1752932936192",
       couple: "Beautiful & Moments",
       date: "NOV 2024",
-    location: "MUMBAI",
+      location: "MUMBAI",
       alt: "Wedding gallery showcase",
     },
     {
       id: 2,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-thevisionaryvows-32927615.jpg?updatedAt=1752931184071",
-      couple:"Love stories",
+      couple: "Love Stories",
       date: "JUN 2024",
       location: "JAIPUR",
       alt: "Cinematic wedding capture",
@@ -61,341 +67,278 @@ const PhotoGallery = () => {
       location: "UDAIPUR",
       alt: "Wedding portrait session",
     },
-  ]
+  ], [])
 
-  // Auto-advance gallery every 6 seconds
+  // Swipe detection
+  const minSwipeDistance = 50
+
+  const onTouchStart = useCallback((e) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+    setIsSwipping(true)
+  }, [])
+
+  const onTouchMove = useCallback((e) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }, [])
+
+  const onTouchEnd = useCallback(() => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      nextSlide()
+    } else if (isRightSwipe) {
+      prevSlide()
+    }
+    
+    setIsSwipping(false)
+  }, [touchStart, touchEnd])
+
+  // Optimized navigation functions
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length)
+    setIsAutoPlaying(false)
+    // Resume autoplay after 8 seconds
+    if (autoPlayRef.current) clearTimeout(autoPlayRef.current)
+    autoPlayRef.current = setTimeout(() => setIsAutoPlaying(true), 8000)
+  }, [photos.length])
+
+  const prevSlide = useCallback(() => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + photos.length) % photos.length)
+    setIsAutoPlaying(false)
+    // Resume autoplay after 8 seconds
+    if (autoPlayRef.current) clearTimeout(autoPlayRef.current)
+    autoPlayRef.current = setTimeout(() => setIsAutoPlaying(true), 8000)
+  }, [photos.length])
+
+  // Auto-advance gallery - optimized
   useEffect(() => {
     if (!isAutoPlaying) return
 
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length)
-    }, 6000)
+    }, 5000)
 
     return () => clearInterval(timer)
   }, [photos.length, isAutoPlaying])
 
+  // Optimized GSAP animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Beautiful title animation
+      // Clean title animation
       gsap.fromTo(
         titleRef.current,
-        {
-          opacity: 0,
-          y: 80,
-          scale: 0.8,
-          rotationX: 15,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          rotationX: 0,
-          duration: 1.8,
-          ease: "elastic.out(1, 0.6)",
-          delay: 0.3,
-        },
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out", delay: 0.2 }
       )
 
       // Subtitle animation
       gsap.fromTo(
         subtitleRef.current,
-        {
-          opacity: 0,
-          y: 50,
-          letterSpacing: "0.5em",
-        },
-        {
-          opacity: 1,
-          y: 0,
-          letterSpacing: "0.1em",
-          duration: 1.5,
-          ease: "power3.out",
-          delay: 0.8,
-        },
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out", delay: 0.4 }
       )
 
-      // Floating particles animation
-      gsap.to(".floating-particle", {
-        y: -30,
-        x: 15,
-        rotation: 360,
-        duration: 4,
-        ease: "power2.inOut",
-        yoyo: true,
-        repeat: -1,
-        stagger: {
-          each: 0.3,
-          from: "random",
-        },
-      })
-
-      // Sparkle particles
-      gsap.to(".sparkle-particle", {
-        scale: 1.5,
-        opacity: 0.8,
-        rotation: 180,
-        duration: 2,
-        ease: "power2.inOut",
-        yoyo: true,
-        repeat: -1,
-        stagger: 0.4,
-      })
-
-      // Section entrance animation
+      // Section entrance
       gsap.fromTo(
         sectionRef.current,
         { opacity: 0 },
         {
           opacity: 1,
-          duration: 1,
-          ease: "power3.out",
+          duration: 0.6,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 80%",
             toggleActions: "play none none reverse",
           },
-        },
+        }
       )
 
-      // Cards stagger animation
+      // Cards animation
       gsap.fromTo(
         ".gallery-card",
-        { opacity: 0, y: 80, scale: 0.9, rotationY: 10 },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          rotationY: 0,
-          duration: 1.2,
-          stagger: 0.15,
-          ease: "back.out(1.4)",
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: cardsRef.current,
             start: "top 85%",
             toggleActions: "play none none reverse",
           },
-        },
+        }
       )
     })
 
     return () => ctx.revert()
   }, [])
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length)
-    setIsAutoPlaying(false)
-    setTimeout(() => setIsAutoPlaying(true), 10000)
-  }
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + photos.length) % photos.length)
-    setIsAutoPlaying(false)
-    setTimeout(() => setIsAutoPlaying(true), 10000)
-  }
-
-  // Get visible cards for the current view
-  const getVisibleCards = () => {
+  // Get visible cards for desktop view
+  const getVisibleCards = useCallback(() => {
     const cards = []
-    // Show 3 cards: previous, current, next
     for (let i = 0; i < 3; i++) {
       const index = (currentIndex + i) % photos.length
       cards.push(photos[index])
     }
     return cards
-  }
+  }, [currentIndex, photos])
+
+  const currentPhoto = useMemo(() => photos[currentIndex], [photos, currentIndex])
 
   return (
     <section
       ref={sectionRef}
-      className="py-6 sm:py-8 md:py-12 px-4 sm:px-6 bg-gradient-to-b from-cream/30 via-background to-beige-light/20 relative overflow-hidden"
+      className="py-4 sm:py-6 pt-8 md:py-8 px-4 sm:px-6 bg-gradient-to-b from-cream/20 via-background to-beige-light/10 relative overflow-hidden"
+      style={{ backgroundColor: "#f9f6f2" }} // Added simple background color matching the theme
     >
-      {/* Beautiful Floating Particles */}
-      <div ref={particlesRef} className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Heart particles */}
-        <Heart className="floating-particle absolute top-20 left-20 w-4 h-4 text-chocolate/20 fill-current" />
-        <Heart className="floating-particle absolute top-40 right-32 w-3 h-3 text-beige-warm/30 fill-current" />
-        <Heart className="floating-particle absolute bottom-60 left-40 w-5 h-5 text-chocolate/15 fill-current" />
+      <div className="max-w-7xl mx-auto relative">
+      {/* Clean Animated Title */}
+      <div className="text-center mb-8 sm:mb-10 relative">
+        <div className="relative">
+        <h2
+          ref={titleRef}
+          className="font-amsterdam text-2xl sm:text-3xl md:text-4xl text-chocolate mb-5 leading-loose"
+          style={{ fontWeight: "400", letterSpacing: "0.02em" }}
+        >
+          Captured Moments
+        </h2>
 
-        {/* Sparkle particles */}
-        <Sparkles className="sparkle-particle absolute top-32 left-1/4 w-6 h-6 text-chocolate/25" />
-        <Sparkles className="sparkle-particle absolute top-60 right-1/4 w-4 h-4 text-beige-warm/35" />
-        <Sparkles className="sparkle-particle absolute bottom-40 left-1/3 w-5 h-5 text-chocolate/20" />
+        <p
+          ref={subtitleRef}
+          className="font-playfair text-base sm:text-lg md:text-xl text-chocolate/80 max-w-3xl mx-auto leading-relaxed"
+          style={{ fontWeight: "300" }}
+        >
+          Every frame tells a story of love, joy, and beautiful beginnings
+        </p>
 
-        {/* Star particles */}
-        <Star className="floating-particle absolute top-80 right-20 w-3 h-3 text-chocolate/25 fill-current" />
-        <Star className="floating-particle absolute bottom-80 left-16 w-4 h-4 text-beige-warm/20 fill-current" />
-
-        {/* Dot particles */}
-        <div className="floating-particle absolute top-24 right-40 w-2 h-2 bg-chocolate/20 rounded-full"></div>
-        <div className="floating-particle absolute top-72 left-24 w-3 h-3 bg-beige-warm/25 rounded-full"></div>
-        <div className="floating-particle absolute bottom-32 right-16 w-2 h-2 bg-chocolate/30 rounded-full"></div>
-        <div className="sparkle-particle absolute bottom-72 right-1/3 w-1 h-1 bg-chocolate/40 rounded-full"></div>
+        {/* Simple decorative line */}
+        <div className="flex items-center justify-center mt-4 space-x-3">
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-chocolate/30 to-transparent"></div>
+          <Heart className="w-4 h-4 text-chocolate/40 fill-current" />
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-chocolate/30 to-transparent"></div>
+        </div>
+        </div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Beautiful Animated Title */}
-        <div className="text-center mb-10 relative">
-          {/* Background glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-chocolate/5 to-transparent blur-3xl"></div>
-
-          <div className="relative">
-            {/* Main Title */}
-            <h2
-              ref={titleRef}
-              className="font-amsterdam text-2xl sm:text-2xl md:text-4xl lg:text-4xl text-chocolate mb-4 leading-tight relative"
-              style={{
-                textShadow: "0 4px 20px rgba(183, 134, 90, 0.15)",
-                fontWeight: "400",
-                letterSpacing: "0.02em",
-              }}
-            >
-              Captured Moments
-              {/* Decorative elements around title */}
-              <div className="absolute -top-4 -left-4 w-8 h-8 opacity-20">
-                <Sparkles className="w-full h-full text-chocolate animate-pulse" />
-              </div>
-              <div className="absolute -bottom-2 -right-6 w-6 h-6 opacity-25">
-                <Heart className="w-full h-full text-chocolate fill-current animate-pulse" />
-              </div>
-            </h2>
-
-            {/* Elegant Subtitle */}
-            <p
-              ref={subtitleRef}
-              className="font-playfair text-lg sm:text-xl md:text-2xl  max-w-4xl mx-auto leading-relaxed"
-              style={{
-                textShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-                fontWeight: "300",
-              }}
-            >
-              Every frame tells a story of love, joy, and beautiful beginnings
-            </p>
-
-            {/* Decorative line with particles */}
-            <div className="flex items-center justify-center mt-6 space-x-4">
-              <div className="w-2 h-2 bg-chocolate/30 rounded-full animate-pulse"></div>
-              <div className="w-24 h-px bg-gradient-to-r from-transparent via-chocolate/40 to-transparent"></div>
-              <div className="inline-flex items-center justify-center w-8 h-8 bg-chocolate/10 rounded-full">
-                <Heart className="w-4 h-4 text-chocolate fill-current animate-pulse" />
-              </div>
-              <div className="w-24 h-px bg-gradient-to-r from-transparent via-chocolate/40 to-transparent"></div>
-              <div className="w-2 h-2 bg-chocolate/30 rounded-full animate-pulse delay-1000"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Gallery Cards */}
-        <div ref={cardsRef} className="relative">
-          {/* Desktop & Tablet View */}
-          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12">
-            {getVisibleCards().map((photo, index) => (
-              <div
-                key={`${photo.id}-${index}`}
-                className={`gallery-card relative group cursor-pointer transition-all duration-500 hover:scale-105 hover:-translate-y-2 ${
-                  index === 1 ? "lg:col-span-1" : ""
-                }`}
-              >
-                <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl bg-white border border-chocolate/10">
-                  {/* Image */}
-                  <img
-                    src={photo.url || "/placeholder.svg"}
-                    alt={photo.alt}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                  />
-
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-                  {/* Text Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
-  <div className="mb-2">
-    <div className="flex items-center space-x-3 text-sm font-playfair font-light tracking-wider opacity-90">
-      <span>{photo.date}</span>
-      <span>—</span>
-      <span>{photo.location}</span>
-    </div>
-  </div>
-  <h3 className="font-playfair text-xl sm:text-2xl lg:text-xl font-normal tracking-wide leading-snug">
-  {photo.couple}
-</h3>
-
-
-
-
-</div>
-
-
-                  {/* Hover Effect */}
-                  <div className="absolute inset-0 bg-chocolate/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile View */}
-          <div className="md:hidden mb-12">
-            <div className="gallery-card relative group">
-              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl bg-white border border-chocolate/10">
-                <img
-                  src={photos[currentIndex].url || "/placeholder.svg"}
-                  alt={photos[currentIndex].alt}
-                  className="w-full h-full object-cover transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-<div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-  {/* Date + Location */}
-  <div className="flex items-center space-x-2 text-xs sm:text-sm font-poppins font-light tracking-wider opacity-90 mb-1">
-    <span>{photos[currentIndex].date}</span>
-    <span>—</span>
-    <span>{photos[currentIndex].location}</span>
-  </div>
-
-  {/* Couple Name */}
-  <h3 className="font-playfair text-lg sm:text-xl lg:text-2xl font-light tracking-wide leading-snug">
-    {photos[currentIndex].couple}
-  </h3>
-</div>
-
-              </div>
-            </div>
-          </div>
-
-          {/* Navigation Arrows - Mobile Only */}
-          <div className="md:hidden">
-            <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white text-chocolate rounded-full shadow-xl transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-chocolate/10"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="w-5 h-5 mx-auto" />
-            </button>
-
-            <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white text-chocolate rounded-full shadow-xl transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-chocolate/10"
-              aria-label="Next image"
-            >
-              <ChevronRight className="w-5 h-5 mx-auto" />
-            </button>
-          </div>
-        </div>
-
-        {/* Navigation Dots - Mobile Only */}
-        <div className="flex md:hidden justify-center mt-8 space-x-2">
-          {photos.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`transition-all duration-300 rounded-full ${
-                index === currentIndex
-                  ? "w-8 h-3 bg-chocolate shadow-lg"
-                  : "w-3 h-3 bg-chocolate/30 hover:bg-chocolate/50"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
+      {/* Gallery Cards */}
+      <div ref={cardsRef} className="relative">
+        {/* Desktop & Tablet View */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mb-8">
+        {getVisibleCards().map((photo, index) => (
+          <div
+          key={`${photo.id}-${index}`}
+          className="gallery-card relative group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1"
+          >
+          <div className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-lg bg-white border border-chocolate/5">
+            <img
+            src={photo.url}
+            alt={photo.alt}
+            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
+            loading="lazy"
             />
-          ))}
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+            
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+            <div className="flex items-center space-x-2 text-xs font-light tracking-wide opacity-90 mb-1">
+              <span>{photo.date}</span>
+              <span>—</span>
+              <span>{photo.location}</span>
+            </div>
+            <h3 className="font-playfair text-lg font-normal tracking-wide leading-snug">
+              {photo.couple}
+            </h3>
+            </div>
+          </div>
+          </div>
+        ))}
         </div>
+
+        {/* Mobile View with Swipe Support */}
+        <div 
+        className="md:hidden mb-8 relative"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        >
+        {/* Swipe indicator */}
+        {isSwipping && (
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-chocolate/90 text-cream px-3 py-1 rounded-full text-sm">
+          ← Swipe →
+          </div>
+        )}
+
+        <div className={`gallery-card transition-transform duration-200 ${isSwipping ? 'scale-[0.98]' : ''}`}>
+          <div className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-lg bg-white border border-chocolate/5">
+          <img
+            src={currentPhoto.url}
+            alt={currentPhoto.alt}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+          
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+          
+          <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+            <div className="flex items-center space-x-2 text-sm font-light tracking-wide opacity-90 mb-2">
+            <span>{currentPhoto.date}</span>
+            <span>—</span>
+            <span>{currentPhoto.location}</span>
+            </div>
+            <h3 className="font-playfair text-xl font-normal tracking-wide leading-snug">
+            {currentPhoto.couple}
+            </h3>
+          </div>
+
+          {/* Navigation arrows for mobile */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/90 text-chocolate rounded-full shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="w-5 h-5 mx-auto" />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/90 text-chocolate rounded-full shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+            aria-label="Next image"
+          >
+            <ChevronRight className="w-5 h-5 mx-auto" />
+          </button>
+          </div>
+        </div>
+
+        {/* Swipe hint */}
+        <div className="text-center mt-3">
+          <p className="text-chocolate/60 text-sm">Swipe or use arrows to browse</p>
+        </div>
+        </div>
+
+        {/* Navigation Dots - Mobile */}
+        <div className="flex md:hidden justify-center mt-6 space-x-2">
+        {photos.map((_, index) => (
+          <button
+          key={index}
+          onClick={() => setCurrentIndex(index)}
+          className={`transition-all duration-300 rounded-full ${
+            index === currentIndex
+            ? "w-8 h-3 bg-chocolate shadow-md"
+            : "w-3 h-3 bg-chocolate/30 hover:bg-chocolate/50"
+          }`}
+          aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+        </div>
+      </div>
       </div>
     </section>
   )
