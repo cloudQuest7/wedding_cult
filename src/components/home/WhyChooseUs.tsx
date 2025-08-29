@@ -222,10 +222,10 @@ const WhyChooseUs = () => {
           </div>
           
           <h2 ref={titleRef}
-          className="font-amsterdam text-lg sm:text-4xl md:text-4xl lg:text-3xl text-chocolate mb-5 sm:mb-6 leading-snug px-3"
+          className="font-amsterdam text-lg sm:text-4xl md:text-4xl lg:text-3xl text-chocolate mb-5 sm:mb-6 leading-loose px-3"
         >
           Why Couples Choose Us
-          <span className="block mt-3 text-base sm:text-2xl md:text-3xl font-poppins font-light text-muted-foreground">
+          <span className="block lg:mt-8 sm:mt-3 text-base sm:text-2xl md:text-3xl font-poppins font-light text-muted-foreground">
             for Their Special Day
           </span>
         </h2>
@@ -264,7 +264,7 @@ const WhyChooseUs = () => {
 
                   {/* Mobile-optimized content */}
                   <div className="relative space-y-2 sm:space-y-3 lg:space-y-4 flex-1 flex flex-col justify-center">
-                    <h3 className="feature-title font-amsterdam text-sm sm:text-xl lg:text-xl text-chocolate transition-all duration-300 leading-loose">
+                    <h3 className="feature-title font-amsterdam text-m sm:text-xl lg:text-xl text-chocolate transition-all duration-300 leading-loose">
                       {feature.title}
                     </h3>
                     

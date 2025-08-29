@@ -119,7 +119,7 @@ const FAQ = () => {
     >
       <FloatingBallBackground />
 
-      <div className="pt-20 pb-16 w-full">
+      <div className="pt-20 pb-8 w-full">
         {/* Elegant Header */}
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 overflow-hidden">
           <div className="text-center animate-fade-in-up">
@@ -204,7 +204,7 @@ const FAQ = () => {
 
 
         {/* Still have questions section - Enhanced */}
-        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 overflow-hidden">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 overflow-hidden">
           <div className="animate-fade-in-up w-full">
             <div className="relative bg-gradient-to-br from-chocolate via-chocolate-light to-chocolate rounded-2xl p-6 sm:p-8 lg:p-12 shadow-2xl overflow-hidden w-full">
               {/* Decorative elements */}

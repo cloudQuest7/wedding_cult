@@ -302,13 +302,13 @@ const Portfolio = () => {
       <div className="hero-content text-center px-4 pt-12 pb-6
        w-full container-fix">
         <div className="max-w-4xl mx-auto w-full">
-          <h1 className="font-amsterdam text-2xl leading-tight mb-3 text-chocolate 
-                         xs:text-3xl xs:mb-4
-                         sm:text-4xl sm:mb-5 sm:leading-loose
-                         md:text-5xl md:mb-6
-                         lg:text-4xl lg:mb-7">
+            <h1 className="font-amsterdam text-lg leading-tight mb-2 text-chocolate 
+                   xs:text-xl xs:mb-3
+                   sm:text-4xl sm:mb-5 mt-5 sm:leading-loose
+                   md:text-5xl md:mb-6
+                   lg:text-4xl lg:mb-7">
             Our Cinematic Stories
-          </h1>
+            </h1>
           <p className="font-playfair text-sm leading-relaxed text-muted-foreground mx-auto mb-4 max-w-sm
                         xs:text-base xs:max-w-md xs:mb-5
                         sm:text-lg sm:max-w-2xl sm:mb-6
@@ -618,7 +618,7 @@ const Portfolio = () => {
                             "{testimonial.text}"
                           </blockquote>
                           <div>
-                            <h4 className="font-amsterdam leading-loose text-lg text-chocolate mb-1
+                            <h4 className="font-amsterdam leading-loose mb-4 text-lg text-chocolate
                                            sm:text-xl
                                            md:text-xl
                                            lg:text-2xl">
