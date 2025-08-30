@@ -1,5 +1,5 @@
 {
-  "name": "weddingcult",
+  "name": "theweddingcult",
   "private": true,
   "version": "1.0.0",
   "main": "package.json",
@@ -15,10 +15,10 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^4.3.0",
+    "@sanity/vision": "^4.6.0",
     "react": "^19.1",
     "react-dom": "^19.1",
-    "sanity": "^4.3.0",
+    "sanity": "^4.6.0",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {

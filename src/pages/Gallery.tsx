@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import FloatingBallBackground from "@/components/common/FloatingBallBackground";
 import SocialFloatingButton from "@/components/common/SocialFloatingButton";
 
+
 // Animated Background Pattern Component
 const AnimatedPatterns = () => {
   return (
@@ -29,6 +30,7 @@ const AnimatedPatterns = () => {
         ))}
       </div>
 
+
       {/* Reduced floating flowers */}
       <div className="absolute inset-0">
         {[...Array(8)].map((_, i) => (
@@ -52,6 +54,7 @@ const AnimatedPatterns = () => {
   );
 };
 
+
 // Enhanced Gallery Filter Component
 const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
   return (
@@ -73,18 +76,22 @@ const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
   );
 };
 
+
 // Optimized Image Component with proper aspect ratio handling
 const GalleryImage = ({ photo, index, onClick, isVisible }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
 
+
   const handleImageLoad = useCallback(() => {
     setImageLoaded(true);
   }, []);
 
+
   const handleImageError = useCallback(() => {
     setImageFailed(true);
   }, []);
+
 
   return (
     <div 
@@ -108,6 +115,7 @@ const GalleryImage = ({ photo, index, onClick, isVisible }) => {
             }}
           />
 
+
           {/* Image with natural aspect ratio */}
           {isVisible && !imageFailed && (
             <img 
@@ -127,12 +135,14 @@ const GalleryImage = ({ photo, index, onClick, isVisible }) => {
             />
           )}
 
+
           {/* Loading indicator */}
           {isVisible && !imageLoaded && !imageFailed && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-6 h-6 border-2 border-chocolate/20 border-t-chocolate/60 rounded-full animate-spin" />
             </div>
           )}
+
 
           {/* Hover overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -156,6 +166,7 @@ const GalleryImage = ({ photo, index, onClick, isVisible }) => {
   );
 };
 
+
 // Load More Button Component
 const LoadMoreButton = ({ onClick, loading, hasMore }) => {
   if (!hasMore) return null;
@@ -175,6 +186,7 @@ const LoadMoreButton = ({ onClick, loading, hasMore }) => {
   );
 };
 
+
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -187,6 +199,7 @@ const Gallery = () => {
   const touchStartX = useRef(null);
   
   const IMAGES_PER_LOAD = 15;
+
 
   // Fixed intersection observer - images stay visible once loaded
   useEffect(() => {
@@ -209,12 +222,15 @@ const Gallery = () => {
       }
     );
 
+
     // Observe new images when displayedCount changes
     const images = document.querySelectorAll('[data-image-id]');
     images.forEach(img => observer.observe(img));
 
+
     return () => observer.disconnect();
   }, [displayedCount]);
+
 
   // Cleanup effect
   useEffect(() => {
@@ -225,32 +241,70 @@ const Gallery = () => {
     };
   }, [selectedImage]);
 
+
   // Reset displayed count when category changes
   useEffect(() => {
     setDisplayedCount(20);
   }, [activeCategory]);
 
+
+  // Enhanced scroll lock functions
   const lockScroll = useCallback(() => {
     scrollPosition.current = window.scrollY;
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollPosition.current}px`;
-    document.body.style.width = '100%';
+    
+    // Add class to body for CSS-based locking
+    document.body.classList.add('lightbox-open');
+    document.documentElement.classList.add('lightbox-open');
+    
+    // Apply styles directly for maximum compatibility
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    
+    Object.assign(document.body.style, {
+      position: 'fixed',
+      top: `-${scrollPosition.current}px`,
+      left: '0',
+      right: '0',
+      width: '100%',
+      overflow: 'hidden',
+      paddingRight: `${scrollBarWidth}px` // Prevent layout shift
+    });
+    
+    // Also lock the documentElement for extra security
+    document.documentElement.style.overflow = 'hidden';
   }, []);
 
+
   const unlockScroll = useCallback(() => {
-    document.body.style.removeProperty('overflow');
-    document.body.style.removeProperty('position');
-    document.body.style.removeProperty('top');
-    document.body.style.removeProperty('width');
+    // Remove class from both elements
+    document.body.classList.remove('lightbox-open');
+    document.documentElement.classList.remove('lightbox-open');
+    
+    // Reset all body styles
+    Object.assign(document.body.style, {
+      position: '',
+      top: '',
+      left: '',
+      right: '',
+      width: '',
+      overflow: '',
+      paddingRight: ''
+    });
+    
+    // Reset documentElement
+    document.documentElement.style.overflow = '';
+    
+    // Restore scroll position
     window.scrollTo(0, scrollPosition.current);
+    scrollPosition.current = 0;
   }, []);
+
 
   const handleImageClick = useCallback((imageUrl, index) => {
     setSelectedImage(imageUrl);
     setSelectedIndex(index);
     lockScroll();
   }, [lockScroll]);
+
 
   const handleLoadMore = useCallback(() => {
     setLoading(true);
@@ -260,12 +314,14 @@ const Gallery = () => {
     }, 300);
   }, []);
 
+
   const handlePrevImage = useCallback(() => {
     if (selectedIndex > 0) {
       setSelectedIndex(selectedIndex - 1);
       setSelectedImage(displayedImages[selectedIndex - 1].url);
     }
   }, [selectedIndex]);
+
 
   const handleNextImage = useCallback(() => {
     if (selectedIndex < displayedImages.length - 1) {
@@ -274,16 +330,19 @@ const Gallery = () => {
     }
   }, [selectedIndex]);
 
+
   // Mobile touch handlers
   const handleTouchStart = useCallback((e) => {
     touchStartX.current = e.touches[0].clientX;
   }, []);
+
 
   const handleTouchMove = useCallback((e) => {
     if (!touchStartX.current) return;
     
     const touchEndX = e.touches[0].clientX;
     const diff = touchStartX.current - touchEndX;
+
 
     // Swipe threshold of 50px
     if (Math.abs(diff) > 50) {
@@ -297,6 +356,8 @@ const Gallery = () => {
       touchStartX.current = null;
     }
   }, [handleNextImage, handlePrevImage]);
+  
+  
   // Memoized gallery images - reduced set for testing
   const galleryImages = useMemo(() => [
   
@@ -848,6 +909,7 @@ const Gallery = () => {
     }
   ]); 
 
+
   // Memoized categories
   const categories = useMemo(() => {
     const allCategories = [...new Set(galleryImages.map(img => img.category))];
@@ -855,6 +917,7 @@ const Gallery = () => {
       !["Cinematic", "Family", "Details", "Candid"].includes(category)
     )];
   }, [galleryImages]);
+
 
   // Memoized filtered and displayed images
   const { filteredImages, displayedImages, hasMoreImages } = useMemo(() => {
@@ -871,6 +934,7 @@ const Gallery = () => {
       hasMoreImages: hasMore
     };
   }, [galleryImages, activeCategory, displayedCount]);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 relative mb-20">
@@ -889,12 +953,14 @@ const Gallery = () => {
               <div className="h-1 w-32 mx-auto mt-2 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
             </div>
 
+
             <p className="font-playfair text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Explore our complete collection of cinematic wedding moments, 
               <span className="text-chocolate font-semibold"> captured with love and artistry</span>
             </p>
           </div>
         </div>
+
 
         {/* Category Filter */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
@@ -904,6 +970,7 @@ const Gallery = () => {
             onCategoryChange={setActiveCategory}
           />
         </div>
+
 
         {/* Gallery Grid */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -916,6 +983,7 @@ const Gallery = () => {
               )}
             </p>
           </div>
+
 
           {/* Optimized Masonry Grid */}
           <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4">
@@ -931,6 +999,7 @@ const Gallery = () => {
             ))}
           </div>
 
+
           {/* Load More Button */}
           <LoadMoreButton 
             onClick={handleLoadMore}
@@ -940,10 +1009,22 @@ const Gallery = () => {
         </div>
       </div>
 
-      {/* Lightbox Modal with mobile swipe */}
+
+      {/* Enhanced Lightbox Modal with complete scroll prevention */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm overscroll-none touch-none" 
+          className="lightbox-overlay fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+          style={{ 
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 9999,
+            touchAction: 'none',
+            overscrollBehavior: 'none',
+            WebkitOverflowScrolling: 'none'
+          }}
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setSelectedImage(null);
@@ -959,17 +1040,26 @@ const Gallery = () => {
             e.stopPropagation();
             handleTouchMove(e);
           }}
+          onWheel={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          onScroll={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
-          <div className="relative max-w-6xl max-h-full select-none">
+          <div className="relative flex items-center justify-center w-full h-full">
             <img 
               src={selectedImage?.includes('imagekit.io') 
                 ? `${selectedImage}${selectedImage.includes('?') ? '&' : '?'}tr=w-1200,h-1200,q-85,f-auto`
                 : selectedImage} 
               alt="Gallery image" 
-              className="w-full h-auto max-h-[90vh] object-contain rounded-xl shadow-2xl" 
+              className="max-w-[95vw] max-h-[85vh] w-auto h-auto object-contain rounded-xl shadow-2xl" 
               loading="eager"
               draggable="false"
             />
+
 
             {/* Close Button */}
             <button 
@@ -977,7 +1067,7 @@ const Gallery = () => {
                 setSelectedImage(null);
                 unlockScroll();
               }} 
-              className="absolute top-4 right-4 bg-white/90 hover:bg-white text-chocolate w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 shadow-lg" 
+              className="absolute top-4 right-4 bg-white/90 hover:bg-white text-chocolate w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 shadow-lg z-10" 
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -986,42 +1076,41 @@ const Gallery = () => {
             </button>
             
             {/* Navigation Buttons */}
-            <div className="absolute inset-y-0 left-4 right-4 flex items-center justify-between pointer-events-none">
-              {selectedIndex > 0 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handlePrevImage();
-                  }}
-                  className="pointer-events-auto bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M15 18l-6-6 6-6" />
-                  </svg>
-                </button>
-              )}
-              
-              {selectedIndex < displayedImages.length - 1 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNextImage();
-                  }}
-                  className="pointer-events-auto bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M9 18l6-6-6-6" />
-                  </svg>
-                </button>
-              )}
-            </div>
+            {selectedIndex > 0 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePrevImage();
+                }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+            )}
+            
+            {selectedIndex < displayedImages.length - 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNextImage();
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       )}
       
       <SocialFloatingButton />
 
-      {/* CSS Animations */}
+
+      {/* Enhanced CSS with comprehensive scroll prevention */}
       <style>
         {`
           @keyframes twinkle {
@@ -1038,8 +1127,39 @@ const Gallery = () => {
           .animate-twinkle { animation: twinkle linear infinite; }
           .animate-float { animation: float ease-in-out infinite; }
 
+
           /* Pinterest-style columns layout */
           .columns-2 { column-count: 2; column-gap: 1rem; }
+          
+          /* Enhanced scroll lock - comprehensive approach */
+          html.lightbox-open,
+          body.lightbox-open {
+            overflow: hidden !important;
+            position: fixed !important;
+            width: 100% !important;
+            height: 100% !important;
+            touch-action: none !important;
+            -webkit-overflow-scrolling: none !important;
+            overscroll-behavior: none !important;
+          }
+          
+          /* Prevent scrolling on all elements when lightbox is open */
+          body.lightbox-open * {
+            overscroll-behavior: none !important;
+          }
+          
+          /* Lightbox specific styles - maximum security */
+          .lightbox-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            z-index: 9999 !important;
+            touch-action: none !important;
+            overscroll-behavior: none !important;
+            -webkit-overflow-scrolling: none !important;
+          }
           
           @media (min-width: 640px) {
             .sm\\:columns-2 { column-count: 2; }
@@ -1061,5 +1181,6 @@ const Gallery = () => {
     </div>
   );
 };
+
 
 export default Gallery;
