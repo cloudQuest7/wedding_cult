@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
-import { ChevronLeft, ChevronRight, ArrowRight, PlayCircle, Eye, Star, X, ZoomIn, ZoomOut, Download, Share2, Heart } from "lucide-react"
+import { ChevronLeft, ChevronRight, ArrowRight, PlayCircle, Eye, Star, X, ZoomIn, ZoomOut, Share2, Heart } from "lucide-react"
 import gsap from "gsap"
 import { Link } from "react-router-dom"
 
@@ -9,14 +9,14 @@ const Portfolio = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1)
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [selectedIndex, setSelectedIndex] = useState(-1)
   const [isZoomed, setIsZoomed] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
-  const [favorites, setFavorites] = useState<number[]>([])
+  const [favorites, setFavorites] = useState([])
   const [showImageInfo, setShowImageInfo] = useState(false)
   
   // Mobile swipe detection
@@ -27,8 +27,8 @@ const Portfolio = () => {
   const filmStripRef = useRef(null)
   const testimonialsRef = useRef(null)
   const touchStartX = useRef(0)
-  const imageRef = useRef<HTMLImageElement>(null)
-  const lightboxRef = useRef<HTMLDivElement>(null)
+  const imageRef = useRef(null)
+  const lightboxRef = useRef(null)
 
   // Memoized data to prevent unnecessary re-renders
   const portfolioItems = useMemo(() => [
@@ -185,11 +185,11 @@ const Portfolio = () => {
   }, [portfolioItems.length])
 
   // Optimized touch handlers
-  const handleVideoTouchStart = useCallback((e: React.TouchEvent) => {
+  const handleVideoTouchStart = useCallback((e) => {
     touchStartX.current = e.touches[0].clientX
   }, [])
 
-  const handleVideoTouchMove = useCallback((e: React.TouchEvent) => {
+  const handleVideoTouchMove = useCallback((e) => {
     if (!touchStartX.current) return
     const touchEndX = e.touches[0].clientX
     const diff = touchStartX.current - touchEndX
@@ -204,11 +204,11 @@ const Portfolio = () => {
     }
   }, [currentVideoIndex, portfolioItems.length, nextVideo, prevVideo])
 
-  const handleTestimonialTouchStart = useCallback((e: React.TouchEvent) => {
+  const handleTestimonialTouchStart = useCallback((e) => {
     touchStartX.current = e.touches[0].clientX
   }, [])
 
-  const handleTestimonialTouchMove = useCallback((e: React.TouchEvent) => {
+  const handleTestimonialTouchMove = useCallback((e) => {
     if (!testimonialsRef.current) return
     const touchEndX = e.touches[0].clientX
     const diff = touchStartX.current - touchEndX
@@ -224,7 +224,7 @@ const Portfolio = () => {
   }, [currentTestimonial, testimonials.length])
 
   // Enhanced Lightbox Functions with better positioning
-  const handleImageClick = useCallback((url: string, index: number) => {
+  const handleImageClick = useCallback((url, index) => {
     // Store current scroll position
     scrollPosition.current = window.pageYOffset
     
@@ -292,7 +292,7 @@ const Portfolio = () => {
   }, [selectedIndex, featuredGalleryImages])
 
   // Optimized Mobile Swipe Handlers
-  const handleLightboxTouchStart = useCallback((e: React.TouchEvent) => {
+  const handleLightboxTouchStart = useCallback((e) => {
     if (isZoomed) return
     
     const touch = e.touches[0]
@@ -304,7 +304,7 @@ const Portfolio = () => {
     setIsLightboxSwiping(false)
   }, [isZoomed])
 
-  const handleLightboxTouchMove = useCallback((e: React.TouchEvent) => {
+  const handleLightboxTouchMove = useCallback((e) => {
     if (isZoomed) return
     
     const touch = e.touches[0]
@@ -317,7 +317,7 @@ const Portfolio = () => {
     }
   }, [isZoomed, swipeStart])
 
-  const handleLightboxTouchEnd = useCallback((e: React.TouchEvent) => {
+  const handleLightboxTouchEnd = useCallback((e) => {
     if (isZoomed || !isLightboxSwiping) return
     
     const touch = e.changedTouches[0]
@@ -361,14 +361,14 @@ const Portfolio = () => {
   }, [])
 
   // Optimized drag handlers
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+  const handleMouseDown = useCallback((e) => {
     if (!isZoomed) return
     e.preventDefault()
     setIsDragging(true)
     setDragStart({ x: e.clientX - dragPosition.x, y: e.clientY - dragPosition.y })
   }, [isZoomed, dragPosition])
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+  const handleMouseMove = useCallback((e) => {
     if (!isDragging || !isZoomed) return
     e.preventDefault()
     setDragPosition({
@@ -382,14 +382,14 @@ const Portfolio = () => {
   }, [])
 
   // Touch handlers for zoom/pan
-  const handleZoomTouchStart = useCallback((e: React.TouchEvent) => {
+  const handleZoomTouchStart = useCallback((e) => {
     if (!isZoomed) return
     const touch = e.touches[0]
     setIsDragging(true)
     setDragStart({ x: touch.clientX - dragPosition.x, y: touch.clientY - dragPosition.y })
   }, [isZoomed, dragPosition])
 
-  const handleZoomTouchMove = useCallback((e: React.TouchEvent) => {
+  const handleZoomTouchMove = useCallback((e) => {
     if (!isDragging || !isZoomed) return
     const touch = e.touches[0]
     setDragPosition({
@@ -405,7 +405,7 @@ const Portfolio = () => {
   }, [isZoomed])
 
   // Favorites functionality
-  const toggleFavorite = useCallback((imageId: number) => {
+  const toggleFavorite = useCallback((imageId) => {
     setFavorites(prev => 
       prev.includes(imageId) 
         ? prev.filter(id => id !== imageId)
@@ -413,26 +413,7 @@ const Portfolio = () => {
     )
   }, [])
 
-  // Download functionality
-  const handleDownload = useCallback(async () => {
-    if (!selectedImage) return
-    try {
-      const response = await fetch(selectedImage)
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `wedding-photo-${selectedIndex + 1}.jpg`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error('Download failed:', error)
-    }
-  }, [selectedImage, selectedIndex])
-
-  // Share functionality
+  // Share functionality (kept, removed download)
   const handleShare = useCallback(() => {
     if (navigator.share && selectedImage) {
       navigator.share({
@@ -445,11 +426,11 @@ const Portfolio = () => {
     }
   }, [selectedImage])
 
-  // Keyboard navigation - Optimized
+  // Keyboard navigation - Optimized (removed download key binding)
   useEffect(() => {
     if (!selectedImage) return
 
-    const handleKeyPress = (e: KeyboardEvent) => {
+    const handleKeyPress = (e) => {
       switch (e.key) {
         case 'Escape':
           handleCloseModal()
@@ -776,7 +757,7 @@ const Portfolio = () => {
         </div>
       </div>
 
-      {/* FIXED: Optimized Lightbox Modal */}
+      {/* FIXED: Optimized Lightbox Modal (Download functionality removed) */}
       {selectedImage && (
         <div 
           ref={lightboxRef}
@@ -785,7 +766,7 @@ const Portfolio = () => {
           onTouchMove={isZoomed ? handleZoomTouchMove : handleLightboxTouchMove}
           onTouchEnd={isZoomed ? handleZoomTouchEnd : handleLightboxTouchEnd}
         >
-          {/* Top Controls Bar */}
+          {/* Top Controls Bar (Download button removed) */}
           <div className="absolute top-0 left-0 right-0 z-60 lightbox-controls px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-4 text-white">
               <span className="text-sm font-medium">
@@ -821,13 +802,6 @@ const Portfolio = () => {
                 title="Share"
               >
                 <Share2 className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleDownload}
-                className="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all duration-200"
-                title="Download"
-              >
-                <Download className="w-5 h-5" />
               </button>
               <button
                 onClick={handleCloseModal}
