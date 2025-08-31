@@ -12,7 +12,7 @@ import FeedbackSection from "@/components/feedback/FeedbackSection";
 import Footer from "@/components/home/Footer";
 import OffersSection from "@/components/home/OffersSection";
 import FilmStripGSAP from "@/components/home/FilmStripGSAP";
-import BlogPosts from "@/components/BlogPosts";
+import Offers from "@/components/Offers";
 
 const Index = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -39,11 +39,12 @@ const Index = () => {
         <VideoPreview />
         {/* <FilmStripGSAP /> */}
         <PhotoGallery />
+        <Offers />
         {/* <Reviews /> */}
         <CallToAction />
         <EnquiryForm />
         {/* <FeedbackSection /> */}
-        {/* <BlogPosts /> */}
+        
         <Footer />
       </div>
     </main>

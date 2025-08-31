@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
-
-export interface Offer {
-  id: number;
-  title: string;
-  description: string;
-  image: {
-    url: string;
-  };
-  validUntil: string;
-}
+import { client } from "../lib/sanity";
+import { Offer } from "../types/offer";
 
 export const useOffers = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
@@ -16,21 +8,16 @@ export const useOffers = () => {
 
   useEffect(() => {
     const fetchOffers = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/offers?populate=*`);
-        const data = await res.json();
-        setOffers(data.data.map((item: any) => ({
-          id: item.id,
-          title: item.attributes.title,
-          description: item.attributes.description,
-          image: item.attributes.image?.data?.attributes?.url,
-          validUntil: item.attributes.validUntil,
-        })));
-      } catch (err) {
-        console.error("Error fetching offers:", err);
-      } finally {
-        setLoading(false);
-      }
+      const data = await client.fetch<Offer[]>(`*[_type == "offer"]{
+        _id,
+        title,
+        description,
+        price,
+        date,
+        image
+      }`);
+      setOffers(data);
+      setLoading(false);
     };
 
     fetchOffers();

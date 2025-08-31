@@ -1,4 +1,3 @@
-import post from "./post";
-export const schemaTypes = [post];
+import {offer} from './offer'
 
-
+export const schemaTypes = [offer]

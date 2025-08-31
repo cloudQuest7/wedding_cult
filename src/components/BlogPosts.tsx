@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { client } from "../sanity"; // adjust path if needed
-import type { Post } from "../types/post";
+import type { Post } from "../types/offer";
 
 const BlogPosts = () => {
   const [posts, setPosts] = useState<Post[]>([]);

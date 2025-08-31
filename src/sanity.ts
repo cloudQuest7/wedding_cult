@@ -1,8 +1,9 @@
+// src/lib/sanity.ts
 import { createClient } from "@sanity/client";
 
 export const client = createClient({
-  projectId: "zpzkzcwp",  // 👈 get from studio/sanity.config.ts
-  dataset: "production",         // or the dataset you chose
-  apiVersion: "2023-08-30",      // today’s date is good practice
-  useCdn: true,                  // `false` if you need fresh data always
+  projectId: import.meta.env.VITE_SANITY_PROJECT_ID as string,
+  dataset: import.meta.env.VITE_SANITY_DATASET as string,
+  apiVersion: "2023-08-30", // can set to today's date for freshest API
+  useCdn: true, // `true` = faster, cached results | `false` = real-time
 });
