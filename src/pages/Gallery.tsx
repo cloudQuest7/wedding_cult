@@ -1,15 +1,14 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo, memo } from "react";
+import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, Download, Share2, Heart, Eye } from "lucide-react";
 import FloatingBallBackground from "@/components/common/FloatingBallBackground";
 import SocialFloatingButton from "@/components/common/SocialFloatingButton";
 
-
-// Animated Background Pattern Component
-const AnimatedPatterns = () => {
+// Memoized Animated Background with reduced elements
+const AnimatedPatterns = memo(() => {
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-      {/* Star Dots Pattern */}
       <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <div
             key={`star-${i}`}
             className="absolute animate-twinkle"
@@ -20,7 +19,7 @@ const AnimatedPatterns = () => {
               animationDuration: `${3 + Math.random() * 2}s`,
             }}
           >
-            <svg width="8" height="8" viewBox="0 0 8 8" className="text-beige-warm/20">
+            <svg width="6" height="6" viewBox="0 0 8 8" className="text-beige-warm/15">
               <path
                 d="M4 0L4.854 2.146L7 1.292L5.708 3.292L8 4L5.708 4.708L7 6.708L4.854 5.854L4 8L3.146 5.854L1 6.708L2.292 4.708L0 4L2.292 3.292L1 1.292L3.146 2.146L4 0Z"
                 fill="currentColor"
@@ -30,13 +29,11 @@ const AnimatedPatterns = () => {
         ))}
       </div>
 
-
-      {/* Reduced floating flowers */}
       <div className="absolute inset-0">
-        {[...Array(8)].map((_, i) => (
+        {[...Array(4)].map((_, i) => (
           <div
             key={`flower-${i}`}
-            className="absolute animate-float opacity-10"
+            className="absolute animate-float opacity-5"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -44,7 +41,7 @@ const AnimatedPatterns = () => {
               animationDuration: `${8 + Math.random() * 4}s`,
             }}
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" className="text-primary/10">
+            <svg width="10" height="10" viewBox="0 0 24 24" className="text-primary/5">
               <circle cx="12" cy="12" r="3" fill="currentColor" />
             </svg>
           </div>
@@ -52,13 +49,12 @@ const AnimatedPatterns = () => {
       </div>
     </div>
   );
-};
+});
 
-
-// Enhanced Gallery Filter Component
-const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
+// Memoized Category Filter
+const CategoryFilter = memo(({ categories, activeCategory, onCategoryChange }) => {
   return (
-    <div className="flex flex-wrap justify-center gap-3 mb-12">
+    <div className="flex flex-wrap justify-center gap-3">
       {categories.map((category) => (
         <button
           key={category}
@@ -74,292 +70,479 @@ const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
       ))}
     </div>
   );
-};
+});
 
-
-// Optimized Image Component with proper aspect ratio handling
-const GalleryImage = ({ photo, index, onClick, isVisible }) => {
+// Optimized Image Component
+const GalleryImage = memo(({ photo, index, onClick, isVisible, favorites, toggleFavorite }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
-
 
   const handleImageLoad = useCallback(() => {
     setImageLoaded(true);
   }, []);
 
-
   const handleImageError = useCallback(() => {
     setImageFailed(true);
   }, []);
 
+  const handleClick = useCallback((e) => {
+    e.preventDefault();
+    onClick(photo.url, index);
+  }, [photo.url, index, onClick]);
+
+  const handleFavoriteClick = useCallback((e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    toggleFavorite(photo.id);
+  }, [photo.id, toggleFavorite]);
+
+  if (!isVisible) {
+    return (
+      <div 
+        className="gallery-item break-inside-avoid mb-4"
+        style={{ height: '200px', backgroundColor: '#f5f5f0' }}
+      />
+    );
+  }
 
   return (
     <div 
-      className="group cursor-pointer break-inside-avoid mb-4"
+      className="gallery-item group cursor-pointer break-inside-avoid mb-4 will-change-transform"
       style={{
-        animationDelay: `${index * 0.02}s`,
-        animationFillMode: 'both'
+        animationDelay: `${Math.min(index * 0.01, 0.5)}s`,
+        animationFillMode: 'both',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '200px'
       }} 
-      onClick={() => onClick(photo.url, index)}
+      onClick={handleClick}
     >
-      <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1">
-        {/* Natural aspect ratio container - no forced padding */}
+      <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transform transition-transform duration-200 hover:scale-[1.02]">
         <div className="relative w-full">
-          {/* Placeholder that maintains natural dimensions */}
-          <div 
-            className={`w-full bg-gradient-to-br from-beige-warm/20 to-cream/30 ${
-              !imageLoaded && isVisible ? 'h-48' : 'h-auto'
-            }`}
-            style={{
-              backgroundColor: '#f5f5f0'
-            }}
-          />
-
-
-          {/* Image with natural aspect ratio */}
-          {isVisible && !imageFailed && (
+          {!imageFailed ? (
             <img 
               src={photo.url.includes('imagekit.io') 
-                ? `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-400,q-75,f-auto`
+                ? `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-300,q-70,f-webp`
                 : photo.url}
               alt={photo.alt}
-              className={`${
-                imageLoaded ? 'relative' : 'absolute inset-0'
-              } w-full h-auto object-contain transition-opacity duration-300 ${
+              className={`w-full h-auto object-contain transition-opacity duration-200 ${
                 imageLoaded ? 'opacity-100' : 'opacity-0'
-              } group-hover:scale-105 transition-transform duration-500`}
+              }`}
               loading="lazy"
+              decoding="async"
               onLoad={handleImageLoad}
               onError={handleImageError}
-              decoding="async"
+              draggable={false}
+              style={{ backgroundColor: '#f5f5f0' }}
             />
-          )}
-
-
-          {/* Loading indicator */}
-          {isVisible && !imageLoaded && !imageFailed && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-6 h-6 border-2 border-chocolate/20 border-t-chocolate/60 rounded-full animate-spin" />
+          ) : (
+            <div className="w-full h-48 bg-gradient-to-br from-beige-warm/20 to-cream/30 flex items-center justify-center">
+              <span className="text-chocolate/40 text-sm">Image unavailable</span>
             </div>
           )}
 
+          {!imageLoaded && !imageFailed && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-beige-warm/20 to-cream/30">
+              <div className="w-4 h-4 border-2 border-chocolate/20 border-t-chocolate/60 rounded-full animate-spin" />
+            </div>
+          )}
 
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
           
-          {/* Category Badge */}
-          <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <span className="bg-white/90 text-chocolate px-3 py-1 rounded-full text-xs font-medium">
+          <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <span className="bg-white/90 text-chocolate px-2 py-1 rounded text-xs font-medium">
               {photo.category}
             </span>
           </div>
           
-          {/* Photo Title on Hover */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-            <h3 className="text-white font-medium text-sm leading-tight">
-              {photo.alt}
-            </h3>
+          <div className="absolute bottom-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <div className="bg-white/90 text-chocolate p-1.5 rounded-full">
+              <Eye className="w-3 h-3" />
+            </div>
+            <button
+              onClick={handleFavoriteClick}
+              className={`p-1.5 rounded-full transition-colors duration-150 ${
+                favorites.includes(photo.id) 
+                  ? 'bg-red-100 text-red-500' 
+                  : 'bg-white/90 text-chocolate'
+              }`}
+            >
+              <Heart className={`w-3 h-3 ${favorites.includes(photo.id) ? 'fill-current' : ''}`} />
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
-};
+});
 
-
-// Load More Button Component
-const LoadMoreButton = ({ onClick, loading, hasMore }) => {
+const LoadMoreButton = memo(({ onClick, loading, hasMore }) => {
   if (!hasMore) return null;
   
   return (
-    <div className="text-center py-12">
+    <div className="text-center py-8">
       <button
         onClick={onClick}
         disabled={loading}
-        className={`px-8 py-4 bg-gradient-to-r from-chocolate to-chocolate-light text-cream rounded-full font-poppins font-semibold text-lg shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
-          loading ? 'animate-pulse' : 'hover:-translate-y-1'
+        className={`px-6 py-3 bg-gradient-to-r from-chocolate to-chocolate-light text-cream rounded-full font-poppins font-semibold shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+          loading ? 'animate-pulse' : 'hover:shadow-xl hover:scale-105'
         }`}
       >
         {loading ? 'Loading...' : 'Load More'}
       </button>
     </div>
   );
-};
-
+});
 
 const Gallery = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [displayedCount, setDisplayedCount] = useState(20);
-  const [loading, setLoading] = useState(false);
+  // State management
+  const [galleryState, setGalleryState] = useState({
+    selectedImage: null,
+    selectedIndex: -1,
+    activeCategory: "All",
+    displayedCount: 12,
+    loading: false
+  });
+
+  const [lightboxState, setLightboxState] = useState({
+    isZoomed: false,
+    zoomLevel: 1,
+    dragPosition: { x: 0, y: 0 },
+    isDragging: false,
+    dragStart: { x: 0, y: 0 },
+    showImageInfo: false
+  });
+
   const [visibleImages, setVisibleImages] = useState(new Set());
+  const [favorites, setFavorites] = useState([]);
+  
+  // Enhanced swipe detection state
+  const [swipeState, setSwipeState] = useState({
+    startX: 0,
+    startY: 0,
+    currentX: 0,
+    currentY: 0,
+    startTime: 0,
+    isSwiping: false,
+    swipeDirection: null
+  });
+  
+  // Refs
   const galleryRef = useRef(null);
   const scrollPosition = useRef(0);
-  const touchStartX = useRef(null);
+  const imageRef = useRef(null);
+  const lightboxRef = useRef(null);
   
-  const IMAGES_PER_LOAD = 15;
+  const IMAGES_PER_LOAD = 8;
+  const SWIPE_THRESHOLD = 50;
+  const SWIPE_VELOCITY_THRESHOLD = 0.3;
 
+  // Optimized scroll lock
+  const lockScroll = useCallback(() => {
+    scrollPosition.current = window.pageYOffset;
+    
+    requestAnimationFrame(() => {
+      document.body.style.cssText = `
+        overflow: hidden !important;
+        position: fixed !important;
+        top: -${scrollPosition.current}px !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        touch-action: none !important;
+      `;
+    });
+  }, []);
 
-  // Fixed intersection observer - images stay visible once loaded
+  const unlockScroll = useCallback(() => {
+    requestAnimationFrame(() => {
+      document.body.style.cssText = '';
+      window.scrollTo(0, scrollPosition.current);
+    });
+  }, []);
+
+  // Enhanced swipe handlers
+  const handleTouchStart = useCallback((e) => {
+    if (lightboxState.isZoomed) return;
+    
+    const touch = e.touches[0];
+    const now = Date.now();
+    
+    setSwipeState({
+      startX: touch.clientX,
+      startY: touch.clientY,
+      currentX: touch.clientX,
+      currentY: touch.clientY,
+      startTime: now,
+      isSwiping: false,
+      swipeDirection: null
+    });
+  }, [lightboxState.isZoomed]);
+
+  const handleTouchMove = useCallback((e) => {
+    if (lightboxState.isZoomed) return;
+    
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - swipeState.startX;
+    const deltaY = touch.clientY - swipeState.startY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+    
+    // Determine if this is a horizontal swipe
+    if (absDeltaX > 10 && absDeltaX > absDeltaY * 1.5) {
+      // Prevent default scroll behavior for horizontal swipes
+      e.preventDefault();
+      
+      setSwipeState(prev => ({
+        ...prev,
+        currentX: touch.clientX,
+        currentY: touch.clientY,
+        isSwiping: true,
+        swipeDirection: deltaX > 0 ? 'right' : 'left'
+      }));
+    }
+  }, [lightboxState.isZoomed, swipeState.startX, swipeState.startY]);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (lightboxState.isZoomed || !swipeState.isSwiping) {
+      setSwipeState(prev => ({ ...prev, isSwiping: false }));
+      return;
+    }
+    
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - swipeState.startX;
+    const deltaY = touch.clientY - swipeState.startY;
+    const deltaTime = Date.now() - swipeState.startTime;
+    const velocity = Math.abs(deltaX) / deltaTime;
+    
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+    
+    // Check if it's a valid swipe (horizontal, sufficient distance or velocity)
+    const isValidSwipe = (
+      absDeltaX > SWIPE_THRESHOLD || velocity > SWIPE_VELOCITY_THRESHOLD
+    ) && absDeltaX > absDeltaY;
+    
+    if (isValidSwipe) {
+      if (deltaX > 0 && galleryState.selectedIndex > 0) {
+        // Swipe right - go to previous image
+        handlePrevImage();
+      } else if (deltaX < 0 && galleryState.selectedIndex < displayedImages.length - 1) {
+        // Swipe left - go to next image
+        handleNextImage();
+      }
+    }
+    
+    setSwipeState(prev => ({ ...prev, isSwiping: false }));
+  }, [
+    lightboxState.isZoomed, 
+    swipeState.isSwiping, 
+    swipeState.startX, 
+    swipeState.startTime, 
+    galleryState.selectedIndex
+  ]);
+
+  // Navigation handlers
+  const handlePrevImage = useCallback(() => {
+    if (galleryState.selectedIndex > 0) {
+      const newIndex = galleryState.selectedIndex - 1;
+      setGalleryState(prev => ({
+        ...prev,
+        selectedIndex: newIndex,
+        selectedImage: displayedImages[newIndex].url
+      }));
+      setLightboxState(prev => ({
+        ...prev,
+        zoomLevel: 1,
+        dragPosition: { x: 0, y: 0 },
+        isZoomed: false
+      }));
+    }
+  }, [galleryState.selectedIndex]);
+
+  const handleNextImage = useCallback(() => {
+    if (galleryState.selectedIndex < displayedImages.length - 1) {
+      const newIndex = galleryState.selectedIndex + 1;
+      setGalleryState(prev => ({
+        ...prev,
+        selectedIndex: newIndex,
+        selectedImage: displayedImages[newIndex].url
+      }));
+      setLightboxState(prev => ({
+        ...prev,
+        zoomLevel: 1,
+        dragPosition: { x: 0, y: 0 },
+        isZoomed: false
+      }));
+    }
+  }, [galleryState.selectedIndex]);
+
+  // Image click handler
+  const handleImageClick = useCallback((url, index) => {
+    setGalleryState(prev => ({
+      ...prev,
+      selectedImage: url,
+      selectedIndex: index
+    }));
+    
+    setLightboxState({
+      isZoomed: false,
+      zoomLevel: 1,
+      dragPosition: { x: 0, y: 0 },
+      isDragging: false,
+      dragStart: { x: 0, y: 0 },
+      showImageInfo: false
+    });
+    
+    lockScroll();
+  }, [lockScroll]);
+
+  const handleCloseModal = useCallback(() => {
+    unlockScroll();
+    
+    setGalleryState(prev => ({
+      ...prev,
+      selectedImage: null,
+      selectedIndex: -1
+    }));
+    
+    setLightboxState({
+      isZoomed: false,
+      zoomLevel: 1,
+      dragPosition: { x: 0, y: 0 },
+      isDragging: false,
+      dragStart: { x: 0, y: 0 },
+      showImageInfo: false
+    });
+  }, [unlockScroll]);
+
+  // Category change handler
+  const handleCategoryChange = useCallback((category) => {
+    setGalleryState(prev => ({
+      ...prev,
+      activeCategory: category,
+      displayedCount: 12
+    }));
+  }, []);
+
+  // Load more handler
+  const handleLoadMore = useCallback(() => {
+    if (galleryState.loading) return;
+    
+    setGalleryState(prev => ({ ...prev, loading: true }));
+    
+    setTimeout(() => {
+      setGalleryState(prev => ({
+        ...prev,
+        displayedCount: prev.displayedCount + IMAGES_PER_LOAD,
+        loading: false
+      }));
+    }, 100);
+  }, [galleryState.loading]);
+
+  // Favorites toggle
+  const toggleFavorite = useCallback((imageId) => {
+    setFavorites(prev => {
+      const newFavorites = prev.includes(imageId) 
+        ? prev.filter(id => id !== imageId)
+        : [...prev, imageId];
+      return newFavorites;
+    });
+  }, []);
+
+  // Zoom handlers
+  const handleZoomIn = useCallback(() => {
+    setLightboxState(prev => ({
+      ...prev,
+      zoomLevel: Math.min(prev.zoomLevel + 0.5, 3),
+      isZoomed: true
+    }));
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setLightboxState(prev => {
+      const newZoom = Math.max(prev.zoomLevel - 0.5, 1);
+      return {
+        ...prev,
+        zoomLevel: newZoom,
+        isZoomed: newZoom > 1,
+        dragPosition: newZoom === 1 ? { x: 0, y: 0 } : prev.dragPosition
+      };
+    });
+  }, []);
+
+  // Intersection observer for lazy loading
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        setVisibleImages(prev => {
-          const newVisible = new Set(prev);
-          entries.forEach((entry) => {
-            const imageId = Number(entry.target.getAttribute('data-image-id'));
-            if (entry.isIntersecting) {
-              newVisible.add(imageId); // Only add, never remove
-            }
-          });
-          return newVisible;
+        const updates = new Set(visibleImages);
+        entries.forEach((entry) => {
+          const imageId = Number(entry.target.getAttribute('data-image-id'));
+          if (entry.isIntersecting) {
+            updates.add(imageId);
+          }
         });
+        
+        if (updates.size !== visibleImages.size) {
+          setVisibleImages(updates);
+        }
       },
       {
-        rootMargin: '200px 0px', // Larger margin for better UX
+        rootMargin: '100px 0px',
         threshold: 0.1
       }
     );
 
+    const observeImages = () => {
+      const images = document.querySelectorAll('[data-image-id]');
+      images.forEach(img => observer.observe(img));
+    };
 
-    // Observe new images when displayedCount changes
-    const images = document.querySelectorAll('[data-image-id]');
-    images.forEach(img => observer.observe(img));
-
-
+    requestAnimationFrame(observeImages);
     return () => observer.disconnect();
-  }, [displayedCount]);
+  }, [galleryState.displayedCount, visibleImages.size]);
 
-
-  // Cleanup effect
+  // Keyboard navigation
   useEffect(() => {
-    return () => {
-      if (selectedImage) {
-        unlockScroll();
+    if (!galleryState.selectedImage) return;
+
+    let keyTimeout;
+    const handleKeyPress = (e) => {
+      if (keyTimeout) return;
+      
+      keyTimeout = setTimeout(() => {
+        keyTimeout = null;
+      }, 100);
+
+      switch (e.key) {
+        case 'Escape':
+          handleCloseModal();
+          break;
+        case 'ArrowLeft':
+          handlePrevImage();
+          break;
+        case 'ArrowRight':
+          handleNextImage();
+          break;
+        case '+':
+        case '=':
+          handleZoomIn();
+          break;
+        case '-':
+          handleZoomOut();
+          break;
       }
     };
-  }, [selectedImage]);
 
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+      if (keyTimeout) clearTimeout(keyTimeout);
+    };
+  }, [galleryState.selectedImage, handleCloseModal, handlePrevImage, handleNextImage, handleZoomIn, handleZoomOut]);
 
-  // Reset displayed count when category changes
-  useEffect(() => {
-    setDisplayedCount(20);
-  }, [activeCategory]);
-
-
-  // Enhanced scroll lock functions
-  const lockScroll = useCallback(() => {
-    scrollPosition.current = window.scrollY;
-    
-    // Add class to body for CSS-based locking
-    document.body.classList.add('lightbox-open');
-    document.documentElement.classList.add('lightbox-open');
-    
-    // Apply styles directly for maximum compatibility
-    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-    
-    Object.assign(document.body.style, {
-      position: 'fixed',
-      top: `-${scrollPosition.current}px`,
-      left: '0',
-      right: '0',
-      width: '100%',
-      overflow: 'hidden',
-      paddingRight: `${scrollBarWidth}px` // Prevent layout shift
-    });
-    
-    // Also lock the documentElement for extra security
-    document.documentElement.style.overflow = 'hidden';
-  }, []);
-
-
-  const unlockScroll = useCallback(() => {
-    // Remove class from both elements
-    document.body.classList.remove('lightbox-open');
-    document.documentElement.classList.remove('lightbox-open');
-    
-    // Reset all body styles
-    Object.assign(document.body.style, {
-      position: '',
-      top: '',
-      left: '',
-      right: '',
-      width: '',
-      overflow: '',
-      paddingRight: ''
-    });
-    
-    // Reset documentElement
-    document.documentElement.style.overflow = '';
-    
-    // Restore scroll position
-    window.scrollTo(0, scrollPosition.current);
-    scrollPosition.current = 0;
-  }, []);
-
-
-  const handleImageClick = useCallback((imageUrl, index) => {
-    setSelectedImage(imageUrl);
-    setSelectedIndex(index);
-    lockScroll();
-  }, [lockScroll]);
-
-
-  const handleLoadMore = useCallback(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setDisplayedCount(prev => prev + IMAGES_PER_LOAD);
-      setLoading(false);
-    }, 300);
-  }, []);
-
-
-  const handlePrevImage = useCallback(() => {
-    if (selectedIndex > 0) {
-      setSelectedIndex(selectedIndex - 1);
-      setSelectedImage(displayedImages[selectedIndex - 1].url);
-    }
-  }, [selectedIndex]);
-
-
-  const handleNextImage = useCallback(() => {
-    if (selectedIndex < displayedImages.length - 1) {
-      setSelectedIndex(selectedIndex + 1);
-      setSelectedImage(displayedImages[selectedIndex + 1].url);
-    }
-  }, [selectedIndex]);
-
-
-  // Mobile touch handlers
-  const handleTouchStart = useCallback((e) => {
-    touchStartX.current = e.touches[0].clientX;
-  }, []);
-
-
-  const handleTouchMove = useCallback((e) => {
-    if (!touchStartX.current) return;
-    
-    const touchEndX = e.touches[0].clientX;
-    const diff = touchStartX.current - touchEndX;
-
-
-    // Swipe threshold of 50px
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        // Swipe left - next image
-        handleNextImage();
-      } else {
-        // Swipe right - previous image
-        handlePrevImage();
-      }
-      touchStartX.current = null;
-    }
-  }, [handleNextImage, handlePrevImage]);
-  
-  
-  // Memoized gallery images - reduced set for testing
-  const galleryImages = useMemo(() => [
+  // Gallery images data - keeping your existing data structure
+   const galleryImages = useMemo(() => [
   
     {
       id: 1,
@@ -909,8 +1092,7 @@ const Gallery = () => {
     }
   ]); 
 
-
-  // Memoized categories
+  // Categories
   const categories = useMemo(() => {
     const allCategories = [...new Set(galleryImages.map(img => img.category))];
     return ["All", ...allCategories.filter(category => 
@@ -918,75 +1100,112 @@ const Gallery = () => {
     )];
   }, [galleryImages]);
 
-
-  // Memoized filtered and displayed images
+  // Filtered and displayed images
   const { filteredImages, displayedImages, hasMoreImages } = useMemo(() => {
-    const filtered = activeCategory === "All" 
+    const filtered = galleryState.activeCategory === "All" 
       ? galleryImages 
-      : galleryImages.filter(img => img.category === activeCategory);
+      : galleryImages.filter(img => img.category === galleryState.activeCategory);
     
-    const displayed = filtered.slice(0, displayedCount);
-    const hasMore = displayedCount < filtered.length;
+    const displayed = filtered.slice(0, galleryState.displayedCount);
+    const hasMore = galleryState.displayedCount < filtered.length;
     
     return {
       filteredImages: filtered,
       displayedImages: displayed,
       hasMoreImages: hasMore
     };
-  }, [galleryImages, activeCategory, displayedCount]);
-
+  }, [galleryImages, galleryState.activeCategory, galleryState.displayedCount]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 relative mb-20">
-      {/* Simplified animated background */}
+      {/* Optimized CSS */}
+      <style jsx>{`
+        * {
+          box-sizing: border-box;
+        }
+        
+        .gallery-item {
+          contain: layout style paint;
+          content-visibility: auto;
+          contain-intrinsic-size: 200px;
+        }
+        
+        .lightbox-container {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          z-index: 99999 !important;
+          overflow: hidden !important;
+          touch-action: none !important;
+        }
+        
+        .lightbox-image {
+          will-change: transform;
+          backface-visibility: hidden;
+          transform-style: preserve-3d;
+        }
+        
+        .columns-2 { column-count: 2; column-gap: 0.75rem; }
+        @media (min-width: 640px) { .sm\\:columns-2 { column-count: 2; } }
+        @media (min-width: 768px) { .md\\:columns-3 { column-count: 3; } }
+        @media (min-width: 1024px) { .lg\\:columns-4 { column-count: 4; } }
+        @media (min-width: 1280px) { .xl\\:columns-5 { column-count: 5; } }
+        
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.2; transform: scale(0.9); }
+          50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-5px); }
+        }
+      `}</style>
+
       <AnimatedPatterns />
-      <FloatingBallBackground />
       
       <div className="relative z-10 pt-20 pb-15" ref={galleryRef}>
         {/* Header Section */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-5 text-center">
           <div>
-            <div className="inline-block mb-4">
-              <h1 className="font-dancing text-3xl sm:text-5xl lg:text-5xl leading-[1.3] pt-5 pb-10 text-transparent bg-clip-text bg-gradient-to-r from-chocolate via-primary to-chocolate-light">
+            <div className="inline-block mb-2">
+              <h1 className="font-dancing text-3xl sm:text-5xl lg:text-5xl leading-[1.3] pt-5 pb-8 text-transparent bg-clip-text bg-gradient-to-r from-chocolate via-primary to-chocolate-light">
                 Gallery 
               </h1>
-              <div className="h-1 w-32 mx-auto mt-2 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
+              <div className="h-1 w-24 mx-auto mt-2 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
             </div>
 
-
-            <p className="font-playfair text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Explore our complete collection of cinematic wedding moments, 
-              <span className="text-chocolate font-semibold"> captured with love and artistry</span>
+            <p className="font-playfair text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Explore our collection of cinematic wedding moments
             </p>
           </div>
         </div>
 
-
         {/* Category Filter */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <CategoryFilter 
             categories={categories}
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
+            activeCategory={galleryState.activeCategory}
+            onCategoryChange={handleCategoryChange}
           />
         </div>
 
-
         {/* Gallery Grid */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Gallery Stats */}
-          <div className="text-center mb-8">
-            <p className="text-muted-foreground font-poppins">
-              Showing <span className="font-semibold text-chocolate">{displayedImages.length}</span> of <span className="font-semibold text-chocolate">{filteredImages.length}</span> beautiful moments
-              {activeCategory !== "All" && (
-                <span className="text-chocolate"> in {activeCategory}</span>
+          <div className="text-center mb-6">
+            <p className="text-muted-foreground font-poppins text-sm">
+              Showing <span className="font-semibold text-chocolate">{displayedImages.length}</span> of <span className="font-semibold text-chocolate">{filteredImages.length}</span> moments
+              {galleryState.activeCategory !== "All" && (
+                <span className="text-chocolate"> in {galleryState.activeCategory}</span>
               )}
             </p>
           </div>
 
-
-          {/* Optimized Masonry Grid */}
-          <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4">
+          <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-3">
             {displayedImages.map((photo, index) => (
               <div key={photo.id} data-image-id={photo.id}>
                 <GalleryImage
@@ -994,193 +1213,124 @@ const Gallery = () => {
                   index={index}
                   onClick={handleImageClick}
                   isVisible={visibleImages.has(photo.id)}
+                  favorites={favorites}
+                  toggleFavorite={toggleFavorite}
                 />
               </div>
             ))}
           </div>
 
-
-          {/* Load More Button */}
           <LoadMoreButton 
             onClick={handleLoadMore}
-            loading={loading}
+            loading={galleryState.loading}
             hasMore={hasMoreImages}
           />
         </div>
       </div>
 
-
-      {/* Enhanced Lightbox Modal with complete scroll prevention */}
-      {selectedImage && (
+      {/* Enhanced Lightbox with Swipe Support */}
+      {galleryState.selectedImage && (
         <div 
-          className="lightbox-overlay fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-          style={{ 
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 9999,
-            touchAction: 'none',
-            overscrollBehavior: 'none',
-            WebkitOverflowScrolling: 'none'
-          }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setSelectedImage(null);
-              unlockScroll();
-            }
-          }}
-          onTouchStart={(e) => {
-            e.stopPropagation();
-            handleTouchStart(e);
-          }}
-          onTouchMove={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleTouchMove(e);
-          }}
-          onWheel={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onScroll={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
+          ref={lightboxRef}
+          className="lightbox-container bg-black/95 flex items-center justify-center"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
-          <div className="relative flex items-center justify-center w-full h-full">
-            <img 
-              src={selectedImage?.includes('imagekit.io') 
-                ? `${selectedImage}${selectedImage.includes('?') ? '&' : '?'}tr=w-1200,h-1200,q-85,f-auto`
-                : selectedImage} 
-              alt="Gallery image" 
-              className="max-w-[95vw] max-h-[85vh] w-auto h-auto object-contain rounded-xl shadow-2xl" 
-              loading="eager"
-              draggable="false"
-            />
-
-
-            {/* Close Button */}
-            <button 
-              onClick={() => {
-                setSelectedImage(null);
-                unlockScroll();
-              }} 
-              className="absolute top-4 right-4 bg-white/90 hover:bg-white text-chocolate w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 shadow-lg z-10" 
+          {/* Top controls */}
+          <div className="absolute top-0 left-0 right-0 z-60 bg-black/50 px-4 py-3 flex items-center justify-between">
+            <span className="text-white text-sm">
+              {galleryState.selectedIndex + 1} / {displayedImages.length}
+            </span>
+            
+            <button
+              onClick={handleCloseModal}
+              className="text-white/80 hover:text-white p-2"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Navigation buttons - hidden on mobile for swipe */}
+          <button
+            onClick={handlePrevImage}
+            disabled={galleryState.selectedIndex === 0}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full hover:bg-white/10 disabled:opacity-50 hidden sm:block"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          {/* Main image container */}
+          <div className="relative flex-1 flex items-center justify-center overflow-hidden">
+            <img
+              ref={imageRef}
+              src={galleryState.selectedImage}
+              alt={displayedImages[galleryState.selectedIndex]?.alt}
+              className="lightbox-image max-h-[85vh] max-w-[85vw] object-contain"
+              style={{
+                transform: `scale(${lightboxState.zoomLevel}) translate(${lightboxState.dragPosition.x / lightboxState.zoomLevel}px, ${lightboxState.dragPosition.y / lightboxState.zoomLevel}px)`,
+              }}
+              onDoubleClick={() => lightboxState.isZoomed ? handleZoomOut() : handleZoomIn()}
+              draggable={false}
+            />
+            
+            {/* Mobile swipe indicators */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-xs bg-black/40 px-3 py-1 rounded-full sm:hidden">
+              {lightboxState.isZoomed ? 'Double tap to reset zoom' : 'Swipe left/right to navigate'}
+            </div>
+            
+            {/* Visual swipe feedback */}
+            {swipeState.isSwiping && (
+              <div className="absolute inset-0 pointer-events-none">
+                <div 
+                  className={`absolute top-1/2 -translate-y-1/2 text-white/50 text-4xl transition-all duration-200 ${
+                    swipeState.swipeDirection === 'right' 
+                      ? 'left-8 animate-pulse' 
+                      : 'right-8 animate-pulse'
+                  }`}
+                >
+                  {swipeState.swipeDirection === 'right' ? '←' : '→'}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={handleNextImage}
+            disabled={galleryState.selectedIndex === displayedImages.length - 1}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 rounded-full hover:bg-white/10 disabled:opacity-50 hidden sm:block"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Zoom controls */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/50 px-4 py-2 rounded-full">
+            <button
+              onClick={handleZoomOut}
+              disabled={lightboxState.zoomLevel <= 1}
+              className="text-white/80 hover:text-white disabled:text-white/40 p-1"
+            >
+              <ZoomOut className="w-4 h-4" />
             </button>
             
-            {/* Navigation Buttons */}
-            {selectedIndex > 0 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePrevImage();
-                }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M15 18l-6-6 6-6" />
-                </svg>
-              </button>
-            )}
+            <span className="text-white text-sm min-w-[50px] text-center">
+              {Math.round(lightboxState.zoomLevel * 100)}%
+            </span>
             
-            {selectedIndex < displayedImages.length - 1 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleNextImage();
-                }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
-              </button>
-            )}
+            <button
+              onClick={handleZoomIn}
+              disabled={lightboxState.zoomLevel >= 3}
+              className="text-white/80 hover:text-white disabled:text-white/40 p-1"
+            >
+              <ZoomIn className="w-4 h-4" />
+            </button>
           </div>
         </div>
       )}
       
       <SocialFloatingButton />
-
-
-      {/* Enhanced CSS with comprehensive scroll prevention */}
-      <style>
-        {`
-          @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-          }
-          
-          @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-10px) rotate(5deg); }
-            66% { transform: translateY(5px) rotate(-3deg); }
-          }
-          
-          .animate-twinkle { animation: twinkle linear infinite; }
-          .animate-float { animation: float ease-in-out infinite; }
-
-
-          /* Pinterest-style columns layout */
-          .columns-2 { column-count: 2; column-gap: 1rem; }
-          
-          /* Enhanced scroll lock - comprehensive approach */
-          html.lightbox-open,
-          body.lightbox-open {
-            overflow: hidden !important;
-            position: fixed !important;
-            width: 100% !important;
-            height: 100% !important;
-            touch-action: none !important;
-            -webkit-overflow-scrolling: none !important;
-            overscroll-behavior: none !important;
-          }
-          
-          /* Prevent scrolling on all elements when lightbox is open */
-          body.lightbox-open * {
-            overscroll-behavior: none !important;
-          }
-          
-          /* Lightbox specific styles - maximum security */
-          .lightbox-overlay {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            z-index: 9999 !important;
-            touch-action: none !important;
-            overscroll-behavior: none !important;
-            -webkit-overflow-scrolling: none !important;
-          }
-          
-          @media (min-width: 640px) {
-            .sm\\:columns-2 { column-count: 2; }
-          }
-          
-          @media (min-width: 768px) {
-            .md\\:columns-3 { column-count: 3; }
-          }
-          
-          @media (min-width: 1024px) {
-            .lg\\:columns-4 { column-count: 4; }
-          }
-          
-          @media (min-width: 1280px) {
-            .xl\\:columns-5 { column-count: 5; }
-          }
-        `}
-      </style>
     </div>
   );
 };
-
 
 export default Gallery;

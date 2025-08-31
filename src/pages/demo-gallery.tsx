@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import FloatingBallBackground from "@/components/common/FloatingBallBackground";
 import SocialFloatingButton from "@/components/common/SocialFloatingButton";
+
 
 // Animated Background Pattern Component
 const AnimatedPatterns = () => {
@@ -8,7 +9,7 @@ const AnimatedPatterns = () => {
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
       {/* Star Dots Pattern */}
       <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <div
             key={`star-${i}`}
             className="absolute animate-twinkle"
@@ -19,7 +20,7 @@ const AnimatedPatterns = () => {
               animationDuration: `${3 + Math.random() * 2}s`,
             }}
           >
-            <svg width="8" height="8" viewBox="0 0 8 8" className="text-beige-warm/30">
+            <svg width="8" height="8" viewBox="0 0 8 8" className="text-beige-warm/20">
               <path
                 d="M4 0L4.854 2.146L7 1.292L5.708 3.292L8 4L5.708 4.708L7 6.708L4.854 5.854L4 8L3.146 5.854L1 6.708L2.292 4.708L0 4L2.292 3.292L1 1.292L3.146 2.146L4 0Z"
                 fill="currentColor"
@@ -29,12 +30,13 @@ const AnimatedPatterns = () => {
         ))}
       </div>
 
-      {/* Floating Flowers */}
+
+      {/* Reduced floating flowers */}
       <div className="absolute inset-0">
-        {[...Array(15)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <div
             key={`flower-${i}`}
-            className="absolute animate-float opacity-20"
+            className="absolute animate-float opacity-10"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -42,38 +44,18 @@ const AnimatedPatterns = () => {
               animationDuration: `${8 + Math.random() * 4}s`,
             }}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" className="text-primary/20">
-              <path
-                d="M12 3.5c2.5 0 4.5 2 4.5 4.5 0-2.5 2-4.5 4.5-4.5-2.5 0-4.5-2-4.5-4.5 0 2.5-2 4.5-4.5 4.5zm0 17c-2.5 0-4.5-2-4.5-4.5 0 2.5-2 4.5-4.5 4.5 2.5 0 4.5 2 4.5 4.5 0-2.5 2-4.5 4.5-4.5z"
-                fill="currentColor"
-              />
+            <svg width="12" height="12" viewBox="0 0 24 24" className="text-primary/10">
               <circle cx="12" cy="12" r="3" fill="currentColor" />
             </svg>
           </div>
         ))}
       </div>
-
-      {/* Geometric Pattern Overlay */}
-      <div className="absolute inset-0 opacity-5">
-        <svg width="100%" height="100%" className="text-chocolate">
-          <defs>
-            <pattern id="geometric" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
-              <circle cx="60" cy="60" r="2" fill="currentColor" opacity="0.3" />
-              <circle cx="20" cy="20" r="1" fill="currentColor" opacity="0.2" />
-              <circle cx="100" cy="20" r="1" fill="currentColor" opacity="0.2" />
-              <circle cx="20" cy="100" r="1" fill="currentColor" opacity="0.2" />
-              <circle cx="100" cy="100" r="1" fill="currentColor" opacity="0.2" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#geometric)" />
-        </svg>
-      </div>
     </div>
   );
 };
 
-// Enhanced Gallery Filter Component - EXCLUDES "Cinematic", "Family", "Details"
 
+// Enhanced Gallery Filter Component
 const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
   return (
     <div className="flex flex-wrap justify-center gap-3 mb-12">
@@ -81,7 +63,7 @@ const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
         <button
           key={category}
           onClick={() => onCategoryChange(category)}
-          className={`px-6 py-3 rounded-full font-poppins font-medium text-sm transition-all duration-300 transform hover:scale-105 ${
+          className={`px-6 py-3 rounded-full font-poppins font-medium text-sm transition-all duration-200 ${
             activeCategory === category
               ? "bg-gradient-to-r from-chocolate to-chocolate-light text-cream shadow-lg"
               : "bg-white/80 text-chocolate hover:bg-beige-warm/50 hover:shadow-md"
@@ -93,6 +75,97 @@ const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
     </div>
   );
 };
+
+
+// Optimized Image Component with proper aspect ratio handling
+const GalleryImage = ({ photo, index, onClick, isVisible }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
+
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+  }, []);
+
+
+  const handleImageError = useCallback(() => {
+    setImageFailed(true);
+  }, []);
+
+
+  return (
+    <div 
+      className="group cursor-pointer break-inside-avoid mb-4"
+      style={{
+        animationDelay: `${index * 0.02}s`,
+        animationFillMode: 'both'
+      }} 
+      onClick={() => onClick(photo.url, index)}
+    >
+      <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1">
+        {/* Natural aspect ratio container - no forced padding */}
+        <div className="relative w-full">
+          {/* Placeholder that maintains natural dimensions */}
+          <div 
+            className={`w-full bg-gradient-to-br from-beige-warm/20 to-cream/30 ${
+              !imageLoaded && isVisible ? 'h-48' : 'h-auto'
+            }`}
+            style={{
+              backgroundColor: '#f5f5f0'
+            }}
+          />
+
+
+          {/* Image with natural aspect ratio */}
+          {isVisible && !imageFailed && (
+            <img 
+              src={photo.url.includes('imagekit.io') 
+                ? `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-400,q-75,f-auto`
+                : photo.url}
+              alt={photo.alt}
+              className={`${
+                imageLoaded ? 'relative' : 'absolute inset-0'
+              } w-full h-auto object-contain transition-opacity duration-300 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              } group-hover:scale-105 transition-transform duration-500`}
+              loading="lazy"
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+              decoding="async"
+            />
+          )}
+
+
+          {/* Loading indicator */}
+          {isVisible && !imageLoaded && !imageFailed && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-chocolate/20 border-t-chocolate/60 rounded-full animate-spin" />
+            </div>
+          )}
+
+
+          {/* Hover overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          
+          {/* Category Badge */}
+          <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="bg-white/90 text-chocolate px-3 py-1 rounded-full text-xs font-medium">
+              {photo.category}
+            </span>
+          </div>
+          
+          {/* Photo Title on Hover */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h3 className="text-white font-medium text-sm leading-tight">
+              {photo.alt}
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 // Load More Button Component
 const LoadMoreButton = ({ onClick, loading, hasMore }) => {
@@ -107,63 +180,60 @@ const LoadMoreButton = ({ onClick, loading, hasMore }) => {
           loading ? 'animate-pulse' : 'hover:-translate-y-1'
         }`}
       >
-        {loading ? (
-          <div className="flex items-center gap-3">
-            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-cream" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Loading more...
-          </div>
-        ) : (
-          'Load More'
-        )}
+        {loading ? 'Loading...' : 'Load More'}
       </button>
     </div>
   );
 };
 
-const Gallery = () => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-  const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [displayedCount, setDisplayedCount] = useState<number>(20); // Initial load count
-  const [loading, setLoading] = useState<boolean>(false);
-  const [visibleImages, setVisibleImages] = useState<Set<number>>(new Set()); // Track which images are in viewport
-  const imageRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
-  const scrollPosition = useRef(0);
-  
-  const IMAGES_PER_LOAD = 15; // How many images to load each time
 
-  // Simple intersection observer for lazy loading
+const Gallery = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [displayedCount, setDisplayedCount] = useState(20);
+  const [loading, setLoading] = useState(false);
+  const [visibleImages, setVisibleImages] = useState(new Set());
+  const galleryRef = useRef(null);
+  const scrollPosition = useRef(0);
+  const touchStartX = useRef(null);
+  
+  const IMAGES_PER_LOAD = 15;
+
+
+  // Fixed intersection observer - images stay visible once loaded
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          const imageId = Number(entry.target.getAttribute('data-image-id'));
-          if (entry.isIntersecting) {
-            // Trigger image load when it comes into view
-            setVisibleImages(prev => new Set([...prev, imageId]));
-          }
+        setVisibleImages(prev => {
+          const newVisible = new Set(prev);
+          entries.forEach((entry) => {
+            const imageId = Number(entry.target.getAttribute('data-image-id'));
+            if (entry.isIntersecting) {
+              newVisible.add(imageId); // Only add, never remove
+            }
+          });
+          return newVisible;
         });
       },
       {
-        rootMargin: '50px 0px',
+        rootMargin: '200px 0px', // Larger margin for better UX
         threshold: 0.1
       }
     );
 
-    // Observe all image containers
-    Object.values(imageRefs.current).forEach(ref => {
-      if (ref) observer.observe(ref);
-    });
+
+    // Observe new images when displayedCount changes
+    const images = document.querySelectorAll('[data-image-id]');
+    images.forEach(img => observer.observe(img));
+
 
     return () => observer.disconnect();
-  }, [displayedCount]); // Re-run when more images are loaded
+  }, [displayedCount]);
+
 
   // Cleanup effect
   useEffect(() => {
-    // Clean up if component unmounts while modal is open
     return () => {
       if (selectedImage) {
         unlockScroll();
@@ -171,109 +241,126 @@ const Gallery = () => {
     };
   }, [selectedImage]);
 
+
   // Reset displayed count when category changes
   useEffect(() => {
     setDisplayedCount(20);
   }, [activeCategory]);
 
-  const lockScroll = () => {
-    // Store current scroll position
-    scrollPosition.current = window.scrollY;
-    // Add styles to body to prevent scrolling
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollPosition.current}px`;
-    document.body.style.width = '100%';
-  };
 
-  const unlockScroll = () => {
-    // Remove styles from body
-    document.body.style.removeProperty('overflow');
-    document.body.style.removeProperty('position');
-    document.body.style.removeProperty('top');
-    document.body.style.removeProperty('width');
+  // Enhanced scroll lock functions
+  const lockScroll = useCallback(() => {
+    scrollPosition.current = window.scrollY;
+    
+    // Add class to body for CSS-based locking
+    document.body.classList.add('lightbox-open');
+    document.documentElement.classList.add('lightbox-open');
+    
+    // Apply styles directly for maximum compatibility
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    
+    Object.assign(document.body.style, {
+      position: 'fixed',
+      top: `-${scrollPosition.current}px`,
+      left: '0',
+      right: '0',
+      width: '100%',
+      overflow: 'hidden',
+      paddingRight: `${scrollBarWidth}px` // Prevent layout shift
+    });
+    
+    // Also lock the documentElement for extra security
+    document.documentElement.style.overflow = 'hidden';
+  }, []);
+
+
+  const unlockScroll = useCallback(() => {
+    // Remove class from both elements
+    document.body.classList.remove('lightbox-open');
+    document.documentElement.classList.remove('lightbox-open');
+    
+    // Reset all body styles
+    Object.assign(document.body.style, {
+      position: '',
+      top: '',
+      left: '',
+      right: '',
+      width: '',
+      overflow: '',
+      paddingRight: ''
+    });
+    
+    // Reset documentElement
+    document.documentElement.style.overflow = '';
+    
     // Restore scroll position
     window.scrollTo(0, scrollPosition.current);
-  };
+    scrollPosition.current = 0;
+  }, []);
 
-  const handleImageClick = (imageUrl: string, index: number) => {
+
+  const handleImageClick = useCallback((imageUrl, index) => {
     setSelectedImage(imageUrl);
     setSelectedIndex(index);
     lockScroll();
-    
-    // Preload next and previous images
-    const preloadImages = () => {
-      // Preload next image
-      if (index < displayedImages.length - 1) {
-        const nextImg = new Image();
-        nextImg.src = `${displayedImages[index + 1].url}${displayedImages[index + 1].url.includes('?') ? '&' : '?'}tr=w-1200,h-1200,q-85`;
-      }
-      // Preload previous image
-      if (index > 0) {
-        const prevImg = new Image();
-        prevImg.src = `${displayedImages[index - 1].url}${displayedImages[index - 1].url.includes('?') ? '&' : '?'}tr=w-1200,h-1200,q-85`;
-      }
-    };
-    
-    // Use requestIdleCallback for non-critical preloading
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(preloadImages);
-    } else {
-      setTimeout(preloadImages, 1000);
-    };
-  };
+  }, [lockScroll]);
 
-  const handleLoadMore = () => {
+
+  const handleLoadMore = useCallback(() => {
     setLoading(true);
-    // Simulate loading delay
     setTimeout(() => {
       setDisplayedCount(prev => prev + IMAGES_PER_LOAD);
       setLoading(false);
-    }, 800);
-  };
+    }, 300);
+  }, []);
 
-  const handlePrevImage = () => {
+
+  const handlePrevImage = useCallback(() => {
     if (selectedIndex > 0) {
       setSelectedIndex(selectedIndex - 1);
       setSelectedImage(displayedImages[selectedIndex - 1].url);
     }
-  };
+  }, [selectedIndex]);
 
-  const handleNextImage = () => {
+
+  const handleNextImage = useCallback(() => {
     if (selectedIndex < displayedImages.length - 1) {
       setSelectedIndex(selectedIndex + 1);
       setSelectedImage(displayedImages[selectedIndex + 1].url);
     }
-  };
+  }, [selectedIndex]);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+
+  // Mobile touch handlers
+  const handleTouchStart = useCallback((e) => {
     touchStartX.current = e.touches[0].clientX;
-  };
+  }, []);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+
+  const handleTouchMove = useCallback((e) => {
     if (!touchStartX.current) return;
     
     const touchEndX = e.touches[0].clientX;
     const diff = touchStartX.current - touchEndX;
 
+
     // Swipe threshold of 50px
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
-        // Swipe left
+        // Swipe left - next image
         handleNextImage();
       } else {
-        // Swipe right
+        // Swipe right - previous image
         handlePrevImage();
       }
       touchStartX.current = null;
     }
-  };
-
-  const touchStartX = useRef<number | null>(null);
-
-  // Complete Gallery Images - ALL IMAGES INCLUDED
-  const galleryImages = [
-    // Homepage PhotoGallery images
+  }, [handleNextImage, handlePrevImage]);
+  
+  
+  // Memoized gallery images - reduced set for testing
+  const galleryImages = useMemo(() => [
+  
     {
       id: 1,
       url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000488.jpg?updatedAt=1752122341261",
@@ -820,39 +907,52 @@ const Gallery = () => {
       alt: "Beautiful couple portraits",
       category: "Pre-Wedding"
     }
-  ];
+  ]); 
 
-  // UPDATED: Extract unique categories BUT exclude "Cinematic", "Family", "Details"
-  const allCategories = [...new Set(galleryImages.map(img => img.category))];
-  const categories = ["All", ...allCategories.filter(category => 
-    !["Cinematic", "Family", "Details","Candid"].includes(category)
-  )];
 
-  // Filter images based on active category
-  const filteredImages = activeCategory === "All" 
-    ? galleryImages 
-    : galleryImages.filter(img => img.category === activeCategory);
+  // Memoized categories
+  const categories = useMemo(() => {
+    const allCategories = [...new Set(galleryImages.map(img => img.category))];
+    return ["All", ...allCategories.filter(category => 
+      !["Cinematic", "Family", "Details", "Candid"].includes(category)
+    )];
+  }, [galleryImages]);
 
-  // Get displayed images based on pagination
-  const displayedImages = filteredImages.slice(0, displayedCount);
-  const hasMoreImages = displayedCount < filteredImages.length;
+
+  // Memoized filtered and displayed images
+  const { filteredImages, displayedImages, hasMoreImages } = useMemo(() => {
+    const filtered = activeCategory === "All" 
+      ? galleryImages 
+      : galleryImages.filter(img => img.category === activeCategory);
+    
+    const displayed = filtered.slice(0, displayedCount);
+    const hasMore = displayedCount < filtered.length;
+    
+    return {
+      filteredImages: filtered,
+      displayedImages: displayed,
+      hasMoreImages: hasMore
+    };
+  }, [galleryImages, activeCategory, displayedCount]);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 relative mb-20">
-      {/* Animated Background Patterns */}
+      {/* Simplified animated background */}
       <AnimatedPatterns />
       <FloatingBallBackground />
       
-      <div className="relative z-10 pt-20 pb-15">
-        {/* Enhanced Header Section */}
+      <div className="relative z-10 pt-20 pb-15" ref={galleryRef}>
+        {/* Header Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center">
-          <div className="animate-fade-in-up">
-            <div className="inline-block mb-4 overflow-visible">
-              <h1 className="font-dancing text-3xl sm:text-5xl lg:text-5xl leading-[1.3] pt-5 pb-10 text-transparent bg-clip-text bg-gradient-to-r from-chocolate via-primary to-chocolate-light drop-shadow-sm">
+          <div>
+            <div className="inline-block mb-4">
+              <h1 className="font-dancing text-3xl sm:text-5xl lg:text-5xl leading-[1.3] pt-5 pb-10 text-transparent bg-clip-text bg-gradient-to-r from-chocolate via-primary to-chocolate-light">
                 Gallery 
               </h1>
               <div className="h-1 w-32 mx-auto mt-2 bg-gradient-to-r from-transparent via-chocolate to-transparent rounded-full"></div>
             </div>
+
 
             <p className="font-playfair text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Explore our complete collection of cinematic wedding moments, 
@@ -861,7 +961,8 @@ const Gallery = () => {
           </div>
         </div>
 
-        {/* Category Filter - WITH Cinematic, Family, Details REMOVED */}
+
+        {/* Category Filter */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <CategoryFilter 
             categories={categories}
@@ -870,7 +971,8 @@ const Gallery = () => {
           />
         </div>
 
-        {/* Enhanced Gallery Grid */}
+
+        {/* Gallery Grid */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Gallery Stats */}
           <div className="text-center mb-8">
@@ -882,110 +984,21 @@ const Gallery = () => {
             </p>
           </div>
 
-          {/* Pinterest-style Grid - Mobile optimized */}
-          <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4">
+
+          {/* Optimized Masonry Grid */}
+          <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4">
             {displayedImages.map((photo, index) => (
-              <div 
-                key={photo.id} 
-                ref={el => imageRefs.current[photo.id] = el}
-                data-image-id={photo.id}
-                className="group cursor-pointer animate-fade-in hover-scale break-inside-avoid mb-4"
-                style={{
-                  animationDelay: `${index * 0.05}s`,
-                  animationFillMode: 'both'
-                }} 
-                onClick={() => handleImageClick(photo.url, index)}
-              >
-                <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-700 hover:-translate-y-2">
-                  {/* Image Container with Aspect Ratio */}
-                  <div className="relative w-full pb-[133.33%]"> {/* 4:3 aspect ratio */}
-                    <div className="absolute inset-0">
-                      {/* Low-res placeholder */}
-                      <div 
-                        className="absolute inset-0 bg-gradient-to-br from-beige-warm/10 to-cream/20"
-                        style={{
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                          filter: 'blur(10px)',
-                          transform: 'scale(1.1)',
-                        }}
-                      />
-
-                      {/* Main Image with Progressive Loading */}
-                      <img 
-                        src={photo.url.includes('imagekit.io') 
-                          ? `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-400,h-400,q-60`
-                          : photo.url}
-                        alt={photo.alt}
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${visibleImages.has(photo.id) ? 'opacity-100' : 'opacity-0'} group-hover:scale-110 transition-all duration-1000 filter group-hover:brightness-110 group-hover:contrast-105`}
-                        loading="lazy"
-                        onLoad={(e) => {
-                          const img = e.target as HTMLImageElement;
-                          if (img.complete) {
-                            // Load high quality version after thumbnail is shown
-                            if (photo.url.includes('imagekit.io')) {
-                              const highQualityImg = new Image();
-                              highQualityImg.src = `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-800,q-80,f-auto`;
-                              highQualityImg.onload = () => {
-                                img.src = highQualityImg.src;
-                              };
-                            }
-                            setVisibleImages(prev => new Set([...prev, photo.id]));
-                          }
-                        }}
-                      />
-
-                      {/* Loading Overlay */}
-                      {!visibleImages.has(photo.id) && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-beige-warm/5 to-cream/10 backdrop-blur-sm">
-                          <div className="flex flex-col items-center gap-2">
-                            <div className="w-8 h-8 rounded-full border-2 border-chocolate/20 border-t-chocolate/40 animate-smooth-spin" />
-                            <span className="text-xs text-chocolate/40 font-poppins tracking-wider">Loading</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* Gradient Overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-transparent to-secondary/30 opacity-0 group-hover:opacity-40 transition-all duration-500" />
-                  
-                  {/* Category Badge */}
-                  <div className="absolute top-4 left-4 transform -translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
-                    <span className="bg-gradient-to-r from-cream/95 to-beige-light/95 backdrop-blur-sm text-chocolate px-4 py-2 rounded-full text-xs font-poppins font-semibold shadow-xl border border-white/20">
-                      {photo.category}
-                    </span>
-                  </div>
-                  
-                  {/* Photo Title on Hover */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-all duration-500 delay-200">
-                    <h3 className="text-white font-playfair font-semibold text-lg mb-2 leading-tight">
-                      {photo.alt}
-                    </h3>
-                    <div className="flex items-center justify-between">
-                      <div className="flex space-x-2">
-                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                        <div className="w-2 h-2 bg-secondary rounded-full animate-pulse opacity-70" style={{ animationDelay: '0.5s' }} />
-                        <div className="w-2 h-2 bg-primary/70 rounded-full animate-pulse opacity-50" style={{ animationDelay: '1s' }} />
-                      </div>
-                      <span className="text-white/80 text-xs font-poppins">Click to view</span>
-                    </div>
-                  </div>
-                  
-                  {/* Hover Border Glow */}
-                  <div className="absolute inset-0 rounded-2xl ring-0 group-hover:ring-4 group-hover:ring-primary/20 transition-all duration-500" />
-                  
-                  {/* Sparkle Effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
-                    <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '1s' }} />
-                    <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '1.5s' }} />
-                  </div>
-                </div>
+              <div key={photo.id} data-image-id={photo.id}>
+                <GalleryImage
+                  photo={photo}
+                  index={index}
+                  onClick={handleImageClick}
+                  isVisible={visibleImages.has(photo.id)}
+                />
               </div>
             ))}
           </div>
+
 
           {/* Load More Button */}
           <LoadMoreButton 
@@ -996,10 +1009,22 @@ const Gallery = () => {
         </div>
       </div>
 
-      {/* Enhanced Lightbox Modal with improved touch handling */}
+
+      {/* Enhanced Lightbox Modal with complete scroll prevention */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm overscroll-none touch-none" 
+          className="lightbox-overlay fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+          style={{ 
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 9999,
+            touchAction: 'none',
+            overscrollBehavior: 'none',
+            WebkitOverflowScrolling: 'none'
+          }}
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setSelectedImage(null);
@@ -1007,24 +1032,34 @@ const Gallery = () => {
             }
           }}
           onTouchStart={(e) => {
-            e.stopPropagation(); // Prevent background interactions
+            e.stopPropagation();
             handleTouchStart(e);
           }}
           onTouchMove={(e) => {
-            e.preventDefault(); // Prevent any scrolling
+            e.preventDefault();
             e.stopPropagation();
             handleTouchMove(e);
           }}
+          onWheel={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          onScroll={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
-          <div className="relative max-w-6xl max-h-full animate-fade-in select-none">
+          <div className="relative flex items-center justify-center w-full h-full">
             <img 
               src={selectedImage?.includes('imagekit.io') 
                 ? `${selectedImage}${selectedImage.includes('?') ? '&' : '?'}tr=w-1200,h-1200,q-85,f-auto`
                 : selectedImage} 
               alt="Gallery image" 
-              className="w-full h-auto max-h-[90vh] object-contain rounded-xl shadow-2xl" 
-              draggable="false" 
+              className="max-w-[95vw] max-h-[85vh] w-auto h-auto object-contain rounded-xl shadow-2xl" 
+              loading="eager"
+              draggable="false"
             />
+
 
             {/* Close Button */}
             <button 
@@ -1032,57 +1067,50 @@ const Gallery = () => {
                 setSelectedImage(null);
                 unlockScroll();
               }} 
-              className="absolute top-4 right-4 bg-white/90 hover:bg-white text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm" 
-              aria-label="Close lightbox"
+              className="absolute top-4 right-4 bg-white/90 hover:bg-white text-chocolate w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 shadow-lg z-10" 
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             </button>
             
             {/* Navigation Buttons */}
-            <div className="absolute inset-y-0 left-4 right-4 flex items-center justify-between pointer-events-none">
-              {selectedIndex > 0 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handlePrevImage();
-                  }}
-                   className="pointer-events-auto bg-transparent hover:bg-white/20 text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
-                    aria-label="previous image"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2">
-                    <path d="M15 18l-6-6 6-6" />
-                  </svg>
-                </button>
-              )}
-              
-              {selectedIndex < displayedImages.length - 1 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNextImage();
-                    }}
-                    className="pointer-events-auto bg-transparent hover:bg-white/20 text-chocolate w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg backdrop-blur-sm"
-                    aria-label="Next image"
-                    >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2">
-                    <path d="M9 18l6-6-6-6" />
-                    </svg>
-                </button>
-              )}
-            </div>
+            {selectedIndex > 0 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePrevImage();
+                }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+            )}
             
-            
+            {selectedIndex < displayedImages.length - 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNextImage();
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       )}
       
-      {/* Floating Social Media Button */}
       <SocialFloatingButton />
-      
-      {/* Custom CSS for animations */}
+
+
+      {/* Enhanced CSS with comprehensive scroll prevention */}
       <style>
         {`
           @keyframes twinkle {
@@ -1096,85 +1124,63 @@ const Gallery = () => {
             66% { transform: translateY(5px) rotate(-3deg); }
           }
           
-          @keyframes fade-in {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-
-          @keyframes bounce-x {
-            0%, 100% { transform: translateX(-2px); }
-            50% { transform: translateX(2px); }
-          }
-
-          @keyframes image-fade-in {
-            0% { opacity: 0; transform: scale(1.1); }
-            100% { opacity: 1; transform: scale(1); }
-          }
-
-          @keyframes smooth-spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-          
           .animate-twinkle { animation: twinkle linear infinite; }
           .animate-float { animation: float ease-in-out infinite; }
-          .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-          .animate-bounce-x { animation: bounce-x 1.5s ease-in-out infinite; }
-          .animate-image-fade-in { animation: image-fade-in 0.8s ease-out forwards; }
-          .animate-smooth-spin { animation: smooth-spin 1.2s linear infinite; }
-          .hover-scale { transition: transform 0.3s ease; }
-          .hover-scale:hover { transform: scale(1.02); }
-          
-          .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-          
-          .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-          }
 
-          .snap-x {
-            scroll-snap-type: x mandatory;
-          }
-          
-          .snap-center {
-            scroll-snap-align: center;
-          }
 
           /* Pinterest-style columns layout */
-          .columns-2 {
-            column-count: 2;
-            column-gap: 1rem;
+          .columns-2 { column-count: 2; column-gap: 1rem; }
+          
+          /* Enhanced scroll lock - comprehensive approach */
+          html.lightbox-open,
+          body.lightbox-open {
+            overflow: hidden !important;
+            position: fixed !important;
+            width: 100% !important;
+            height: 100% !important;
+            touch-action: none !important;
+            -webkit-overflow-scrolling: none !important;
+            overscroll-behavior: none !important;
+          }
+          
+          /* Prevent scrolling on all elements when lightbox is open */
+          body.lightbox-open * {
+            overscroll-behavior: none !important;
+          }
+          
+          /* Lightbox specific styles - maximum security */
+          .lightbox-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            z-index: 9999 !important;
+            touch-action: none !important;
+            overscroll-behavior: none !important;
+            -webkit-overflow-scrolling: none !important;
           }
           
           @media (min-width: 640px) {
-            .sm\\:columns-2 {
-              column-count: 2;
-            }
+            .sm\\:columns-2 { column-count: 2; }
           }
           
           @media (min-width: 768px) {
-            .md\\:columns-3 {
-              column-count: 3;
-            }
+            .md\\:columns-3 { column-count: 3; }
           }
           
           @media (min-width: 1024px) {
-            .lg\\:columns-4 {
-              column-count: 4;
-            }
+            .lg\\:columns-4 { column-count: 4; }
           }
           
           @media (min-width: 1280px) {
-            .xl\\:columns-5 {
-              column-count: 5;
-            }
+            .xl\\:columns-5 { column-count: 5; }
           }
         `}
       </style>
     </div>
   );
 };
+
 
 export default Gallery;
