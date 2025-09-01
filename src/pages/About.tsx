@@ -437,7 +437,7 @@ const About = () => {
                 
                 {/* Couple Info */}
                 <div className="bg-chocolate/5 rounded-2xl p-6 inline-block">
-                  <div className="font-amsterdam text-2xl sm:text-3xl text-chocolate mb-2">
+                  <div className="font-amsterdam text-2xl sm:text-3xl text-chocolate mb-2 leading-loose">
                     {reviews[currentReview].names}
                   </div>
                   <div className="font-poppins text-muted-foreground flex items-center justify-center gap-2">
