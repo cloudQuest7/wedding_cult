@@ -268,7 +268,7 @@ const VideoPreview = () => {
                   Featured Wedding
                 </p>
               </div>
-              <h1 className="font-amsterdam text-md sm:text-2xl md:text-4xl text-chocolate leading-loose font-normal mb-2">
+              <h1 className="font-amsterdam text-md sm:text-2xl md:text-2xl text-chocolate leading-loose font-normal mb-2">
                 {currentVideo.coupleNames}
               </h1>
               <p className="text-chocolate/70 text-sm sm:text-base mb-2">

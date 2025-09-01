@@ -170,6 +170,14 @@ html, body {
   font-style: normal;
 }
   
+/* In your CSS file */
+/* @font-face {
+  font-family: 'Poppins-Light';
+  src: url('/fonts/Poppins-Light.ttf') format('truetype');
+  font-display: swap;
+} */
+
+
   .font-poppins {
     font-family: 'Poppins', sans-serif;
   }

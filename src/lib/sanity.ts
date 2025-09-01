@@ -1,3 +1,13 @@
+// lib/sanity.ts
+// import { createClient } from '@sanity/client'
+
+// export const client = createClient({
+//   projectId: 'zpzkzcwp',
+//   dataset: 'production',
+//   useCdn: true,
+//   apiVersion: '2024-01-01'
+// })
+
 // src/lib/sanity.ts
 import { createClient } from "@sanity/client";
 import imageUrlBuilder from "@sanity/image-url";
@@ -5,7 +15,7 @@ import imageUrlBuilder from "@sanity/image-url";
 export const client = createClient({
   projectId: import.meta.env.VITE_SANITY_PROJECT_ID as string,
   dataset: import.meta.env.VITE_SANITY_DATASET as string,
-  apiVersion: "2024-01-01", // use latest date
+  apiVersion: import.meta.env.VITE_SANITY_API_VERSION, // use latest date
   useCdn: false,
   perspective: "published",
   stega: false,
