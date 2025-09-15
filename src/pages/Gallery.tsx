@@ -1,7 +1,70 @@
+// Gallery.tsx
 import { useState, useRef, useEffect, useCallback, useMemo, memo } from "react";
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, Download, Share2, Heart, Eye } from "lucide-react";
 import FloatingBallBackground from "@/components/common/FloatingBallBackground";
 import SocialFloatingButton from "@/components/common/SocialFloatingButton";
+import { useGallery } from "../hooks/useGallery";
+import imageUrlBuilder from "@sanity/image-url";
+import { client } from "../lib/sanity";
+
+// Initialize Sanity image builder
+const builder = imageUrlBuilder(client);
+
+// Type definitions
+interface PhotoItem {
+  id: string | number;
+  url: string;
+  alt: string;
+  category: string;
+}
+
+interface GalleryState {
+  selectedImage: string | null;
+  selectedIndex: number;
+  activeCategory: string;
+  displayedCount: number;
+  loading: boolean;
+}
+
+interface LightboxState {
+  isZoomed: boolean;
+  zoomLevel: number;
+  dragPosition: { x: number; y: number };
+  isDragging: boolean;
+  dragStart: { x: number; y: number };
+  showImageInfo: boolean;
+}
+
+interface SwipeState {
+  startX: number;
+  startY: number;
+  currentX: number;
+  currentY: number;
+  startTime: number;
+  isSwiping: boolean;
+  swipeDirection: string | null;
+}
+
+// Component Props Types
+interface CategoryFilterProps {
+  categories: string[];
+  activeCategory: string;
+  onCategoryChange: (category: string) => void;
+}
+
+interface GalleryImageProps {
+  photo: PhotoItem;
+  index: number;
+  onClick: (url: string, index: number) => void;
+  favorites: (string | number)[];
+  toggleFavorite: (imageId: string | number) => void;
+}
+
+interface LoadMoreButtonProps {
+  onClick: () => void;
+  loading: boolean;
+  hasMore: boolean;
+}
 
 // Memoized Animated Background with reduced elements
 const AnimatedPatterns = memo(() => {
@@ -51,8 +114,10 @@ const AnimatedPatterns = memo(() => {
   );
 });
 
+AnimatedPatterns.displayName = 'AnimatedPatterns';
+
 // Memoized Category Filter
-const CategoryFilter = memo(({ categories, activeCategory, onCategoryChange }) => {
+const CategoryFilter = memo<CategoryFilterProps>(({ categories, activeCategory, onCategoryChange }) => {
   return (
     <div className="flex flex-wrap justify-center gap-3">
       {categories.map((category) => (
@@ -72,10 +137,14 @@ const CategoryFilter = memo(({ categories, activeCategory, onCategoryChange }) =
   );
 });
 
-// Optimized Image Component
-const GalleryImage = memo(({ photo, index, onClick, isVisible, favorites, toggleFavorite }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageFailed, setImageFailed] = useState(false);
+CategoryFilter.displayName = 'CategoryFilter';
+
+// FIXED: Optimized Image Component - removed isVisible dependency
+const GalleryImage = memo<GalleryImageProps>(({ photo, index, onClick, favorites, toggleFavorite }) => {
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+  const [imageFailed, setImageFailed] = useState<boolean>(false);
+  const [isInView, setIsInView] = useState<boolean>(index < 12); // Show first 12 images immediately
+  const imageRef = useRef<HTMLDivElement>(null);
 
   const handleImageLoad = useCallback(() => {
     setImageLoaded(true);
@@ -85,28 +154,44 @@ const GalleryImage = memo(({ photo, index, onClick, isVisible, favorites, toggle
     setImageFailed(true);
   }, []);
 
-  const handleClick = useCallback((e) => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     onClick(photo.url, index);
   }, [photo.url, index, onClick]);
 
-  const handleFavoriteClick = useCallback((e) => {
+  const handleFavoriteClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     toggleFavorite(photo.id);
   }, [photo.id, toggleFavorite]);
 
-  if (!isVisible) {
-    return (
-      <div 
-        className="gallery-item break-inside-avoid mb-4"
-        style={{ height: '200px', backgroundColor: '#f5f5f0' }}
-      />
+  // FIXED: Lazy loading with intersection observer for images beyond initial batch
+  useEffect(() => {
+    if (index < 12 || isInView) return; // Skip observer for initially visible images
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: '50px',
+        threshold: 0.1
+      }
     );
-  }
+
+    if (imageRef.current) {
+      observer.observe(imageRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [index, isInView]);
 
   return (
     <div 
+      ref={imageRef}
       className="gallery-item group cursor-pointer break-inside-avoid mb-4 will-change-transform"
       style={{
         animationDelay: `${Math.min(index * 0.01, 0.5)}s`,
@@ -118,64 +203,76 @@ const GalleryImage = memo(({ photo, index, onClick, isVisible, favorites, toggle
     >
       <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transform transition-transform duration-200 hover:scale-[1.02]">
         <div className="relative w-full">
-          {!imageFailed ? (
-            <img 
-              src={photo.url.includes('imagekit.io') 
-                ? `${photo.url}${photo.url.includes('?') ? '&' : '?'}tr=w-300,q-70,f-webp`
-                : photo.url}
-              alt={photo.alt}
-              className={`w-full h-auto object-contain transition-opacity duration-200 ${
-                imageLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
-              loading="lazy"
-              decoding="async"
-              onLoad={handleImageLoad}
-              onError={handleImageError}
-              draggable={false}
-              style={{ backgroundColor: '#f5f5f0' }}
-            />
+          {isInView ? (
+            !imageFailed ? (
+              <img 
+                src={photo.url}
+                alt={photo.alt}
+                className={`w-full h-auto object-cover transition-opacity duration-200 ${
+                  imageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                loading={index < 6 ? "eager" : "lazy"} // Load first 6 eagerly
+                decoding="async"
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+                draggable={false}
+                style={{ backgroundColor: '#f5f5f0' }}
+              />
+            ) : (
+              <div className="w-full h-48 bg-gradient-to-br from-beige-warm/20 to-cream/30 flex items-center justify-center">
+                <span className="text-chocolate/40 text-sm">Image unavailable</span>
+              </div>
+            )
           ) : (
-            <div className="w-full h-48 bg-gradient-to-br from-beige-warm/20 to-cream/30 flex items-center justify-center">
-              <span className="text-chocolate/40 text-sm">Image unavailable</span>
-            </div>
+            // Placeholder for lazy-loaded images
+            <div 
+              className="w-full bg-gradient-to-br from-beige-warm/10 to-cream/20"
+              style={{ height: '200px' }}
+            />
           )}
 
-          {!imageLoaded && !imageFailed && (
+          {isInView && !imageLoaded && !imageFailed && (
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-beige-warm/20 to-cream/30">
               <div className="w-4 h-4 border-2 border-chocolate/20 border-t-chocolate/60 rounded-full animate-spin" />
             </div>
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-          
-          <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <span className="bg-white/90 text-chocolate px-2 py-1 rounded text-xs font-medium">
-              {photo.category}
-            </span>
-          </div>
-          
-          <div className="absolute bottom-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <div className="bg-white/90 text-chocolate p-1.5 rounded-full">
-              <Eye className="w-3 h-3" />
-            </div>
-            <button
-              onClick={handleFavoriteClick}
-              className={`p-1.5 rounded-full transition-colors duration-150 ${
-                favorites.includes(photo.id) 
-                  ? 'bg-red-100 text-red-500' 
-                  : 'bg-white/90 text-chocolate'
-              }`}
-            >
-              <Heart className={`w-3 h-3 ${favorites.includes(photo.id) ? 'fill-current' : ''}`} />
-            </button>
-          </div>
+          {isInView && (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              
+              <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <span className="bg-white/90 text-chocolate px-2 py-1 rounded text-xs font-medium">
+                  {photo.category}
+                </span>
+              </div>
+              
+              <div className="absolute bottom-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <div className="bg-white/90 text-chocolate p-1.5 rounded-full">
+                  <Eye className="w-3 h-3" />
+                </div>
+                <button
+                  onClick={handleFavoriteClick}
+                  className={`p-1.5 rounded-full transition-colors duration-150 ${
+                    favorites.includes(photo.id) 
+                      ? 'bg-red-100 text-red-500' 
+                      : 'bg-white/90 text-chocolate'
+                  }`}
+                >
+                  <Heart className={`w-3 h-3 ${favorites.includes(photo.id) ? 'fill-current' : ''}`} />
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
   );
 });
 
-const LoadMoreButton = memo(({ onClick, loading, hasMore }) => {
+GalleryImage.displayName = 'GalleryImage';
+
+const LoadMoreButton = memo<LoadMoreButtonProps>(({ onClick, loading, hasMore }) => {
   if (!hasMore) return null;
   
   return (
@@ -193,9 +290,14 @@ const LoadMoreButton = memo(({ onClick, loading, hasMore }) => {
   );
 });
 
-const Gallery = () => {
+LoadMoreButton.displayName = 'LoadMoreButton';
+
+const Gallery: React.FC = () => {
+  // Add CMS data fetching
+  const { gallery: cmsGallery, loading: cmsLoading, error: cmsError } = useGallery();
+
   // State management
-  const [galleryState, setGalleryState] = useState({
+  const [galleryState, setGalleryState] = useState<GalleryState>({
     selectedImage: null,
     selectedIndex: -1,
     activeCategory: "All",
@@ -203,7 +305,7 @@ const Gallery = () => {
     loading: false
   });
 
-  const [lightboxState, setLightboxState] = useState({
+  const [lightboxState, setLightboxState] = useState<LightboxState>({
     isZoomed: false,
     zoomLevel: 1,
     dragPosition: { x: 0, y: 0 },
@@ -212,11 +314,10 @@ const Gallery = () => {
     showImageInfo: false
   });
 
-  const [visibleImages, setVisibleImages] = useState(new Set());
-  const [favorites, setFavorites] = useState([]);
+  // FIXED: Removed visibleImages state - not needed anymore
+  const [favorites, setFavorites] = useState<(string | number)[]>([]);
   
-  // Enhanced swipe detection state
-  const [swipeState, setSwipeState] = useState({
+  const [swipeState, setSwipeState] = useState<SwipeState>({
     startX: 0,
     startY: 0,
     currentX: 0,
@@ -227,16 +328,61 @@ const Gallery = () => {
   });
   
   // Refs
-  const galleryRef = useRef(null);
-  const scrollPosition = useRef(0);
-  const imageRef = useRef(null);
-  const lightboxRef = useRef(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const scrollPosition = useRef<number>(0);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const lightboxRef = useRef<HTMLDivElement>(null);
   
   const IMAGES_PER_LOAD = 8;
   const SWIPE_THRESHOLD = 50;
   const SWIPE_VELOCITY_THRESHOLD = 0.3;
 
-  // Optimized scroll lock
+  // Transform CMS data to match your existing structure
+  const galleryImages = useMemo<PhotoItem[]>(() => {
+    if (!cmsGallery || cmsGallery.length === 0) return [];
+    
+    console.log('CMS Gallery data:', cmsGallery);
+    
+    return cmsGallery.map((item, index) => {
+      const imageUrl = item.image ? builder.image(item.image).width(800).quality(80).url() : '';
+      console.log(`Item ${index}:`, { id: item._id, imageUrl, title: item.title });
+      
+      return {
+        id: item._id || (index + 1).toString(),
+        url: imageUrl,
+        alt: item.title || item.description || `Gallery image ${index + 1}`,
+        category: item.category || "Wedding"
+      };
+    });
+  }, [cmsGallery]);
+
+  // Categories
+  const categories = useMemo<string[]>(() => {
+    if (galleryImages.length === 0) return ["All"];
+    
+    const allCategories = [...new Set(galleryImages.map(img => img.category))];
+    return ["All", ...allCategories.filter(category => 
+      !["Cinematic", "Family", "Details", "Candid"].includes(category)
+    )];
+  }, [galleryImages]);
+
+  // Filtered and displayed images
+  const { filteredImages, displayedImages, hasMoreImages } = useMemo(() => {
+    const filtered = galleryState.activeCategory === "All" 
+      ? galleryImages 
+      : galleryImages.filter(img => img.category === galleryState.activeCategory);
+    
+    const displayed = filtered.slice(0, galleryState.displayedCount);
+    const hasMore = galleryState.displayedCount < filtered.length;
+    
+    return {
+      filteredImages: filtered,
+      displayedImages: displayed,
+      hasMoreImages: hasMore
+    };
+  }, [galleryImages, galleryState.activeCategory, galleryState.displayedCount]);
+
+  // ALL YOUR EXISTING HANDLERS (unchanged)
   const lockScroll = useCallback(() => {
     scrollPosition.current = window.pageYOffset;
     
@@ -261,88 +407,6 @@ const Gallery = () => {
     });
   }, []);
 
-  // Enhanced swipe handlers
-  const handleTouchStart = useCallback((e) => {
-    if (lightboxState.isZoomed) return;
-    
-    const touch = e.touches[0];
-    const now = Date.now();
-    
-    setSwipeState({
-      startX: touch.clientX,
-      startY: touch.clientY,
-      currentX: touch.clientX,
-      currentY: touch.clientY,
-      startTime: now,
-      isSwiping: false,
-      swipeDirection: null
-    });
-  }, [lightboxState.isZoomed]);
-
-  const handleTouchMove = useCallback((e) => {
-    if (lightboxState.isZoomed) return;
-    
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - swipeState.startX;
-    const deltaY = touch.clientY - swipeState.startY;
-    const absDeltaX = Math.abs(deltaX);
-    const absDeltaY = Math.abs(deltaY);
-    
-    // Determine if this is a horizontal swipe
-    if (absDeltaX > 10 && absDeltaX > absDeltaY * 1.5) {
-      // Prevent default scroll behavior for horizontal swipes
-      e.preventDefault();
-      
-      setSwipeState(prev => ({
-        ...prev,
-        currentX: touch.clientX,
-        currentY: touch.clientY,
-        isSwiping: true,
-        swipeDirection: deltaX > 0 ? 'right' : 'left'
-      }));
-    }
-  }, [lightboxState.isZoomed, swipeState.startX, swipeState.startY]);
-
-  const handleTouchEnd = useCallback((e) => {
-    if (lightboxState.isZoomed || !swipeState.isSwiping) {
-      setSwipeState(prev => ({ ...prev, isSwiping: false }));
-      return;
-    }
-    
-    const touch = e.changedTouches[0];
-    const deltaX = touch.clientX - swipeState.startX;
-    const deltaY = touch.clientY - swipeState.startY;
-    const deltaTime = Date.now() - swipeState.startTime;
-    const velocity = Math.abs(deltaX) / deltaTime;
-    
-    const absDeltaX = Math.abs(deltaX);
-    const absDeltaY = Math.abs(deltaY);
-    
-    // Check if it's a valid swipe (horizontal, sufficient distance or velocity)
-    const isValidSwipe = (
-      absDeltaX > SWIPE_THRESHOLD || velocity > SWIPE_VELOCITY_THRESHOLD
-    ) && absDeltaX > absDeltaY;
-    
-    if (isValidSwipe) {
-      if (deltaX > 0 && galleryState.selectedIndex > 0) {
-        // Swipe right - go to previous image
-        handlePrevImage();
-      } else if (deltaX < 0 && galleryState.selectedIndex < displayedImages.length - 1) {
-        // Swipe left - go to next image
-        handleNextImage();
-      }
-    }
-    
-    setSwipeState(prev => ({ ...prev, isSwiping: false }));
-  }, [
-    lightboxState.isZoomed, 
-    swipeState.isSwiping, 
-    swipeState.startX, 
-    swipeState.startTime, 
-    galleryState.selectedIndex
-  ]);
-
-  // Navigation handlers
   const handlePrevImage = useCallback(() => {
     if (galleryState.selectedIndex > 0) {
       const newIndex = galleryState.selectedIndex - 1;
@@ -358,7 +422,7 @@ const Gallery = () => {
         isZoomed: false
       }));
     }
-  }, [galleryState.selectedIndex]);
+  }, [galleryState.selectedIndex, displayedImages]);
 
   const handleNextImage = useCallback(() => {
     if (galleryState.selectedIndex < displayedImages.length - 1) {
@@ -375,10 +439,9 @@ const Gallery = () => {
         isZoomed: false
       }));
     }
-  }, [galleryState.selectedIndex]);
+  }, [galleryState.selectedIndex, displayedImages]);
 
-  // Image click handler
-  const handleImageClick = useCallback((url, index) => {
+  const handleImageClick = useCallback((url: string, index: number) => {
     setGalleryState(prev => ({
       ...prev,
       selectedImage: url,
@@ -416,8 +479,7 @@ const Gallery = () => {
     });
   }, [unlockScroll]);
 
-  // Category change handler
-  const handleCategoryChange = useCallback((category) => {
+  const handleCategoryChange = useCallback((category: string) => {
     setGalleryState(prev => ({
       ...prev,
       activeCategory: category,
@@ -425,7 +487,6 @@ const Gallery = () => {
     }));
   }, []);
 
-  // Load more handler
   const handleLoadMore = useCallback(() => {
     if (galleryState.loading) return;
     
@@ -440,8 +501,7 @@ const Gallery = () => {
     }, 100);
   }, [galleryState.loading]);
 
-  // Favorites toggle
-  const toggleFavorite = useCallback((imageId) => {
+  const toggleFavorite = useCallback((imageId: string | number) => {
     setFavorites(prev => {
       const newFavorites = prev.includes(imageId) 
         ? prev.filter(id => id !== imageId)
@@ -450,7 +510,6 @@ const Gallery = () => {
     });
   }, []);
 
-  // Zoom handlers
   const handleZoomIn = useCallback(() => {
     setLightboxState(prev => ({
       ...prev,
@@ -471,47 +530,95 @@ const Gallery = () => {
     });
   }, []);
 
-  // Intersection observer for lazy loading
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const updates = new Set(visibleImages);
-        entries.forEach((entry) => {
-          const imageId = Number(entry.target.getAttribute('data-image-id'));
-          if (entry.isIntersecting) {
-            updates.add(imageId);
-          }
-        });
-        
-        if (updates.size !== visibleImages.size) {
-          setVisibleImages(updates);
-        }
-      },
-      {
-        rootMargin: '100px 0px',
-        threshold: 0.1
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (lightboxState.isZoomed) return;
+    
+    const touch = e.touches[0];
+    const now = Date.now();
+    
+    setSwipeState({
+      startX: touch.clientX,
+      startY: touch.clientY,
+      currentX: touch.clientX,
+      currentY: touch.clientY,
+      startTime: now,
+      isSwiping: false,
+      swipeDirection: null
+    });
+  }, [lightboxState.isZoomed]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (lightboxState.isZoomed) return;
+    
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - swipeState.startX;
+    const deltaY = touch.clientY - swipeState.startY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+    
+    if (absDeltaX > 10 && absDeltaX > absDeltaY * 1.5) {
+      e.preventDefault();
+      
+      setSwipeState(prev => ({
+        ...prev,
+        currentX: touch.clientX,
+        currentY: touch.clientY,
+        isSwiping: true,
+        swipeDirection: deltaX > 0 ? 'right' : 'left'
+      }));
+    }
+  }, [lightboxState.isZoomed, swipeState.startX, swipeState.startY]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (lightboxState.isZoomed || !swipeState.isSwiping) {
+      setSwipeState(prev => ({ ...prev, isSwiping: false }));
+      return;
+    }
+    
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - swipeState.startX;
+    const deltaTime = Date.now() - swipeState.startTime;
+    const velocity = Math.abs(deltaX) / deltaTime;
+    
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(touch.clientY - swipeState.startY);
+    
+    const isValidSwipe = (
+      absDeltaX > SWIPE_THRESHOLD || velocity > SWIPE_VELOCITY_THRESHOLD
+    ) && absDeltaX > absDeltaY;
+    
+    if (isValidSwipe) {
+      if (deltaX > 0 && galleryState.selectedIndex > 0) {
+        handlePrevImage();
+      } else if (deltaX < 0 && galleryState.selectedIndex < displayedImages.length - 1) {
+        handleNextImage();
       }
-    );
+    }
+    
+    setSwipeState(prev => ({ ...prev, isSwiping: false }));
+  }, [
+    lightboxState.isZoomed, 
+    swipeState.isSwiping, 
+    swipeState.startX, 
+    swipeState.startTime, 
+    galleryState.selectedIndex,
+    displayedImages.length,
+    handlePrevImage,
+    handleNextImage
+  ]);
 
-    const observeImages = () => {
-      const images = document.querySelectorAll('[data-image-id]');
-      images.forEach(img => observer.observe(img));
-    };
-
-    requestAnimationFrame(observeImages);
-    return () => observer.disconnect();
-  }, [galleryState.displayedCount, visibleImages.size]);
+  // FIXED: Removed intersection observer useEffect - handled per image now
 
   // Keyboard navigation
   useEffect(() => {
     if (!galleryState.selectedImage) return;
 
-    let keyTimeout;
-    const handleKeyPress = (e) => {
+    let keyTimeout: NodeJS.Timeout;
+    const handleKeyPress = (e: KeyboardEvent) => {
       if (keyTimeout) return;
       
       keyTimeout = setTimeout(() => {
-        keyTimeout = null;
+        clearTimeout(keyTimeout);
       }, 100);
 
       switch (e.key) {
@@ -541,584 +648,42 @@ const Gallery = () => {
     };
   }, [galleryState.selectedImage, handleCloseModal, handlePrevImage, handleNextImage, handleZoomIn, handleZoomOut]);
 
-  // Gallery images data - keeping your existing data structure
-   const galleryImages = useMemo(() => [
-  
-    {
-      id: 1,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000488.jpg?updatedAt=1752122341261",
-      alt: "Nilkeshi & Saevesh - Wedding ceremony moment",
-      category: "Wedding"
-    },
-    {
-      id: 2,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-theindiaweddings-28144255.jpg?updatedAt=1752122336598",
-      alt: "Dhiraj & Rajashri - Bride and groom portrait",
-      category: "Portraits"
-    },
-    {
-      id: 3,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-zephyr-events-2153609654-32864600.jpg?updatedAt=1752122336721",
-      alt: "Ruturaj & Krutika - Wedding celebration",
-      category: "Wedding"
-    },
-    {
-      id: 4,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-varun-118342-5759464.jpg?updatedAt=1752122335592",
-      alt: "Jobin & Jesline - Cinematic wedding moments",
-      category: "Portraits"
-    },
-    {
-      id: 5,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-sourav-kundu-87262483-31230267.jpg?updatedAt=1752122328085",
-      alt: "Love Stories - Pre-wedding shoot",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 6,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187422.jpg?updatedAt=1752122328713",
-      alt: "Wedding ceremony moment",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 7,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-suraj-galgale-1822752-16196490.jpg?updatedAt=1752122329114",
-      alt: "Moments",
-      category: "Wedding"
-    },
-    // {
-    //   id: 8,
-    //   url: "https://ik.imagekit.io/7xgikoq8o/pexels-sampark-films-samparkfilms-com-1300296201-32081698.jpg?updatedAt=1752122335732",
-    //   alt: "Wedding celebration",
-    //   category: "Portraits"
-    // },
-    {
-      id: 9,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000471.jpg?updatedAt=1752122333713",
-      alt: "Cinematic wedding collection",
-      category: "Wedding"
-    },
-    {
-      id: 10,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-theindiaweddings-28144266.jpg?updatedAt=1752122336295",
-      alt: "Wedding details",
-      category: "Portraits"
-    },
-    {
-      id: 11,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-fotographiya-wedding-photography-823737813-29492597.jpg?updatedAt=1752122327991",
-      alt: "Pre-wedding shoot",
-      category: "Ceremony"
-    },
-    {
-      id: 12,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-angel-ayala-321556-29851245.jpg?updatedAt=1752122328077",
-      alt: "Family moments",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 13,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000480.jpg?updatedAt=1752122335536",
-      alt: "Couple dancing",
-      category: "Wedding"
-    },
-    {
-      id: 14,
-      url: "https://ik.imagekit.io/7xgikoq8o/Nilkeshi%20+%20Saevesh%20Cinematic.00_04_33_23.Still015.png?updatedAt=1752122785721",
-      alt: "Nilkeshi & Saevesh portrait",
-      category: "Wedding"
-    },
-    {
-      id: 15,
-      url: "https://ik.imagekit.io/7xgikoq8o/Nilkeshi%20+%20Saevesh%20Cinematic.00_06_24_13.Still024.png?updatedAt=1752122785580",
-      alt: "Nilkeshi & Saevesh moments",
-      category: "Wedding"
-    },
-    {
-      id: 16,
-      url: "https://ik.imagekit.io/7xgikoq8o/Dhiraj%20&%20Rajashri%20Wedding%20Teaser.00_00_52_00.Still001.png?updatedAt=1752122784444",
-      alt: "Dhiraj & Rajashri wedding",
-      category: "Ceremony"
-    },
-    {
-      id: 17,
-      url: "https://ik.imagekit.io/7xgikoq8o/Dhiraj%20&%20Rajashri%20Wedding%20Teaser.00_01_18_06.Still019.png?updatedAt=1752122784770",
-      alt: "Wedding celebration",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 18,
-      url: "https://ik.imagekit.io/7xgikoq8o/couple-9210801.jpg?updatedAt=1752218451384",
-      alt: "Beautiful couple portrait",
-      category: "Wedding"
-    },
-    {
-      id: 19,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-gursher-gill-63702010-18633036.jpg?updatedAt=1752218493332",
-      alt: "Pretty bridal moments",
-      category: "Portraits"
-    },
-    {
-      id: 20,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-fliqaindia-32499931.jpg?updatedAt=1752218492641",
-      alt: "Traditional wedding rituals",
-      category: "Ceremony"
-    },
-    {
-      id: 21,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-909646465-31600968.jpg?updatedAt=1752218490957",
-      alt: "Couple celebration",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 22,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-amit-chowdhury-2402860-18077025.jpg?updatedAt=1752218490697",
-      alt: "Wedding photography session",
-      category: "Wedding" 
-    },
-    {
-      id: 23,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-lpfstudio023-26558728.jpg?updatedAt=1752218490314",
-      alt: "Cinematic wedding moments",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 24,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-varun-118342-5759527.jpg?updatedAt=1752218488581",
-      alt: "Elegant bridal portrait",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 25,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000484.jpg?updatedAt=1752218488535",
-      alt: "Wedding ceremony traditions",
-      category: "Wedding"
-    },
-    {
-      id: 26,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000464.jpg?updatedAt=1752218486011",
-      alt: "Candid wedding moments",
-      category: "Wedding"
-    },
-    {
-      id: 27,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-ids-fotowale-1416063-17000479.jpg?updatedAt=1752218483021",
-      alt: "Wedding celebration",
-      category: "Wedding"
-    },
-    // {
-    //   id: 28,
-    //   url: "https://ik.imagekit.io/7xgikoq8o/pexels-ajay-donga-1113836-2235390.jpg?updatedAt=1752218480207",
-    //   alt: "Traditional Indian wedding",
-    //   category: "Pre-Wedding"
-    // },
-    // {
-    //   id: 29,
-    //   url: "https://ik.imagekit.io/7xgikoq8o/pexels-ajay-donga-1113836-2221392.jpg?updatedAt=1752218479074",
-    //   alt: "Wedding rituals captured",
-    //   category: "Pre-Wedding"
-    // },
-    {
-      id: 30,
-      url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187414.jpg?updatedAt=1752218469371",
-      alt: "Cinematic wedding story",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 31,
-      url: "https://ik.imagekit.io/7xgikoq8o/couple-9400897.jpg?updatedAt=1752218465131",
-      alt: "Romantic couple moments",
-      category: "Wedding"
-    },
-    {
-      id: 32,
-      url: "https://ik.imagekit.io/7xgikoq8o/couple-9400896.jpg?updatedAt=1752218464809",
-      alt: "Pre-wedding photography",
-      category: "Wedding"
-    },
-    {
-      id: 33,
-      url: "https://ik.imagekit.io/7xgikoq8o/couple-9400899.jpg?updatedAt=1752218464719",
-      alt: "Beautiful couple shoot",
-      category: "Wedding"
-    },
-    {
-      id: 34,
-      url: "https://ik.imagekit.io/7xgikoq8o/fotographiya-wedding-photography-9325564.jpg?updatedAt=1752218464295",
-      alt: "Professional wedding photography",
-      category: "Ceremony"
-    },
-    {
-      id: 35,
-      url: "https://ik.imagekit.io/7xgikoq8o/wedding-9325562.jpg?updatedAt=1752218463122",
-      alt: "Wedding celebration moments",
-      category: "Wedding"
-    },
-    {
-      id: 36,
-      url: "https://ik.imagekit.io/7xgikoq8o/fotographiya-wedding-photography-9325561.jpg?updatedAt=1752218460012",
-      alt: "Artistic wedding photography",
-      category: "Wedding"
-    },
-    // {
-    //   id: 37,
-    //   url: "https://ik.imagekit.io/7xgikoq8o/pexels-theshortguyfilms-29187294.jpg?updatedAt=1752218462738",
-    //   alt: "Cinematic wedding capture",
-    //   category: "Pre-Wedding"
-    // },
-    {
-      id: 38,
-      url: "https://ik.imagekit.io/7xgikoq8o/couple-9400893.jpg?updatedAt=1752218462662",
-      alt: "Couple love story",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 39,
-      url: "https://ik.imagekit.io/7xgikoq8o/wedding-photography-9371876.jpg?updatedAt=1752218461631",
-      alt: "Wedding photography excellence",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 40,
-      url: "https://ik.imagekit.io/7xgikoq8o/candid-8535584.jpg?updatedAt=1752218456309",
-      alt: "Candid wedding photography",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 41,
-      url: "https://ik.imagekit.io/7xgikoq8o/pre-wedding-photosession-8812655.jpg?updatedAt=1752218454510",
-      alt: "Pre-wedding photo session",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 42,
-      url: "https://ik.imagekit.io/7xgikoq8o/couple-9210812.jpg?updatedAt=1752218453773",
-      alt: "Couple portraits",
-      category: "Wedding"
-    },
-    {
-      id: 43,
-      url: "https://ik.imagekit.io/7xgikoq8o/happy-couple-8457514.jpg?updatedAt=1752218453664",
-      alt: "Happy wedding couple",
-      category: "Ceremony"
-    },
-    {
-      id: 44,
-      url: "https://ik.imagekit.io/7xgikoq8o/indian-wedding-8471648.jpg?updatedAt=1752218453165",
-      alt: "Traditional Indian wedding",
-      category: "Ceremony"
-    },
-    {
-      id: 45,
-      url: "https://ik.imagekit.io/7xgikoq8o/haldi-8457512.jpg?updatedAt=1752218452812",
-      alt: "Haldi ceremony moments",
-      category: "Ceremony"
-    },
-    {
-      id: 46,
-      url: "https://ik.imagekit.io/7xgikoq8o/indian-wedding-8471667.jpg?updatedAt=1752218452169",
-      alt: "Indian wedding traditions",
-      category: "Ceremony"
-    },
-    {
-      id: 47,
-      url: "https://ik.imagekit.io/7xgikoq8o/wedding-photography-8443234.jpg?updatedAt=1752218451592",
-      alt: "Wedding photography masterpiece",
-      category: "Wedding"
-    },
-    {
-      id: 52,
-      url: "https://ik.imagekit.io/7xgikoq8o/DSC02069.jpg?updatedAt=1752469016563",
-      alt: "Wedding ceremony capture",
-      category: "Ceremony"
-    },
-    {
-      id: 54,
-      url: "https://ik.imagekit.io/7xgikoq8o/DSC01828.jpg?updatedAt=1752469017255",
-      alt: "Little Moments",
-      category: "Ceremony"
-    },
-    {
-      id: 60,
-      url: "https://ik.imagekit.io/7xgikoq8o/8575c123-3f5f-4994-92d2-3e4a1c1f07f9.jpg?updatedAt=1752469020327",
-      alt: "Beautiful moments",
-      category: "Portraits" 
-    },
-    {
-      id: 61,
-      url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20.....png?updatedAt=1752469381426",
-      alt: "Dreamy portrait session",
-      category: "Portraits"
-    },
-    {
-      id: 62,
-      url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20....._love%20_nature%20_naturelovers%20_photographer%20_photography%20_like%20_likesforlike%20_vagamon%20_model%20_modeling%20_dress%20_style%20_followforfollowback%20_follow%20_insta%20_in%20(8)_PhotoGrid.png?updatedAt=1752469379787",
-      alt: "Nature-inspired photography",
-      category: "Portraits"
-    },
-    {
-      id: 63,
-      url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20....._love%20_nature%20_naturelovers%20_photographer%20_photography%20_like%20_likesforlike%20_vagamon%20_model%20_modeling%20_dress%20_style%20_followforfollowback%20_follow%20_insta%20_in%20(7)_PhotoGrid.png?updatedAt=1752469379782",
-      alt: "Artistic couple photography",
-      category: "Portraits"
-    },
-    {
-      id: 64,
-      url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20....._love%20_nature%20_naturelovers%20_photographer%20_photography%20_like%20_likesforlike%20_vagamon%20_model%20_modeling%20_dress%20_style%20_followforfollowback%20_follow%20_insta%20_in%20(3)_PhotoGrid.png?updatedAt=1752469379471",
-      alt: "Cinematic nature portraits",
-      category: "Portraits"
-    },
-    {
-      id: 65,
-      url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20....._love%20_nature%20_naturelovers%20_photographer%20_photography%20_like%20_likesforlike%20_vagamon%20_model%20_modeling%20_dress%20_style%20_followforfollowback%20_follow%20_insta%20_in%20(6)_PhotoGrid.png?updatedAt=1752469379170",
-      alt: "Beautiful outdoor session",
-      category: "Portraits"
-    },
-    {
-      id: 66,
-      url: "https://ik.imagekit.io/7xgikoq8o/Foggy%20days,%20wandering%20thoughts%20..%20%20@dana__designss%20....._love%20_nature%20_naturelovers%20_photographer%20_photography%20_like%20_likesforlike%20_vagamon%20_model%20_modeling%20_dress%20_style%20_followforfollowback%20_follow%20_insta%20_in%20(4)_PhotoGrid.png?updatedAt=1752469379722",
-      alt: "Premium portrait photography",
-      category: "Portraits"
-    },
-    {
-      id: 67,
-      url: "https://ik.imagekit.io/7xgikoq8o/39.png",
-      alt: "Wedding photography collection",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 70,
-      url: "https://ik.imagekit.io/7xgikoq8o/38.png",
-      alt: "Elegant bridal portraits",
-      category: "Ceremony"
-    },
-    {
-      id: 71,
-      url: "https://ik.imagekit.io/7xgikoq8o/37.png",
-      alt: "Wedding celebration moments",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 72,
-      url: "https://ik.imagekit.io/7xgikoq8o/35.png",
-      alt: "Traditional wedding ceremony",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 73,
-      url: "https://ik.imagekit.io/7xgikoq8o/36.png",
-      alt: "Pre-wedding photography session",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 74,
-      url: "https://ik.imagekit.io/7xgikoq8o/32.png",
-      alt: "Candid wedding moments",
-      category: "Portraits"
-    },
-    {
-      id: 75,
-      url: "https://ik.imagekit.io/7xgikoq8o/34.png",
-      alt: "Wedding details and decor",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 76,
-      url: "https://ik.imagekit.io/7xgikoq8o/30.png",
-      alt: "Family wedding portraits",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 77,
-      url: "https://ik.imagekit.io/7xgikoq8o/27.png",
-      alt: "Artistic wedding photography",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 78,
-      url: "https://ik.imagekit.io/7xgikoq8o/28.png",
-      alt: "Romantic couple moments",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 79,
-      url: "https://ik.imagekit.io/7xgikoq8o/33.png",
-      alt: "Wedding ceremony rituals",
-      category: "Portraits"
-    },
-    {
-      id: 80,
-      url: "https://ik.imagekit.io/7xgikoq8o/31.png",
-      alt: "Beautiful bridal shots",
-      category: "Ceremony"
-    },
-    {
-      id: 81,
-      url: "https://ik.imagekit.io/7xgikoq8o/26.png",
-      alt: "Wedding reception celebration",
-      category: "Portraits"
-    },
-    {
-      id: 84,
-      url: "https://ik.imagekit.io/7xgikoq8o/23.png",
-      alt: "Traditional Indian wedding",
-      category: "Portraits"
-    },
-    {
-      id: 85,
-      url: "https://ik.imagekit.io/7xgikoq8o/22.png",
-      alt: "Couple love story",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 86,
-      url: "https://ik.imagekit.io/7xgikoq8o/21.png",
-      alt: "Wedding candid photography",
-      category: "Portraits"
-    },
-    {
-      id: 87,
-      url: "https://ik.imagekit.io/7xgikoq8o/15.png",
-      alt: "Elegant wedding portraits",
-      category: "Ceremony"
-    },
-    {
-      id: 88,
-      url: "https://ik.imagekit.io/7xgikoq8o/20.png",
-      alt: "Wedding ceremony moments",
-      category: "Portraits"
-    },
-    {
-      id: 89,
-      url: "https://ik.imagekit.io/7xgikoq8o/19.png",
-      alt: "Cinematic wedding storytelling",
-      category: "Portraits"
-    },
-    {
-      id: 91,
-      url: "https://ik.imagekit.io/7xgikoq8o/14.png",
-      alt: "Beautiful couple portraits",
-      category: "Wedding"
-    },
-    {
-      id: 92,
-      url: "https://ik.imagekit.io/7xgikoq8o/17.png",
-      alt: "Wedding detail shots",
-      category: "Portraits"
-    },
-    {
-      id: 93,
-      url: "https://ik.imagekit.io/7xgikoq8o/13.png",
-      alt: "wedding couple session",
-      category: "Wedding"
-    },
-    {
-      id: 94,
-      url: "https://ik.imagekit.io/7xgikoq8o/16.png",
-      alt: "Wedding family moments",
-      category: "Portraits"
-    },
-    {
-      id: 95,
-      url: "https://ik.imagekit.io/7xgikoq8o/12.png",
-      alt: "Romantic wedding photography",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 96,
-      url: "https://ik.imagekit.io/7xgikoq8o/11.png",
-      alt: "Wedding ceremony traditions",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 97,
-      url: "https://ik.imagekit.io/7xgikoq8o/10.png",
-      alt: "Beautiful bridal moments",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 98,
-      url: "https://ik.imagekit.io/7xgikoq8o/9.png",
-      alt: "Wedding celebration joy",
-      category: "Wedding"
-    },
-    {
-      id: 99,
-      url: "https://ik.imagekit.io/7xgikoq8o/8.png",
-      alt: "Cinematic couple photography",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 100,
-      url: "https://ik.imagekit.io/7xgikoq8o/7.png",
-      alt: "Traditional wedding rituals",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 101,
-      url: "https://ik.imagekit.io/7xgikoq8o/6.png",
-      alt: "Pre-wedding love story",
-      category: "Portraits"
-    },
-    {
-      id: 102,
-      url: "https://ik.imagekit.io/7xgikoq8o/5.png",
-      alt: "Wedding detail photography",
-      category: "Wedding"
-    },
-    {
-      id: 103,
-      url: "https://ik.imagekit.io/7xgikoq8o/4.png",
-      alt: "Family wedding portraits",
-      category: "Portraits"
-    },
-    {
-      id: 104,
-      url: "https://ik.imagekit.io/7xgikoq8o/3.png",
-      alt: "Candid wedding photography",
-      category: "Ceremony"
-    },
-    {
-      id: 105,
-      url: "https://ik.imagekit.io/7xgikoq8o/2.png",
-      alt: "Artistic wedding moments",
-      category: "Pre-Wedding"
-    },
-    {
-      id: 106,
-      url: "https://ik.imagekit.io/7xgikoq8o/1.png",
-      alt: "Beautiful couple portraits",
-      category: "Pre-Wedding"
-    }
-  ]); 
+  // Loading and error states for CMS
+  if (cmsLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin w-12 h-12 border-4 border-chocolate/20 border-t-chocolate rounded-full mx-auto mb-4"></div>
+          <p className="text-xl text-chocolate font-semibold">Loading gallery...</p>
+        </div>
+      </div>
+    );
+  }
 
-  // Categories
-  const categories = useMemo(() => {
-    const allCategories = [...new Set(galleryImages.map(img => img.category))];
-    return ["All", ...allCategories.filter(category => 
-      !["Cinematic", "Family", "Details", "Candid"].includes(category)
-    )];
-  }, [galleryImages]);
+  if (cmsError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-chocolate font-semibold">Error loading gallery</p>
+          <p className="text-muted-foreground">Please try again later</p>
+        </div>
+      </div>
+    );
+  }
 
-  // Filtered and displayed images
-  const { filteredImages, displayedImages, hasMoreImages } = useMemo(() => {
-    const filtered = galleryState.activeCategory === "All" 
-      ? galleryImages 
-      : galleryImages.filter(img => img.category === galleryState.activeCategory);
-    
-    const displayed = filtered.slice(0, galleryState.displayedCount);
-    const hasMore = galleryState.displayedCount < filtered.length;
-    
-    return {
-      filteredImages: filtered,
-      displayedImages: displayed,
-      hasMoreImages: hasMore
-    };
-  }, [galleryImages, galleryState.activeCategory, galleryState.displayedCount]);
+  if (galleryImages.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-chocolate font-semibold">No gallery images found</p>
+          <p className="text-muted-foreground">Please add some images to your CMS</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cream/50 via-background to-beige-warm/30 relative mb-20">
-      {/* Optimized CSS */}
       <style jsx>{`
         * {
           box-sizing: border-box;
@@ -1169,7 +734,6 @@ const Gallery = () => {
       <AnimatedPatterns />
       
       <div className="relative z-10 pt-20 pb-15" ref={galleryRef}>
-        {/* Header Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-5 text-center">
           <div>
             <div className="inline-block mb-2">
@@ -1185,7 +749,6 @@ const Gallery = () => {
           </div>
         </div>
 
-        {/* Category Filter */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <CategoryFilter 
             categories={categories}
@@ -1194,7 +757,6 @@ const Gallery = () => {
           />
         </div>
 
-        {/* Gallery Grid */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6">
             <p className="text-muted-foreground font-poppins text-sm">
@@ -1207,12 +769,11 @@ const Gallery = () => {
 
           <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-3">
             {displayedImages.map((photo, index) => (
-              <div key={photo.id} data-image-id={photo.id}>
+              <div key={photo.id}>
                 <GalleryImage
                   photo={photo}
                   index={index}
                   onClick={handleImageClick}
-                  isVisible={visibleImages.has(photo.id)}
                   favorites={favorites}
                   toggleFavorite={toggleFavorite}
                 />
@@ -1228,7 +789,6 @@ const Gallery = () => {
         </div>
       </div>
 
-      {/* Enhanced Lightbox with Swipe Support */}
       {galleryState.selectedImage && (
         <div 
           ref={lightboxRef}
@@ -1237,7 +797,6 @@ const Gallery = () => {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Top controls */}
           <div className="absolute top-0 left-0 right-0 z-60 bg-black/50 px-4 py-3 flex items-center justify-between">
             <span className="text-white text-sm">
               {galleryState.selectedIndex + 1} / {displayedImages.length}
@@ -1251,7 +810,6 @@ const Gallery = () => {
             </button>
           </div>
 
-          {/* Navigation buttons - hidden on mobile for swipe */}
           <button
             onClick={handlePrevImage}
             disabled={galleryState.selectedIndex === 0}
@@ -1260,7 +818,6 @@ const Gallery = () => {
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          {/* Main image container */}
           <div className="relative flex-1 flex items-center justify-center overflow-hidden">
             <img
               ref={imageRef}
@@ -1274,12 +831,10 @@ const Gallery = () => {
               draggable={false}
             />
             
-            {/* Mobile swipe indicators */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-xs bg-black/40 px-3 py-1 rounded-full sm:hidden">
               {lightboxState.isZoomed ? 'Double tap to reset zoom' : 'Swipe left/right to navigate'}
             </div>
             
-            {/* Visual swipe feedback */}
             {swipeState.isSwiping && (
               <div className="absolute inset-0 pointer-events-none">
                 <div 
@@ -1303,7 +858,6 @@ const Gallery = () => {
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          {/* Zoom controls */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/50 px-4 py-2 rounded-full">
             <button
               onClick={handleZoomOut}

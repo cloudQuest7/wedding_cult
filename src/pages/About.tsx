@@ -397,7 +397,7 @@ const About = () => {
               <Heart className="w-4 h-4 text-chocolate fill-chocolate" />
               <span className="font-poppins text-sm font-medium text-chocolate">Client Love</span>
             </div>
-            <h2 className="font-amsterdam text-2xl sm:text-4xl text-chocolate mb-4">
+            <h2 className="font-amsterdam text-2xl sm:text-4xl text-chocolate mb-4 leading-loose">
               What Our Couples Say
             </h2>
             <p className="font-playfair text-lg text-muted-foreground max-w-2xl mx-auto">

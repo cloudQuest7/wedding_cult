@@ -265,8 +265,11 @@ export default function MobileBottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [scrollTimeout, setScrollTimeout] = useState(null);
+  
+  // COMMENTED OUT: Scroll visibility state - uncomment to re-enable scroll hide/show effect
+  // const [isVisible, setIsVisible] = useState(true);
+  // const [scrollTimeout, setScrollTimeout] = useState(null);
+  
   const isActive = (path) => currentPath === path;
 
   // Enhanced menu item clicks with scroll-to-top feature for all pages
@@ -287,7 +290,8 @@ export default function MobileBottomNav() {
     }
   };
 
-  // Handle scroll visibility
+  // COMMENTED OUT: Handle scroll visibility - uncomment to re-enable scroll hide/show effect
+  /*
   useEffect(() => {
     let lastScrollY = window.scrollY;
     let ticking = false;
@@ -330,6 +334,7 @@ export default function MobileBottomNav() {
       }
     };
   }, []);
+  */
 
   // Close menu when route changes
   useEffect(() => { 
@@ -381,10 +386,12 @@ export default function MobileBottomNav() {
       <div className="h-20" />
 
       {/* Left Side Menu Capsule - Professional Border */}
+      {/* COMMENTED OUT: Scroll visibility classes - uncomment to re-enable scroll hide/show effect */}
       <div 
-        className={`fixed bottom-8 left-0 z-50 transition-all duration-75 ease-out will-change-transform ${
-          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
-        }`}
+        className={`fixed bottom-8 left-0 z-50 transition-all duration-75 ease-out will-change-transform`}
+        // className={`fixed bottom-8 left-0 z-50 transition-all duration-75 ease-out will-change-transform ${
+        //   isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+        // }`}
       >
         <button
           onClick={() => setIsMenuOpen(true)}
@@ -405,10 +412,12 @@ export default function MobileBottomNav() {
       </div>
 
       {/* Right Side Enquire Capsule - Professional Border */}
+      {/* COMMENTED OUT: Scroll visibility classes - uncomment to re-enable scroll hide/show effect */}
       <div 
-        className={`fixed bottom-8 right-0 z-50 transition-all duration-75 ease-out will-change-transform ${
-          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
-        }`}
+        className={`fixed bottom-8 right-0 z-50 transition-all duration-75 ease-out will-change-transform`}
+        // className={`fixed bottom-8 right-0 z-50 transition-all duration-75 ease-out will-change-transform ${
+        //   isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+        // }`}
       >
         <Link
           to="/contact"
@@ -424,7 +433,7 @@ export default function MobileBottomNav() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-600 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
           
-          <span className="text-base font-poppins font-bold relative z-10 tracking-wide">ENQUIRE</span>
+            <span className="text-base font-poppins font-bold relative z-10 tracking-wide text-chocolate">ENQUIRE</span>
         </Link>
       </div>
 
@@ -548,7 +557,6 @@ export default function MobileBottomNav() {
     </>
   );
 }
-
 
 
 // Desktop Sidebar Component
