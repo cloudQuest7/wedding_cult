@@ -832,7 +832,7 @@ const Gallery: React.FC = () => {
             />
             
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-xs bg-black/40 px-3 py-1 rounded-full sm:hidden">
-              {lightboxState.isZoomed ? 'Double tap to reset zoom' : 'Swipe left/right to navigate'}
+              {lightboxState.isZoomed ? 'Double tap to reset zoom' : 'Swipe'}
             </div>
             
             {swipeState.isSwiping && (
