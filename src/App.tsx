@@ -16,7 +16,7 @@ import NotFound from "./pages/NotFound";
 import Offers from "./pages/Offers";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsAndConditions from "@/pages/TermsAndConditions";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/react"
 
 const queryClient = new QueryClient();
 
